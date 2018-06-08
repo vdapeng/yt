@@ -91,7 +91,7 @@ public class SysRoleController {
 
 	@ApiOperation("更新")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public AjaxJson update(@PathVariable @ApiParam(value = "角色编号", required = true) Integer roleId,
+	public AjaxJson update(@PathVariable @ApiParam(value = "角色编号", required = true) Integer id,
 			@RequestBody @ApiParam(value = "角色信息", required = true) @Valid SysRole sysRole, Errors errors)
 			throws Exception {
 		AjaxJson j = new AjaxJson();
@@ -100,9 +100,10 @@ public class SysRoleController {
 			j.setMsg(errors.getAllErrors().get(0).getDefaultMessage());
 			return j;
 		}
+		sysRole.setCreateOn(null);
 		sysRoleService.update(sysRole);
 		j.setMsg("更新成功");
-		log.info("sys_role表更新数据，roleId：" + roleId);
+		log.info("sys_role表更新数据，roleId：" + id);
 
 		return j;
 	}
