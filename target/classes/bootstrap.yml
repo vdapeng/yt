@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    config:
+      uri:  http://${CONFIG_HOST:39.106.104.232}:${CONFIG_PORT:28088}
+      label: ${CONFIG_LABEL:yt}
+      name: ${CONFIG_NAME:system-api}
+      profile: ${CONFIG_PROFILE:dev}
+
+management:
+  security:
+    enabled: false

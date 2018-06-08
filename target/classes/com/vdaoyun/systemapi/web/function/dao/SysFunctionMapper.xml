@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vdaoyun.systemapi.web.function.dao.SysFunctionMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.vdaoyun.systemapi.web.function.model.SysFunction">
+		<id column="function_id" property="functionId" jdbcType="INTEGER" />
+		<result column="type_code" property="typeCode" jdbcType="VARCHAR" />
+		<result column="parent_function_id" property="parentFunctionId"
+			jdbcType="INTEGER" />
+		<result column="function_level" property="functionLevel"
+			jdbcType="INTEGER" />
+		<result column="function_name" property="functionName"
+			jdbcType="VARCHAR" />
+		<result column="function_code" property="functionCode"
+			jdbcType="VARCHAR" />
+		<result column="orderby" property="orderby" jdbcType="INTEGER" />
+		<result column="function_url" property="functionUrl" jdbcType="VARCHAR" />
+		<result column="font_icon" property="fontIcon" jdbcType="VARCHAR" />
+		<result column="is_show" property="isShow" jdbcType="VARCHAR" />
+		<result column="is_del" property="isDel" jdbcType="VARCHAR" />
+		<result column="create_on" property="createOn" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="TreeResultMap" type="com.vdaoyun.systemapi.common.bean.TreeBean">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="pid" property="pid" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="font_icon" property="fontIcon" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="is_check" property="isCheck" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="selectListByRoleId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		f.function_id,type_code,parent_function_id,function_level,function_name,function_code,orderby,function_url,
+		font_icon,is_show,is_del,create_on from sys_function f,
+		sys_role_function rf
+		where f.function_id = rf.function_id and f.is_del
+		= 'n' and rf.role_id = #{roleId, jdbcType=INTEGER}
+		order by
+		function_level asc, orderby asc
+	</select>
+
+	<select id="selectTreeList" resultMap="TreeResultMap"
+		parameterType="java.util.Map">
+		select f.function_id
+		id,parent_function_id
+		pid,function_name name,font_icon,'menu'
+		type,function_level
+		level,if(isnull(rf.function_id),'n', 'y') is_check
+		from sys_function f
+		left join (select function_id from
+		sys_role_function where role_id =
+		#{roleId, jdbcType=INTEGER}) rf on
+		f.function_id = rf.function_id
+		where
+		f.is_del = 'n' and f.type_code =
+		#{typeCode, jdbcType=VARCHAR}
+		order by
+		function_level asc, orderby asc
+	</select>
+</mapper>
