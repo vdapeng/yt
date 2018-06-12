@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
@@ -163,6 +164,19 @@ public class Device implements Serializable {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+    
+    @Transient
+    @ApiModelProperty(hidden = true)
+    private Integer sensorCount;
+
+	public Integer getSensorCount() {
+		return sensorCount;
+	}
+
+	public void setSensorCount(Integer sensorCount) {
+		this.sensorCount = sensorCount;
+	}
+    
     
     
 }

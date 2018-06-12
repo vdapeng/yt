@@ -9,6 +9,7 @@
     	<result column="latitude" jdbcType="VARCHAR" property="latitude" />
     	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     	<result column="user_id" jdbcType="INTEGER" property="userId" />
+    	<result column="sensorCount" jdbcType="INTEGER" property="sensorCount" />
   </resultMap>
   
 	<sql id="Where_Clause">
@@ -47,13 +48,13 @@
 	
 	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
 		SELECT 
-		terminal_id AS terminalId
-		,name AS name
-		,longitude AS longitude
-		,latitude AS latitude
-		,create_date AS createDate
-		,user_id AS userId
-		FROM device
+		a.terminal_id AS terminalId
+		,a.name AS name
+		,a.longitude AS longitude
+		,a.latitude AS latitude
+		,a.create_date AS createDate
+		,a.user_id AS userId,
+		count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id
 		<include refid="Where_Clause" />
 		<if test="orderByClause != null and orderByClause != ''">
 			order by ${orderByClause}

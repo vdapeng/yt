@@ -147,6 +147,16 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
+		
+		<!-- MQ消息队列 -->
+	    <dependency>
+		    <groupId>com.aliyun.openservices</groupId>
+		   <artifactId>ons-client</artifactId>
+		   <version>1.7.7.Final</version>
+		</dependency>
+
+		
+		
 	</dependencies>
 
 	<build>
