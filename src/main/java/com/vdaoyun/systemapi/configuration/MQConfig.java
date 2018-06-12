@@ -1,27 +1,52 @@
 package com.vdaoyun.systemapi.configuration;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-import com.vdaoyun.systemapi.listener.MQMessageListener;
-import com.vdaoyun.systemapi.web.mqtt.ConsumerService;
-
-@Configuration
+@Component
+@ConfigurationProperties(prefix = "mqtt")
 public class MQConfig {
 	
-	@Bean
-	public MQMessageListener messageListener() {
-		return new MQMessageListener();
+	private String acessKey;
+	
+	private String secretKey;
+	
+	private String consumerID;
+	
+	private String producerId;
+
+	public String getAcessKey() {
+		return acessKey;
+	}
+
+	public void setAcessKey(String acessKey) {
+		this.acessKey = acessKey;
+	}
+
+	public String getSecretKey() {
+		return secretKey;
+	}
+
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
+
+	public String getConsumerID() {
+		return consumerID;
+	}
+
+	public void setConsumerID(String consumerID) {
+		this.consumerID = consumerID;
+	}
+
+	public String getProducerId() {
+		return producerId;
+	}
+
+	public void setProducerId(String producerId) {
+		this.producerId = producerId;
 	}
 	
-	@Bean(initMethod = "init", destroyMethod = "destroy")
-	public ConsumerService consumerService() {
-		ConsumerService consumerService = new ConsumerService();
-		consumerService.addMessageListener(messageListener());
-		consumerService.setAcessKey("LTAIJYtclxVAB3Pd");
-		consumerService.setConsumerID("CID_HJKJ0001");
-		consumerService.setSecretKey("r0igsclU0CGTg6M2VpCdtCcwW02gYV");
-		return consumerService;
-	}
+	
 
 }
