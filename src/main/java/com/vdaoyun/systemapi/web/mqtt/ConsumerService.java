@@ -44,6 +44,14 @@ public class ConsumerService {
         this.consumer = ONSFactory.createConsumer(properties);
 	}
 	
+	public Boolean isStarted() {
+		return consumer.isStarted();
+	}
+	
+	public Boolean isClosed() {
+		return consumer.isClosed();
+	}
+	
 	// 启动服务
 	public void start() {
 		/**
