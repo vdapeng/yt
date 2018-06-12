@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.device.DeviceRecordMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.device.DeviceRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
+    	<result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
+    	<result column="solar_voltage" jdbcType="VARCHAR" property="solarVoltage" />
+    	<result column="battery_voltage" jdbcType="VARCHAR" property="batteryVoltage" />
+    	<result column="battery_temperature" jdbcType="VARCHAR" property="batteryTemperature" />
+    	<result column="system_temperature" jdbcType="VARCHAR" property="systemTemperature" />
+    	<result column="battery_level" jdbcType="VARCHAR" property="batteryLevel" />
+    	<result column="charger_status" jdbcType="VARCHAR" property="chargerStatus" />
+    	<result column="shell_temperature" jdbcType="VARCHAR" property="shellTemperature" />
+    	<result column="gps" jdbcType="VARCHAR" property="gps" />
+    	<result column="power_key" jdbcType="VARCHAR" property="powerKey" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.terminalId != '' and entity.terminalId != null">
+				AND terminal_id = #{entity.terminalId}
+			</if>
+			<if test="entity.postTime != '' and entity.postTime != null">
+				AND post_time = #{entity.postTime}
+			</if>
+			<if test="entity.solarVoltage != '' and entity.solarVoltage != null">
+				AND solar_voltage = #{entity.solarVoltage}
+			</if>
+			<if test="entity.batteryVoltage != '' and entity.batteryVoltage != null">
+				AND battery_voltage = #{entity.batteryVoltage}
+			</if>
+			<if test="entity.batteryTemperature != '' and entity.batteryTemperature != null">
+				AND battery_temperature = #{entity.batteryTemperature}
+			</if>
+			<if test="entity.systemTemperature != '' and entity.systemTemperature != null">
+				AND system_temperature = #{entity.systemTemperature}
+			</if>
+			<if test="entity.batteryLevel != '' and entity.batteryLevel != null">
+				AND battery_level = #{entity.batteryLevel}
+			</if>
+			<if test="entity.chargerStatus != '' and entity.chargerStatus != null">
+				AND charger_status = #{entity.chargerStatus}
+			</if>
+			<if test="entity.shellTemperature != '' and entity.shellTemperature != null">
+				AND shell_temperature = #{entity.shellTemperature}
+			</if>
+			<if test="entity.gps != '' and entity.gps != null">
+				AND gps = #{entity.gps}
+			</if>
+			<if test="entity.powerKey != '' and entity.powerKey != null">
+				AND power_key = #{entity.powerKey}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,post_time AS postTime
+		,solar_voltage AS solarVoltage
+		,battery_voltage AS batteryVoltage
+		,battery_temperature AS batteryTemperature
+		,system_temperature AS systemTemperature
+		,battery_level AS batteryLevel
+		,charger_status AS chargerStatus
+		,shell_temperature AS shellTemperature
+		,gps AS gps
+		,power_key AS powerKey
+		FROM device_record WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,post_time AS postTime
+		,solar_voltage AS solarVoltage
+		,battery_voltage AS batteryVoltage
+		,battery_temperature AS batteryTemperature
+		,system_temperature AS systemTemperature
+		,battery_level AS batteryLevel
+		,charger_status AS chargerStatus
+		,shell_temperature AS shellTemperature
+		,gps AS gps
+		,power_key AS powerKey
+		FROM device_record
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,post_time AS postTime
+		,solar_voltage AS solarVoltage
+		,battery_voltage AS batteryVoltage
+		,battery_temperature AS batteryTemperature
+		,system_temperature AS systemTemperature
+		,battery_level AS batteryLevel
+		,charger_status AS chargerStatus
+		,shell_temperature AS shellTemperature
+		,gps AS gps
+		,power_key AS powerKey
+		FROM device_record
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

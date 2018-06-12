@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.warn.DeviceWarnRecordMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.warn.DeviceWarnRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
+    	<result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
+    	<result column="alaram_business" jdbcType="VARCHAR" property="alaramBusiness" />
+    	<result column="alaram_equipment" jdbcType="VARCHAR" property="alaramEquipment" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.terminalId != '' and entity.terminalId != null">
+				AND terminal_id = #{entity.terminalId}
+			</if>
+			<if test="entity.postTime != '' and entity.postTime != null">
+				AND post_time = #{entity.postTime}
+			</if>
+			<if test="entity.alaramBusiness != '' and entity.alaramBusiness != null">
+				AND alaram_business = #{entity.alaramBusiness}
+			</if>
+			<if test="entity.alaramEquipment != '' and entity.alaramEquipment != null">
+				AND alaram_equipment = #{entity.alaramEquipment}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,post_time AS postTime
+		,alaram_business AS alaramBusiness
+		,alaram_equipment AS alaramEquipment
+		FROM device_warn_record WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,post_time AS postTime
+		,alaram_business AS alaramBusiness
+		,alaram_equipment AS alaramEquipment
+		FROM device_warn_record
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,post_time AS postTime
+		,alaram_business AS alaramBusiness
+		,alaram_equipment AS alaramEquipment
+		FROM device_warn_record
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

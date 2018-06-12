@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.warn.DeviceWarnTypeMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.warn.DeviceWarnType">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="code" jdbcType="VARCHAR" property="code" />
+    	<result column="name" jdbcType="VARCHAR" property="name" />
+    	<result column="orderby" jdbcType="INTEGER" property="orderby" />
+    	<result column="remark" jdbcType="VARCHAR" property="remark" />
+    	<result column="noti_type" jdbcType="VARCHAR" property="notiType" />
+    	<result column="noti_interval" jdbcType="INTEGER" property="notiInterval" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.code != '' and entity.code != null">
+				AND code = #{entity.code}
+			</if>
+			<if test="entity.name != '' and entity.name != null">
+				AND name = #{entity.name}
+			</if>
+			<if test="entity.orderby != '' and entity.orderby != null">
+				AND orderby = #{entity.orderby}
+			</if>
+			<if test="entity.remark != '' and entity.remark != null">
+				AND remark = #{entity.remark}
+			</if>
+			<if test="entity.notiType != '' and entity.notiType != null">
+				AND noti_type = #{entity.notiType}
+			</if>
+			<if test="entity.notiInterval != '' and entity.notiInterval != null">
+				AND noti_interval = #{entity.notiInterval}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,code AS code
+		,name AS name
+		,orderby AS orderby
+		,remark AS remark
+		,noti_type AS notiType
+		,noti_interval AS notiInterval
+		FROM device_warn_type WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,code AS code
+		,name AS name
+		,orderby AS orderby
+		,remark AS remark
+		,noti_type AS notiType
+		,noti_interval AS notiInterval
+		FROM device_warn_type
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,code AS code
+		,name AS name
+		,orderby AS orderby
+		,remark AS remark
+		,noti_type AS notiType
+		,noti_interval AS notiInterval
+		FROM device_warn_type
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

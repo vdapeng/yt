@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.warn.DeviceWarnConfigMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.warn.DeviceWarnConfig">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
+    	<result column="device_warn_type_id" jdbcType="INTEGER" property="deviceWarnTypeId" />
+    	<result column="is_enabled" jdbcType="VARCHAR" property="isEnabled" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.terminalId != '' and entity.terminalId != null">
+				AND terminal_id = #{entity.terminalId}
+			</if>
+			<if test="entity.deviceWarnTypeId != '' and entity.deviceWarnTypeId != null">
+				AND device_warn_type_id = #{entity.deviceWarnTypeId}
+			</if>
+			<if test="entity.isEnabled != '' and entity.isEnabled != null">
+				AND is_enabled = #{entity.isEnabled}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,device_warn_type_id AS deviceWarnTypeId
+		,is_enabled AS isEnabled
+		FROM device_warn_config WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,device_warn_type_id AS deviceWarnTypeId
+		,is_enabled AS isEnabled
+		FROM device_warn_config
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,device_warn_type_id AS deviceWarnTypeId
+		,is_enabled AS isEnabled
+		FROM device_warn_config
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

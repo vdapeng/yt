@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.ponds.Ponds">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="name" jdbcType="VARCHAR" property="name" />
+    	<result column="address" jdbcType="VARCHAR" property="address" />
+    	<result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    	<result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    	<result column="user_id" jdbcType="INTEGER" property="userId" />
+    	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    	<result column="activated" jdbcType="VARCHAR" property="activated" />
+    	<result column="enabled" jdbcType="VARCHAR" property="enabled" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.name != '' and entity.name != null">
+				AND name = #{entity.name}
+			</if>
+			<if test="entity.address != '' and entity.address != null">
+				AND address = #{entity.address}
+			</if>
+			<if test="entity.latitude != '' and entity.latitude != null">
+				AND latitude = #{entity.latitude}
+			</if>
+			<if test="entity.longitude != '' and entity.longitude != null">
+				AND longitude = #{entity.longitude}
+			</if>
+			<if test="entity.userId != '' and entity.userId != null">
+				AND user_id = #{entity.userId}
+			</if>
+			<if test="entity.createDate != '' and entity.createDate != null">
+				AND create_date = #{entity.createDate}
+			</if>
+			<if test="entity.activated != '' and entity.activated != null">
+				AND activated = #{entity.activated}
+			</if>
+			<if test="entity.enabled != '' and entity.enabled != null">
+				AND enabled = #{entity.enabled}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,name AS name
+		,address AS address
+		,latitude AS latitude
+		,longitude AS longitude
+		,user_id AS userId
+		,create_date AS createDate
+		,activated AS activated
+		,enabled AS enabled
+		FROM ponds WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,name AS name
+		,address AS address
+		,latitude AS latitude
+		,longitude AS longitude
+		,user_id AS userId
+		,create_date AS createDate
+		,activated AS activated
+		,enabled AS enabled
+		FROM ponds
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,name AS name
+		,address AS address
+		,latitude AS latitude
+		,longitude AS longitude
+		,user_id AS userId
+		,create_date AS createDate
+		,activated AS activated
+		,enabled AS enabled
+		FROM ponds
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

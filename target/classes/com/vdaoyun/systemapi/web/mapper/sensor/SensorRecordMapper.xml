@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.sensor.SensorRecordMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.sensor.SensorRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="terminalID" jdbcType="VARCHAR" property="terminalid" />
+    	<result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
+    	<result column="value" jdbcType="VARCHAR" property="value" />
+    	<result column="data_time" jdbcType="TIMESTAMP" property="dataTime" />
+    	<result column="code" jdbcType="VARCHAR" property="code" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.terminalid != '' and entity.terminalid != null">
+				AND terminalID = #{entity.terminalid}
+			</if>
+			<if test="entity.postTime != '' and entity.postTime != null">
+				AND post_time = #{entity.postTime}
+			</if>
+			<if test="entity.value != '' and entity.value != null">
+				AND value = #{entity.value}
+			</if>
+			<if test="entity.dataTime != '' and entity.dataTime != null">
+				AND data_time = #{entity.dataTime}
+			</if>
+			<if test="entity.code != '' and entity.code != null">
+				AND code = #{entity.code}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,terminalID AS terminalid
+		,post_time AS postTime
+		,value AS value
+		,data_time AS dataTime
+		,code AS code
+		FROM sensor_record WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,terminalID AS terminalid
+		,post_time AS postTime
+		,value AS value
+		,data_time AS dataTime
+		,code AS code
+		FROM sensor_record
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,terminalID AS terminalid
+		,post_time AS postTime
+		,value AS value
+		,data_time AS dataTime
+		,code AS code
+		FROM sensor_record
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

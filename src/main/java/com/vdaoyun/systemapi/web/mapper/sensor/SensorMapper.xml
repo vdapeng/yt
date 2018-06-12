@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.sensor.SensorMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.sensor.Sensor">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="ponds_id" jdbcType="INTEGER" property="pondsId" />
+    	<result column="terminal_id" jdbcType="INTEGER" property="terminalId" />
+    	<result column="code" jdbcType="VARCHAR" property="code" />
+    	<result column="unit" jdbcType="VARCHAR" property="unit" />
+    	<result column="name" jdbcType="VARCHAR" property="name" />
+    	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    	<result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.pondsId != '' and entity.pondsId != null">
+				AND ponds_id = #{entity.pondsId}
+			</if>
+			<if test="entity.terminalId != '' and entity.terminalId != null">
+				AND terminal_id = #{entity.terminalId}
+			</if>
+			<if test="entity.code != '' and entity.code != null">
+				AND code = #{entity.code}
+			</if>
+			<if test="entity.unit != '' and entity.unit != null">
+				AND unit = #{entity.unit}
+			</if>
+			<if test="entity.name != '' and entity.name != null">
+				AND name = #{entity.name}
+			</if>
+			<if test="entity.createDate != '' and entity.createDate != null">
+				AND create_date = #{entity.createDate}
+			</if>
+			<if test="entity.userId != '' and entity.userId != null">
+				AND user_id = #{entity.userId}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,ponds_id AS pondsId
+		,terminal_id AS terminalId
+		,code AS code
+		,unit AS unit
+		,name AS name
+		,create_date AS createDate
+		,user_id AS userId
+		FROM sensor WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,ponds_id AS pondsId
+		,terminal_id AS terminalId
+		,code AS code
+		,unit AS unit
+		,name AS name
+		,create_date AS createDate
+		,user_id AS userId
+		FROM sensor
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,ponds_id AS pondsId
+		,terminal_id AS terminalId
+		,code AS code
+		,unit AS unit
+		,name AS name
+		,create_date AS createDate
+		,user_id AS userId
+		FROM sensor
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

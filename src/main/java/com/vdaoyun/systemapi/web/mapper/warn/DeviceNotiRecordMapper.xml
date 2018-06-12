@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.warn.DeviceNotiRecordMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.warn.DeviceNotiRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="device_warn_record_id" jdbcType="INTEGER" property="deviceWarnRecordId" />
+    	<result column="content" jdbcType="VARCHAR" property="content" />
+    	<result column="user_id" jdbcType="INTEGER" property="userId" />
+    	<result column="is_read" jdbcType="VARCHAR" property="isRead" />
+    	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    	<result column="is_wx_noti" jdbcType="VARCHAR" property="isWxNoti" />
+    	<result column="wx_noti_date" jdbcType="TIMESTAMP" property="wxNotiDate" />
+    	<result column="is_sms_noti" jdbcType="VARCHAR" property="isSmsNoti" />
+    	<result column="sms_noti_date" jdbcType="TIMESTAMP" property="smsNotiDate" />
+    	<result column="read_date" jdbcType="TIMESTAMP" property="readDate" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.deviceWarnRecordId != '' and entity.deviceWarnRecordId != null">
+				AND device_warn_record_id = #{entity.deviceWarnRecordId}
+			</if>
+			<if test="entity.content != '' and entity.content != null">
+				AND content = #{entity.content}
+			</if>
+			<if test="entity.userId != '' and entity.userId != null">
+				AND user_id = #{entity.userId}
+			</if>
+			<if test="entity.isRead != '' and entity.isRead != null">
+				AND is_read = #{entity.isRead}
+			</if>
+			<if test="entity.createDate != '' and entity.createDate != null">
+				AND create_date = #{entity.createDate}
+			</if>
+			<if test="entity.isWxNoti != '' and entity.isWxNoti != null">
+				AND is_wx_noti = #{entity.isWxNoti}
+			</if>
+			<if test="entity.wxNotiDate != '' and entity.wxNotiDate != null">
+				AND wx_noti_date = #{entity.wxNotiDate}
+			</if>
+			<if test="entity.isSmsNoti != '' and entity.isSmsNoti != null">
+				AND is_sms_noti = #{entity.isSmsNoti}
+			</if>
+			<if test="entity.smsNotiDate != '' and entity.smsNotiDate != null">
+				AND sms_noti_date = #{entity.smsNotiDate}
+			</if>
+			<if test="entity.readDate != '' and entity.readDate != null">
+				AND read_date = #{entity.readDate}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,device_warn_record_id AS deviceWarnRecordId
+		,content AS content
+		,user_id AS userId
+		,is_read AS isRead
+		,create_date AS createDate
+		,is_wx_noti AS isWxNoti
+		,wx_noti_date AS wxNotiDate
+		,is_sms_noti AS isSmsNoti
+		,sms_noti_date AS smsNotiDate
+		,read_date AS readDate
+		FROM device_noti_record WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,device_warn_record_id AS deviceWarnRecordId
+		,content AS content
+		,user_id AS userId
+		,is_read AS isRead
+		,create_date AS createDate
+		,is_wx_noti AS isWxNoti
+		,wx_noti_date AS wxNotiDate
+		,is_sms_noti AS isSmsNoti
+		,sms_noti_date AS smsNotiDate
+		,read_date AS readDate
+		FROM device_noti_record
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,device_warn_record_id AS deviceWarnRecordId
+		,content AS content
+		,user_id AS userId
+		,is_read AS isRead
+		,create_date AS createDate
+		,is_wx_noti AS isWxNoti
+		,wx_noti_date AS wxNotiDate
+		,is_sms_noti AS isSmsNoti
+		,sms_noti_date AS smsNotiDate
+		,read_date AS readDate
+		FROM device_noti_record
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

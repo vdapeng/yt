@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.user.UserMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.user.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    	<result column="true_name" jdbcType="VARCHAR" property="trueName" />
+    	<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    	<result column="password" jdbcType="VARCHAR" property="password" />
+    	<result column="openid" jdbcType="VARCHAR" property="openid" />
+    	<result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
+    	<result column="gender" jdbcType="VARCHAR" property="gender" />
+    	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    	<result column="last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+    	<result column="country" jdbcType="VARCHAR" property="country" />
+    	<result column="province" jdbcType="VARCHAR" property="province" />
+    	<result column="city" jdbcType="VARCHAR" property="city" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.nickname != '' and entity.nickname != null">
+				AND nickname = #{entity.nickname}
+			</if>
+			<if test="entity.trueName != '' and entity.trueName != null">
+				AND true_name = #{entity.trueName}
+			</if>
+			<if test="entity.mobile != '' and entity.mobile != null">
+				AND mobile = #{entity.mobile}
+			</if>
+			<if test="entity.password != '' and entity.password != null">
+				AND password = #{entity.password}
+			</if>
+			<if test="entity.openid != '' and entity.openid != null">
+				AND openid = #{entity.openid}
+			</if>
+			<if test="entity.avatarUrl != '' and entity.avatarUrl != null">
+				AND avatar_url = #{entity.avatarUrl}
+			</if>
+			<if test="entity.gender != '' and entity.gender != null">
+				AND gender = #{entity.gender}
+			</if>
+			<if test="entity.createDate != '' and entity.createDate != null">
+				AND create_date = #{entity.createDate}
+			</if>
+			<if test="entity.lastUpdateDate != '' and entity.lastUpdateDate != null">
+				AND last_update_date = #{entity.lastUpdateDate}
+			</if>
+			<if test="entity.country != '' and entity.country != null">
+				AND country = #{entity.country}
+			</if>
+			<if test="entity.province != '' and entity.province != null">
+				AND province = #{entity.province}
+			</if>
+			<if test="entity.city != '' and entity.city != null">
+				AND city = #{entity.city}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,nickname AS nickname
+		,true_name AS trueName
+		,mobile AS mobile
+		,password AS password
+		,openid AS openid
+		,avatar_url AS avatarUrl
+		,gender AS gender
+		,create_date AS createDate
+		,last_update_date AS lastUpdateDate
+		,country AS country
+		,province AS province
+		,city AS city
+		FROM user WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,nickname AS nickname
+		,true_name AS trueName
+		,mobile AS mobile
+		,password AS password
+		,openid AS openid
+		,avatar_url AS avatarUrl
+		,gender AS gender
+		,create_date AS createDate
+		,last_update_date AS lastUpdateDate
+		,country AS country
+		,province AS province
+		,city AS city
+		FROM user
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,nickname AS nickname
+		,true_name AS trueName
+		,mobile AS mobile
+		,password AS password
+		,openid AS openid
+		,avatar_url AS avatarUrl
+		,gender AS gender
+		,create_date AS createDate
+		,last_update_date AS lastUpdateDate
+		,country AS country
+		,province AS province
+		,city AS city
+		FROM user
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>
