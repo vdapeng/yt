@@ -89,10 +89,9 @@ public class DeviceRecordController {
 	}
 	
 	@ApiOperation(value = "通过主键删除")
-	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
-		@PathVariable(value = "id") Integer id
+		@PathVariable(value = "id") @ApiParam(value = "主键") Long id
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		Boolean result = service.delete(id) > 0;
