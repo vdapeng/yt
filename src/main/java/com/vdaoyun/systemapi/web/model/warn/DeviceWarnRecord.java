@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import com.vdaoyun.systemapi.mq.model.MQDeviceWarnModel;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -146,5 +148,14 @@ public class DeviceWarnRecord implements Serializable {
         this.alaramEquipment = alaramEquipment;
     }
     
+    public DeviceWarnRecord() {
+	}
+
+    public DeviceWarnRecord(MQDeviceWarnModel model) {
+    	this.terminalId = model.getTerminalID();
+    	this.postTime = model.getPostTime();
+    	this.alaramBusiness = model.getAlaram_Business();
+    	this.alaramEquipment = model.getAlaram_Equipment();
+	}
     
 }

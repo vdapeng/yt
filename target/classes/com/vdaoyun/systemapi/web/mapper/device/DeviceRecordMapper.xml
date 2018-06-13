@@ -3,18 +3,17 @@
 <mapper namespace="com.vdaoyun.systemapi.web.mapper.device.DeviceRecordMapper">
   <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.device.DeviceRecord">
     <id column="id" jdbcType="INTEGER" property="id" />
-    	<result column="id" jdbcType="INTEGER" property="id" />
-    	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
-    	<result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
-    	<result column="solar_voltage" jdbcType="VARCHAR" property="solarVoltage" />
-    	<result column="battery_voltage" jdbcType="VARCHAR" property="batteryVoltage" />
-    	<result column="battery_temperature" jdbcType="VARCHAR" property="batteryTemperature" />
-    	<result column="system_temperature" jdbcType="VARCHAR" property="systemTemperature" />
-    	<result column="battery_level" jdbcType="VARCHAR" property="batteryLevel" />
-    	<result column="charger_status" jdbcType="VARCHAR" property="chargerStatus" />
-    	<result column="shell_temperature" jdbcType="VARCHAR" property="shellTemperature" />
-    	<result column="gps" jdbcType="VARCHAR" property="gps" />
-    	<result column="power_key" jdbcType="VARCHAR" property="powerKey" />
+   	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
+   	<result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
+   	<result column="solar_voltage" jdbcType="DOUBLE" property="solarVoltage" />
+   	<result column="battery_voltage" jdbcType="DOUBLE" property="batteryVoltage" />
+   	<result column="battery_temperature" jdbcType="DOUBLE" property="batteryTemperature" />
+   	<result column="system_temperature" jdbcType="DOUBLE" property="systemTemperature" />
+   	<result column="battery_level" jdbcType="DOUBLE" property="batteryLevel" />
+   	<result column="charger_status" jdbcType="INTEGER" property="chargerStatus" />
+   	<result column="shell_temperature" jdbcType="DOUBLE" property="shellTemperature" />
+   	<result column="gps" jdbcType="VARCHAR" property="gps" />
+   	<result column="power_key" jdbcType="VARCHAR" property="powerKey" />
   </resultMap>
   
 	<sql id="Where_Clause">

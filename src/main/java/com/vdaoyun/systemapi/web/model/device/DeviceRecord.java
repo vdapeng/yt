@@ -1,17 +1,17 @@
 package com.vdaoyun.systemapi.web.model.device;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import com.vdaoyun.systemapi.mq.model.MQDeviceRecordData;
+import com.vdaoyun.systemapi.mq.model.MQDeviceRecordModel;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -52,43 +52,43 @@ public class DeviceRecord implements Serializable {
      */
     @Column(name = "solar_voltage")
     @ApiModelProperty(name = "solarVoltage", value = "太阳能电压" )
-    private String solarVoltage;
+    private double solarVoltage;
 	/**
      * 电池电压
      */
     @Column(name = "battery_voltage")
     @ApiModelProperty(name = "batteryVoltage", value = "电池电压" )
-    private String batteryVoltage;
+    private double batteryVoltage;
 	/**
      * 电池温度
      */
     @Column(name = "battery_temperature")
     @ApiModelProperty(name = "batteryTemperature", value = "电池温度" )
-    private String batteryTemperature;
+    private double batteryTemperature;
 	/**
      * 系统温度
      */
     @Column(name = "system_temperature")
     @ApiModelProperty(name = "systemTemperature", value = "系统温度" )
-    private String systemTemperature;
+    private double systemTemperature;
 	/**
      * 电池电量
      */
     @Column(name = "battery_level")
     @ApiModelProperty(name = "batteryLevel", value = "电池电量" )
-    private String batteryLevel;
+    private double batteryLevel;
 	/**
      * 充电池状态
      */
     @Column(name = "charger_status")
     @ApiModelProperty(name = "chargerStatus", value = "充电池状态" )
-    private String chargerStatus;
+    private Integer chargerStatus;
 	/**
      * 表面温度
      */
     @Column(name = "shell_temperature")
     @ApiModelProperty(name = "shellTemperature", value = "表面温度" )
-    private String shellTemperature;
+    private double shellTemperature;
 	/**
      * GPD数据
      */
@@ -158,7 +158,7 @@ public class DeviceRecord implements Serializable {
      *
      * @return remark - 太阳能电压
      */
-    public String getSolarVoltage() {
+    public double getSolarVoltage() {
         return solarVoltage;
     }
 
@@ -167,7 +167,7 @@ public class DeviceRecord implements Serializable {
      *
      * @param remark 太阳能电压
      */
-    public void setSolarVoltage(String solarVoltage) {
+    public void setSolarVoltage(double solarVoltage) {
         this.solarVoltage = solarVoltage;
     }
   	/**
@@ -175,7 +175,7 @@ public class DeviceRecord implements Serializable {
      *
      * @return remark - 电池电压
      */
-    public String getBatteryVoltage() {
+    public double getBatteryVoltage() {
         return batteryVoltage;
     }
 
@@ -184,7 +184,7 @@ public class DeviceRecord implements Serializable {
      *
      * @param remark 电池电压
      */
-    public void setBatteryVoltage(String batteryVoltage) {
+    public void setBatteryVoltage(double batteryVoltage) {
         this.batteryVoltage = batteryVoltage;
     }
   	/**
@@ -192,7 +192,7 @@ public class DeviceRecord implements Serializable {
      *
      * @return remark - 电池温度
      */
-    public String getBatteryTemperature() {
+    public double getBatteryTemperature() {
         return batteryTemperature;
     }
 
@@ -201,7 +201,7 @@ public class DeviceRecord implements Serializable {
      *
      * @param remark 电池温度
      */
-    public void setBatteryTemperature(String batteryTemperature) {
+    public void setBatteryTemperature(double batteryTemperature) {
         this.batteryTemperature = batteryTemperature;
     }
   	/**
@@ -209,7 +209,7 @@ public class DeviceRecord implements Serializable {
      *
      * @return remark - 系统温度
      */
-    public String getSystemTemperature() {
+    public double getSystemTemperature() {
         return systemTemperature;
     }
 
@@ -218,7 +218,7 @@ public class DeviceRecord implements Serializable {
      *
      * @param remark 系统温度
      */
-    public void setSystemTemperature(String systemTemperature) {
+    public void setSystemTemperature(double systemTemperature) {
         this.systemTemperature = systemTemperature;
     }
   	/**
@@ -226,7 +226,7 @@ public class DeviceRecord implements Serializable {
      *
      * @return remark - 电池电量
      */
-    public String getBatteryLevel() {
+    public double getBatteryLevel() {
         return batteryLevel;
     }
 
@@ -235,7 +235,7 @@ public class DeviceRecord implements Serializable {
      *
      * @param remark 电池电量
      */
-    public void setBatteryLevel(String batteryLevel) {
+    public void setBatteryLevel(double batteryLevel) {
         this.batteryLevel = batteryLevel;
     }
   	/**
@@ -243,7 +243,7 @@ public class DeviceRecord implements Serializable {
      *
      * @return remark - 充电池状态
      */
-    public String getChargerStatus() {
+    public Integer getChargerStatus() {
         return chargerStatus;
     }
 
@@ -252,7 +252,7 @@ public class DeviceRecord implements Serializable {
      *
      * @param remark 充电池状态
      */
-    public void setChargerStatus(String chargerStatus) {
+    public void setChargerStatus(Integer chargerStatus) {
         this.chargerStatus = chargerStatus;
     }
   	/**
@@ -260,7 +260,7 @@ public class DeviceRecord implements Serializable {
      *
      * @return remark - 表面温度
      */
-    public String getShellTemperature() {
+    public double getShellTemperature() {
         return shellTemperature;
     }
 
@@ -269,7 +269,7 @@ public class DeviceRecord implements Serializable {
      *
      * @param remark 表面温度
      */
-    public void setShellTemperature(String shellTemperature) {
+    public void setShellTemperature(double shellTemperature) {
         this.shellTemperature = shellTemperature;
     }
   	/**
@@ -306,6 +306,23 @@ public class DeviceRecord implements Serializable {
     public void setPowerKey(String powerKey) {
         this.powerKey = powerKey;
     }
+    
+    public DeviceRecord() {
+	}
+    
+    public DeviceRecord(MQDeviceRecordModel model) {
+    	this.terminalId = model.getTerminalID();
+    	MQDeviceRecordData data = model.getData().get(0);
+		this.batteryLevel = data.getBatteryLevel();
+		this.solarVoltage = data.getSolarVoltage();
+		this.batteryVoltage = data.getBatteryVoltage();
+		this.systemTemperature = data.getSystemTemperature();
+		this.batteryTemperature = data.getBatteryTemperature();
+		this.shellTemperature = data.getShellTemperature();
+		this.gps = data.getGPS();
+		this.powerKey = data.getPowerKey();
+		this.chargerStatus = data.getChargerStatus();
+	}
     
     
 }
