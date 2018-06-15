@@ -54,7 +54,7 @@
 		,a.latitude AS latitude
 		,a.create_date AS createDate
 		,a.user_id AS userId,
-		count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id
+		count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id GROUP BY a.terminal_id
 		<include refid="Where_Clause" />
 		<if test="orderByClause != null and orderByClause != ''">
 			order by ${orderByClause}

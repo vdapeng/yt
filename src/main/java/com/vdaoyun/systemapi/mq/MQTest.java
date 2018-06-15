@@ -23,6 +23,7 @@ public class MQTest {
 
 	@Autowired
 	private MQProducerService mqProducerService;
+	
 
 	/**
 	 * 
@@ -67,6 +68,8 @@ public class MQTest {
 		mqProducerService.send(topic, body);
 	}
 	
+	
+	
 	/**
 	 * 
 	 * @Title: sendDeviceWarnData
@@ -74,7 +77,7 @@ public class MQTest {
 	 * @Description: 模拟设备报警，每十分钟一次
 	 *   void
 	 */
-	@Scheduled(cron = "0 0 0/1 * * ? *")
+	@Scheduled(cron = "0 0/30 * * * ? ")
 	public void sendDeviceWarnData() {
 		MQDeviceWarnModel record = new MQDeviceWarnModel();
 		record.setTerminalID("TK232");
@@ -82,6 +85,12 @@ public class MQTest {
 		record.setAlaram_Business("PH&DO");
 		record.setAlaram_Equipment("BATTERYLOW&TEMPERATUREHIGH");
 		SendMessage(MQTopic.WARN_TOPIC, record);
+	}
+	
+	@Scheduled(cron = "0 0/1 * * * ? ")
+	public void sendToClient() {
+		byte[] body = "HELLO WORLD".getBytes();
+		mqProducerService.sendToClient("ADMIN", body);
 	}
 	
 	/**

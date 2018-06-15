@@ -79,4 +79,24 @@
 		 WHERE id = #{id}
 	</select>
 	
+	<select id="selectAllByTerminalId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			a.*,
+		IF(
+			ISNULL(b.device_warn_type_id) ,
+			'n' ,
+			'y'
+		) isSelected
+		FROM
+			device_warn_type a
+		LEFT JOIN(
+			SELECT
+				device_warn_type_id
+			FROM
+				device_warn_config
+			WHERE
+				terminal_id = #{terminalId}
+		) b ON a.id = b.device_warn_type_id ORDER BY orderby ASC
+	</select>
+	
 </mapper>

@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ import com.vdaoyun.systemapi.web.model.device.Device;
 public class DeviceService extends BaseService<Device> {
 	
 	@Override
+	@CacheEvict(value = "device", allEntries = true)
 	public int delete(Object key) {
 		Device entity = new Device();
 		entity.setTerminalId((String) key);
@@ -27,6 +31,7 @@ public class DeviceService extends BaseService<Device> {
 	} 
 	
 	@Override
+//	@CachePut(value = "device", key = "#entity.terminalId")
 	public int insert(Device entity) {
 //		entity.setCreateDate(new Date());
 		return super.insert(entity);
@@ -35,6 +40,8 @@ public class DeviceService extends BaseService<Device> {
 	@Autowired
 	private DeviceMapper rootMapper;
 	
+//	@Caching(evict = {}, cacheable = {@Cacheable(value = "device")}, put = {})
+//	@Cacheable(value = "device", key = "#p1 + '_' + #p2")
 	public PageInfo<Device> selectPageInfo(
 		Device entity, 
 		Integer wdy_pageNum, 
@@ -54,8 +61,8 @@ public class DeviceService extends BaseService<Device> {
 		return new PageInfo<>(list);
 	}
 	
-	
 	@Transactional
+//	@CachePut(value = "device", key = "#entity.terminalId")
 	public Integer insertInfo(Device entity) {
 		entity.setCreateDate(new Date());
 		Integer result = super.insert(entity);

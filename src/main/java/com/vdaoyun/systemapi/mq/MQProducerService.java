@@ -62,7 +62,9 @@ public class MQProducerService {
 	 * 啟動服務
 	 */
 	public void start() {
-		producer.start();
+		if (producer.isClosed()) {
+			producer.start();
+		}
 	}
 	
 	/**
@@ -106,7 +108,7 @@ public class MQProducerService {
 			throw new NullPointerException("targetClientID not null");
 		}
 		Message msg = new Message(rootTopicId, "MQ2MQTT",  body);
-        msg.putUserProperties("mqttSecondTopic",  "/p2p/" + gloadTargetID + "" +  targetClientID);
+        msg.putUserProperties("mqttSecondTopic",  "/p2p/" + gloadTargetID + "@@@" +  targetClientID);
         if (producer.isClosed()) {
 			producer.start();
 		}

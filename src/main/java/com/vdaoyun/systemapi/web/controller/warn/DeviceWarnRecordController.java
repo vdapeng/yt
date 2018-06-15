@@ -34,7 +34,7 @@ public class DeviceWarnRecordController {
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
 			@RequestParam(value = "pageSize", defaultValue = "10", required = false) @ApiParam(value = "每页条数") Integer pageSize,
-			@RequestParam(value = "order", defaultValue = "createDate", required = false) @ApiParam(value = "排序字段")  String order,
+			@RequestParam(value = "order", defaultValue = "id", required = false) @ApiParam(value = "排序字段")  String order,
 			@RequestParam(value = "sort", defaultValue = "DESC", required = false) @ApiParam(value = "排序方式") String sort,
 			@RequestBody DeviceWarnRecord entity
 	) throws Exception {

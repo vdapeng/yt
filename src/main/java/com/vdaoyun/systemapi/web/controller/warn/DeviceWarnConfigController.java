@@ -2,8 +2,8 @@ package com.vdaoyun.systemapi.web.controller.warn;
 
 import javax.validation.Valid;
 
-import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.model.warn.DeviceWarnConfig;
 import com.vdaoyun.systemapi.web.service.warn.DeviceWarnConfigService;
-
-import com.vdaoyun.common.bean.AjaxJson;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -40,6 +39,19 @@ public class DeviceWarnConfigController {
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
+		return ajaxJson;
+	}
+	
+	@ApiOperation(value = "切换设备指定报警类型报警状态")
+	@RequestMapping(value = "change", method = RequestMethod.GET)
+	public AjaxJson Change(
+		@RequestParam(value = "deviceWarnTypeId") @ApiParam(value = "报警类型编号") Long deviceWarnTypeId,
+		@RequestParam(value = "terminalId") @ApiParam("设备编号") String terminalId
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		Boolean result = service.change(deviceWarnTypeId, terminalId);
+		ajaxJson.setSuccess(result);
+		ajaxJson.setMsg(result ? "操作成功" : "操作失败");
 		return ajaxJson;
 	}
 	

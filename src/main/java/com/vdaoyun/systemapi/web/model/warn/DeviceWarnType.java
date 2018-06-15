@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
@@ -188,6 +189,19 @@ public class DeviceWarnType implements Serializable {
     public void setNotiInterval(Integer notiInterval) {
         this.notiInterval = notiInterval;
     }
+    
+    public String getIsSelected() {
+		return isSelected;
+	}
+
+	public void setIsSelected(String isSelected) {
+		this.isSelected = isSelected;
+	}
+
+	@Transient
+	@ApiModelProperty(value = "是否报警", hidden = true)
+	private String isSelected;
+    
     
     
 }

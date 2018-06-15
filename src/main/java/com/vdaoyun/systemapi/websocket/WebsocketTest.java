@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WebsocketTest {
 	
 	@Autowired
-	private WebSocketServer server;
+	private WsHandler server;
 	
 	@GetMapping
 	public void send(@RequestParam String message) {
