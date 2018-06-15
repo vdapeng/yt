@@ -34,7 +34,7 @@ public class SensorRecordController {
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
 			@RequestParam(value = "pageSize", defaultValue = "10", required = false) @ApiParam(value = "每页条数") Integer pageSize,
-			@RequestParam(value = "order", defaultValue = "createDate", required = false) @ApiParam(value = "排序字段")  String order,
+			@RequestParam(value = "order", defaultValue = "postTime", required = false) @ApiParam(value = "排序字段")  String order,
 			@RequestParam(value = "sort", defaultValue = "DESC", required = false) @ApiParam(value = "排序方式") String sort,
 			@RequestBody SensorRecord entity
 	) throws Exception {
@@ -92,7 +92,7 @@ public class SensorRecordController {
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
-		@PathVariable(value = "id") Integer id
+		@PathVariable(value = "id") Long id
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		Boolean result = service.delete(id) > 0;

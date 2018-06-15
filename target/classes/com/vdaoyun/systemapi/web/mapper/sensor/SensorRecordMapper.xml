@@ -4,11 +4,12 @@
   <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.sensor.SensorRecord">
     <id column="id" jdbcType="INTEGER" property="id" />
     	<result column="id" jdbcType="INTEGER" property="id" />
-    	<result column="terminalID" jdbcType="VARCHAR" property="terminalid" />
+    	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
     	<result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
     	<result column="value" jdbcType="VARCHAR" property="value" />
     	<result column="data_time" jdbcType="TIMESTAMP" property="dataTime" />
     	<result column="code" jdbcType="VARCHAR" property="code" />
+    	<result column="temperature_value" jdbcType="VARCHAR" property="temperatureValue" />
   </resultMap>
   
 	<sql id="Where_Clause">
@@ -16,8 +17,8 @@
 			<if test="entity.id != '' and entity.id != null">
 				AND id = #{entity.id}
 			</if>
-			<if test="entity.terminalid != '' and entity.terminalid != null">
-				AND terminalID = #{entity.terminalid}
+			<if test="entity.terminalId != '' and entity.terminalid != null">
+				AND terminal_id = #{entity.terminalId}
 			</if>
 			<if test="entity.postTime != '' and entity.postTime != null">
 				AND post_time = #{entity.postTime}
@@ -37,22 +38,24 @@
 	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
 		SELECT 
 		id AS id
-		,terminalID AS terminalid
+		,terminal_id AS terminalId
 		,post_time AS postTime
 		,value AS value
 		,data_time AS dataTime
 		,code AS code
+		,temperature_value AS temperatureValue
 		FROM sensor_record WHERE id = #{foreignId}
 	</select>
 	
 	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
 		SELECT 
 		id AS id
-		,terminalID AS terminalid
+		,terminal_id AS terminalId
 		,post_time AS postTime
 		,value AS value
 		,data_time AS dataTime
 		,code AS code
+		,temperature_value AS temperatureValue
 		FROM sensor_record
 		<include refid="Where_Clause" />
 		<if test="orderByClause != null and orderByClause != ''">
@@ -63,11 +66,12 @@
 	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
 		SELECT 
 		id AS id
-		,terminalID AS terminalid
+		,terminal_id AS terminalId
 		,post_time AS postTime
 		,value AS value
 		,data_time AS dataTime
 		,code AS code
+		,temperature_value AS temperatureValue
 		FROM sensor_record
 		 WHERE id = #{id}
 	</select>

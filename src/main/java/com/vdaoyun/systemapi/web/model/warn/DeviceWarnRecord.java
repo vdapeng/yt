@@ -158,4 +158,28 @@ public class DeviceWarnRecord implements Serializable {
     	this.alaramEquipment = model.getAlaram_Equipment();
 	}
     
+    @ApiModelProperty(value = "业务报警文字说明")
+    @Transient
+    private String alaramBusinessName;
+    
+    @Transient
+    @ApiModelProperty(value = "设备报警文字说明")
+    private String alaramEquipmentName;
+
+	public String getAlaramBusinessName() {
+		return alaramBusinessName;
+	}
+
+	public void setAlaramBusinessName(String alaramBusinessName) {
+		this.alaramBusinessName = alaramBusinessName;
+	}
+
+	public String getAlaramEquipmentName() {
+		return alaramEquipmentName;
+	}
+
+	public void setAlaramEquipmentName(String alaramEquipmentName) {
+		this.alaramEquipmentName = alaramEquipmentName;
+	}
+    
 }

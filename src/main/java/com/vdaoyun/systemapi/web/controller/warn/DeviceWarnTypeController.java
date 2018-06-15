@@ -34,12 +34,20 @@ public class DeviceWarnTypeController {
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
 			@RequestParam(value = "pageSize", defaultValue = "10", required = false) @ApiParam(value = "每页条数") Integer pageSize,
-			@RequestParam(value = "order", defaultValue = "name", required = false) @ApiParam(value = "排序字段")  String order,
+			@RequestParam(value = "order", defaultValue = "orderby", required = false) @ApiParam(value = "排序字段")  String order,
 			@RequestParam(value = "sort", defaultValue = "DESC", required = false) @ApiParam(value = "排序方式") String sort,
 			@RequestBody DeviceWarnType entity
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
+		return ajaxJson;
+	}
+	
+	@ApiOperation(value = "获取所有类目")
+	@RequestMapping(value = "all", method = RequestMethod.GET)
+	public AjaxJson selectAllByTerminalId(@RequestParam(value = "terminalId") @ApiParam(value = "设备编号") String terminalId) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectAllByTerminalId(terminalId));
 		return ajaxJson;
 	}
 	

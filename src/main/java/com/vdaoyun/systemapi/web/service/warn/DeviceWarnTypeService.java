@@ -1,6 +1,5 @@
 package com.vdaoyun.systemapi.web.service.warn;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.systemapi.web.mapper.warn.DeviceWarnTypeMapper;
 import com.vdaoyun.systemapi.web.model.warn.DeviceWarnType;
@@ -27,6 +25,19 @@ public class DeviceWarnTypeService extends BaseService<DeviceWarnType> {
 //		entity.setId((Integer)key);
 //		return super.update(entity);
 //	} 
+	
+	/**
+	 * 
+	 * @Title: selectAllByTerminalId
+	 *  
+	 * @Description: 通过设备编号查询所有报警类型信息，包含是否报警配置
+	 *  
+	 * @param terminalId	设备编号
+	 * @return List<DeviceWarnType>
+	 */
+	public List<DeviceWarnType> selectAllByTerminalId(String terminalId) {
+		return rootMapper.selectAllByTerminalId(terminalId);
+	}
 	
 	@Override
 	public int insert(DeviceWarnType entity) {

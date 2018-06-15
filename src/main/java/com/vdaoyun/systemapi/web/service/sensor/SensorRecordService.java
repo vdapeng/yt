@@ -1,6 +1,5 @@
 package com.vdaoyun.systemapi.web.service.sensor;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.systemapi.web.mapper.sensor.SensorRecordMapper;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecord;
@@ -31,7 +29,13 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 	@Override
 	public int insert(SensorRecord entity) {
 //		entity.setCreateDate(new Date());
+		
 		return super.insert(entity);
+	}
+	
+	@Override
+	public int batchInsert(List<SensorRecord> entityList) {
+		return mapper.insertList(entityList);
 	}
 	
 	@Autowired

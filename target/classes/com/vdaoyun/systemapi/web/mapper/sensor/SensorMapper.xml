@@ -5,7 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     	<result column="id" jdbcType="INTEGER" property="id" />
     	<result column="ponds_id" jdbcType="INTEGER" property="pondsId" />
-    	<result column="terminal_id" jdbcType="INTEGER" property="terminalId" />
+    	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
     	<result column="code" jdbcType="VARCHAR" property="code" />
     	<result column="unit" jdbcType="VARCHAR" property="unit" />
     	<result column="name" jdbcType="VARCHAR" property="name" />

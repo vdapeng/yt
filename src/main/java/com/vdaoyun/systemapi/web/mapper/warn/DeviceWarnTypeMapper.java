@@ -11,4 +11,6 @@ public interface DeviceWarnTypeMapper extends BaseMapper<DeviceWarnType> {
 	public List<DeviceWarnType> selectPageInfo(Map<String, Object> param);
 	
 	public DeviceWarnType selectInfoByKey(Integer id);
+	
+	List<DeviceWarnType> selectAllByTerminalId(String terminalId);
 }

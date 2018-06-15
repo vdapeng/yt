@@ -1,16 +1,13 @@
 package com.vdaoyun.systemapi.web.model.sensor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
@@ -47,7 +44,7 @@ public class Sensor implements Serializable {
     @NotNull(message = "塘口编号 is required")
     @Column(name = "terminal_id")
     @ApiModelProperty(name = "terminalId", value = "塘口编号" )
-    private Long terminalId;
+    private String terminalId;
 	/**
      * 编码
      */
@@ -121,7 +118,7 @@ public class Sensor implements Serializable {
      *
      * @return remark - 塘口编号
      */
-    public Long getTerminalId() {
+    public String getTerminalId() {
         return terminalId;
     }
 
@@ -130,7 +127,7 @@ public class Sensor implements Serializable {
      *
      * @param remark 塘口编号
      */
-    public void setTerminalId(Long terminalId) {
+    public void setTerminalId(String terminalId) {
         this.terminalId = terminalId;
     }
   	/**

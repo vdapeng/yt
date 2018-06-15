@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.systemapi.web.mapper.user.UserMapper;
 import com.vdaoyun.systemapi.web.model.user.User;
@@ -30,7 +29,7 @@ public class UserService extends BaseService<User> {
 	
 	@Override
 	public int insert(User entity) {
-//		entity.setCreateDate(new Date());
+		entity.setCreateDate(new Date());
 		return super.insert(entity);
 	}
 	

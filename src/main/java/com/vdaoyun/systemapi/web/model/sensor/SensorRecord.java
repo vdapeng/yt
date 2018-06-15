@@ -1,16 +1,13 @@
 package com.vdaoyun.systemapi.web.model.sensor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
@@ -38,9 +35,9 @@ public class SensorRecord implements Serializable {
      * 设备编号
      */
     @NotNull(message = "设备编号 is required")
-    @Column(name = "terminalID")
-    @ApiModelProperty(name = "terminalid", value = "设备编号" )
-    private String terminalid;
+    @Column(name = "terminal_id")
+    @ApiModelProperty(name = "terminal_id", value = "设备编号" )
+    private String terminalId;
 	/**
      * 推送时间
      */
@@ -55,6 +52,13 @@ public class SensorRecord implements Serializable {
     @Column(name = "value")
     @ApiModelProperty(name = "value", value = "检测值" )
     private String value;
+    /**
+     * 温度
+     */
+    @Column(name = "temperature_value")
+    @ApiModelProperty(name = "temperatureValue", value = "传感器温度值" )
+    private String temperatureValue;
+    
 	/**
      * 监测时间
      */
@@ -86,24 +90,15 @@ public class SensorRecord implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-  	/**
-     * 获取设备编号
-     *
-     * @return remark - 设备编号
-     */
-    public String getTerminalid() {
-        return terminalid;
-    }
+  	public String getTerminalId() {
+		return terminalId;
+	}
+
+	public void setTerminalId(String terminalId) {
+		this.terminalId = terminalId;
+	}
 
 	/**
-     * 设置设备编号
-     *
-     * @param remark 设备编号
-     */
-    public void setTerminalid(String terminalid) {
-        this.terminalid = terminalid;
-    }
-  	/**
      * 获取推送时间
      *
      * @return remark - 推送时间
@@ -171,6 +166,14 @@ public class SensorRecord implements Serializable {
     public void setCode(String code) {
         this.code = code;
     }
+
+	public String getTemperatureValue() {
+		return temperatureValue;
+	}
+
+	public void setTemperatureValue(String temperatureValue) {
+		this.temperatureValue = temperatureValue;
+	}
     
     
 }

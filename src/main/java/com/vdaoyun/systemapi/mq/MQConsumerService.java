@@ -83,14 +83,29 @@ public class MQConsumerService {
          * 此处 MQ 客户端只需要订阅 MQTT 的一级 Topic 即可
          */
         this.consumer.subscribe(rootTopicId, "*", this.messageListener);
-		start(null);
+        if (consumer.isClosed()) {
+        	start(null);
+		}
+		
 	}
 	
 	public void start(String topic) {
 		if (StringUtils.isNotEmpty(topic)) {
 			this.consumer.subscribe(topic, "*", this.messageListener);
 		}
-		this.consumer.start();
+		if (consumer.isClosed()) {
+			this.consumer.start();
+		}
+	}
+	
+	public void reStart(String topic) {
+		if (StringUtils.isNotEmpty(topic)) {
+			this.consumer.subscribe(topic, "*", this.messageListener);
+		}
+		if (consumer.isStarted()) {
+			consumer.shutdown();
+		}
+		consumer.start();
 	}
 	
 	/**

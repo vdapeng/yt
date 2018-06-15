@@ -48,6 +48,15 @@ public class SysUserService extends BaseService<SysUser> {
 	@Autowired
 	private SysFunctionService sysFunctionService;
 
+	
+	public SysUser loadUserByUsername(String username) {
+		Example example = new Example(SysUser.class);
+		example.createCriteria().andEqualTo("username", username)
+		.andEqualTo("isDel", IConstant.YesOrNo.NO.toString());
+		List<SysUser> list = sysUserMapper.selectByExample(example);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
 	/**
 	 * 
 	 * @Title: login
