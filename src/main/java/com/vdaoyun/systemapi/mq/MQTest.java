@@ -89,7 +89,7 @@ public class MQTest {
 		record.setAlaram_Equipment("BATTERYLOW&TEMPERATUREHIGH");
 		SendMessage(MQConstants.WARN_TOPIC, record);
 	}
-	
+//	
 //	@Scheduled(cron = "0 0/1 * * * ? ")
 //	public void sendToClient() {
 //		byte[] body = "HELLO WORLD".getBytes();

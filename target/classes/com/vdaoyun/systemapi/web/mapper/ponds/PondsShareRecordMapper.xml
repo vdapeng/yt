@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.ponds.PondsShareRecordMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.ponds.PondsShareRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="openid" jdbcType="VARCHAR" property="openid" />
+    	<result column="share_openid" jdbcType="VARCHAR" property="shareOpenid" />
+    	<result column="ponds_id" jdbcType="INTEGER" property="pondsId" />
+    	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.openid != '' and entity.openid != null">
+				AND openid = #{entity.openid}
+			</if>
+			<if test="entity.shareOpenid != '' and entity.shareOpenid != null">
+				AND share_openid = #{entity.shareOpenid}
+			</if>
+			<if test="entity.pondsId != '' and entity.pondsId != null">
+				AND ponds_id = #{entity.pondsId}
+			</if>
+			<if test="entity.createDate != '' and entity.createDate != null">
+				AND create_date = #{entity.createDate}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,openid AS openid
+		,share_openid AS shareOpenid
+		,ponds_id AS pondsId
+		,create_date AS createDate
+		FROM ponds_share_record WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,openid AS openid
+		,share_openid AS shareOpenid
+		,ponds_id AS pondsId
+		,create_date AS createDate
+		FROM ponds_share_record
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,openid AS openid
+		,share_openid AS shareOpenid
+		,ponds_id AS pondsId
+		,create_date AS createDate
+		FROM ponds_share_record
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>
