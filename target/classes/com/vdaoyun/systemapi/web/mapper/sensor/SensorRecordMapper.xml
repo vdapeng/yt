@@ -76,4 +76,27 @@
 		 WHERE id = #{id}
 	</select>
 	
+	<resultMap type="java.util.Map" id="EchartData">
+		<id column="code" jdbcType="VARCHAR" property="code" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<collection property="datas" javaType="java.util.List" ofType="java.util.Map">
+			<result column="value" jdbcType="VARCHAR" property="value" />
+			<result column="temperature_value" jdbcType="VARCHAR" property="temperatureValue" />
+			<result column="data_time"  jdbcType="TIMESTAMP" property="dataTime"  />
+		</collection>
+	</resultMap>
+	
+	<select id="selectEchartData" parameterType="java.util.Map" resultMap="EchartData">
+		SELECT
+			a.*, b. NAME
+		FROM
+			sensor_record a ,
+			sensor b
+		WHERE
+			a.terminal_id = b.terminal_id
+		AND a.`code` = b.`code`
+		AND b.ponds_id = #{pondsId}
+		ORDER BY a.data_time ASC
+	</select>
+	
 </mapper>

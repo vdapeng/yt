@@ -1,9 +1,11 @@
 package com.vdaoyun.systemapi.web.controller.sensor;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
-import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
+import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecord;
 import com.vdaoyun.systemapi.web.service.sensor.SensorRecordService;
-
-import com.vdaoyun.common.bean.AjaxJson;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -40,6 +42,14 @@ public class SensorRecordController {
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
+		return ajaxJson;
+	}
+	
+	@ApiOperation("探测器运行轨迹图")
+	@RequestMapping(value = "echart", method = RequestMethod.POST)
+	public AjaxJson selectEchartData(@RequestBody Map<String, Object> param) {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(JSON.parse(JSON.toJSONString(service.selectEchartData(param))));
 		return ajaxJson;
 	}
 	

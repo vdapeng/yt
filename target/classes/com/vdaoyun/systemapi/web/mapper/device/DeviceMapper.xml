@@ -61,16 +61,17 @@
 		</if>
 	</select>
 	
-	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	<select id="selectInfoByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
 		SELECT 
-		terminal_id AS terminalId
-		,name AS name
-		,longitude AS longitude
-		,latitude AS latitude
-		,create_date AS createDate
-		,user_id AS userId
-		FROM device
-		 WHERE id = #{id}
+		a.terminal_id AS terminalId
+		,a.name AS name
+		,a.longitude AS longitude
+		,a.latitude AS latitude
+		,a.create_date AS createDate
+		,a.user_id AS userId,
+		count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id 
+		WHERE a.terminal_id = #{id, jdbcType=VARCHAR}
+		GROUP BY a.terminal_id
 	</select>
 	
 </mapper>

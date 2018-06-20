@@ -1,14 +1,21 @@
 package com.vdaoyun.systemapi.web.service.sensor;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.abel533.echarts.Option;
+import com.github.abel533.echarts.axis.CategoryAxis;
+import com.github.abel533.echarts.axis.ValueAxis;
+import com.github.abel533.echarts.code.Trigger;
+import com.github.abel533.echarts.series.Line;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
@@ -31,6 +38,37 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 //		entity.setCreateDate(new Date());
 		
 		return super.insert(entity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Option selectEchartData(Map<String, Object> param) {
+		Option option = new Option();
+		option.yAxis(new ValueAxis());
+		option.title("运行记录");
+		option.tooltip(Trigger.axis);
+		List<HashMap<String, Object>> result = rootMapper.selectEchartData(param);
+		HashMap<String, Object> item = null;
+		CategoryAxis xAxis = new CategoryAxis();
+		for (int i = 0; i < result.size(); i++) {
+			item = result.get(i);
+			Line line = new Line();
+//			line.setSmooth(true);
+			line.name(item.getOrDefault("name", "").toString());
+			line.stack(item.getOrDefault("code", "").toString());
+			List<HashMap<String, Object>> datas = (List<HashMap<String, Object>>) item.get("datas");
+			for (int j = 0; j < datas.size(); j++) {
+				line.data().add(datas.get(j).get("value"));
+				if (option.getxAxis() == null || option.getxAxis().size() <= 0) {
+					xAxis.data().add(DateFormatUtils.format((Date)datas.get(j).get("dataTime"), "HH:mm"));
+				}
+			}
+			if (option.getxAxis() == null || option.getxAxis().size() <= 0) {
+				option.xAxis().add(xAxis);
+			}
+			option.series().add(line);
+			option.legend().data().add(item.getOrDefault("name", "").toString());
+		}
+		return option;
 	}
 	
 	@Override

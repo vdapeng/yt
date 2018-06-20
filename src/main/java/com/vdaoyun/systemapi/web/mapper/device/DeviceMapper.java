@@ -10,5 +10,5 @@ public interface DeviceMapper extends BaseMapper<Device> {
 
 	public List<Device> selectPageInfo(Map<String, Object> param);
 	
-	public Device selectInfoByKey(Integer id);
+	public Device selectInfoByKey(String id);
 }
