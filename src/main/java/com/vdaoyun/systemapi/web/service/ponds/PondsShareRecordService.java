@@ -56,6 +56,19 @@ public class PondsShareRecordService extends BaseService<PondsShareRecord> {
 		return new PageInfo<>(list);
 	}
 	
+	public PageInfo<HashMap<String, Object>> selectPageInfoEx(PondsShareRecord entity, 
+			Integer wdy_pageNum, 
+			Integer wdy_pageSize, 
+			String wdy_pageOrder, 
+			String wdy_pageSort) {
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("entity", entity);
+		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
+		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
+		List<HashMap<String, Object>> list = rootMapper.selectPageInfoEx(param);
+		return new PageInfo<>(list);
+	}
+	
 	
 	@Transactional
 	public Integer insertInfo(PondsShareRecord entity) {

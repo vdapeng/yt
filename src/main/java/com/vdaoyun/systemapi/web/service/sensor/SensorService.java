@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.systemapi.web.mapper.sensor.SensorMapper;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
@@ -30,7 +29,7 @@ public class SensorService extends BaseService<Sensor> {
 	
 	@Override
 	public int insert(Sensor entity) {
-//		entity.setCreateDate(new Date());
+		entity.setCreateDate(new Date());
 		return super.insert(entity);
 	}
 	
@@ -59,6 +58,7 @@ public class SensorService extends BaseService<Sensor> {
 	
 	@Transactional
 	public Integer insertInfo(Sensor entity) {
+		entity.setCreateDate(new Date());
 		Integer result = super.insert(entity);
 		if (result > 0) {
 		}

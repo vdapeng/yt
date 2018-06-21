@@ -1,6 +1,5 @@
-package com.vdaoyun.systemapi.web.service.ponds;
+package com.vdaoyun.systemapi.web.service.sensor;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,35 +12,31 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
-import com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper;
-import com.vdaoyun.systemapi.web.model.ponds.Ponds;
+import com.vdaoyun.systemapi.web.mapper.sensor.SensorWarnConfigMapper;
+import com.vdaoyun.systemapi.web.model.sensor.SensorWarnConfig;
 
 @Service
-public class PondsService extends BaseService<Ponds> {
+public class SensorWarnConfigService extends BaseService<SensorWarnConfig> {
 	
 //	@Override
 //	public int delete(Object key) {
-//		Ponds entity = new Ponds();
+//		SensorWarnConfig entity = new SensorWarnConfig();
 //		entity.setIsDel(YesOrNo.YES.toString());
 //		entity.setId((Integer)key);
 //		return super.update(entity);
 //	} 
 	
 	@Override
-	public int insert(Ponds entity) {
+	public int insert(SensorWarnConfig entity) {
 //		entity.setCreateDate(new Date());
 		return super.insert(entity);
 	}
 	
-	public List<Ponds> selectAll() {
-		return mapper.selectAll();
-	}
-	
 	@Autowired
-	private PondsMapper rootMapper;
+	private SensorWarnConfigMapper rootMapper;
 	
-	public PageInfo<Ponds> selectPageInfo(
-		Ponds entity, 
+	public PageInfo<SensorWarnConfig> selectPageInfo(
+		SensorWarnConfig entity, 
 		Integer wdy_pageNum, 
 		Integer wdy_pageSize, 
 		String wdy_pageOrder, 
@@ -55,14 +50,13 @@ public class PondsService extends BaseService<Ponds> {
 			param.put("orderByClause", "createDate DESC");
 		}
 		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
-		List<Ponds> list = rootMapper.selectPageInfo(param);
+		List<SensorWarnConfig> list = rootMapper.selectPageInfo(param);
 		return new PageInfo<>(list);
 	}
 	
 	
 	@Transactional
-	public Integer insertInfo(Ponds entity) {
-		entity.setCreateDate(new Date());
+	public Integer insertInfo(SensorWarnConfig entity) {
 		Integer result = super.insert(entity);
 		if (result > 0) {
 		}

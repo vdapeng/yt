@@ -41,6 +41,14 @@ public class DeviceController {
 		return ajaxJson;
 	}
 	
+	@ApiOperation("搜索所有设备列表")
+	@RequestMapping(value = "all", method = RequestMethod.GET)
+	public AjaxJson selectAll() throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectAll());
+		return ajaxJson;
+	}
+	
 	@ApiOperation(value = "通过主键查询详情")
 	@RequestMapping(value = "/{terminalId}", method = RequestMethod.GET)
 	public AjaxJson getById(

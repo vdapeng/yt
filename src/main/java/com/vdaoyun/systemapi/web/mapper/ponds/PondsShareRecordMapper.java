@@ -1,5 +1,6 @@
 package com.vdaoyun.systemapi.web.mapper.ponds;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import com.vdaoyun.systemapi.web.model.ponds.PondsShareRecord;
 public interface PondsShareRecordMapper extends BaseMapper<PondsShareRecord> {
 
 	public List<PondsShareRecord> selectPageInfo(Map<String, Object> param);
+	
+	List<HashMap<String, Object>> selectPageInfoEx(HashMap<String, Object> param);
 	
 	public PondsShareRecord selectInfoByKey(Integer id);
 }

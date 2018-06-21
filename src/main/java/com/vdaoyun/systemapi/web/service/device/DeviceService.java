@@ -39,6 +39,18 @@ public class DeviceService extends BaseService<Device> {
 		return result;
 	} 
 	
+	/**
+	 * 
+	 * @Title: selectAll
+	 *  
+	 * @Description: 搜索所有设备列表
+	 *  
+	 * @return List<Device>
+	 */
+	public List<Device> selectAll() {
+		return mapper.selectAll();
+	}
+	
 	@Override
 	public int insert(Device entity) {
 		entity.setCreateDate(new Date());

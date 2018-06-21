@@ -15,6 +15,8 @@ import com.github.abel533.echarts.Option;
 import com.github.abel533.echarts.axis.CategoryAxis;
 import com.github.abel533.echarts.axis.ValueAxis;
 import com.github.abel533.echarts.code.Trigger;
+import com.github.abel533.echarts.code.X;
+import com.github.abel533.echarts.code.Y;
 import com.github.abel533.echarts.series.Line;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -42,32 +44,60 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 	
 	@SuppressWarnings("unchecked")
 	public Option selectEchartData(Map<String, Object> param) {
+		String formart = "HH:mm";
+		if (param.containsKey("expr")) {
+			String expr = (String) param.get("expr");
+			Integer exprInt = Integer.parseInt(expr);
+			if (exprInt > 7) {
+				param.put("expr", 7);
+			} else {
+				param.put("expr", Integer.parseInt(expr));
+			}
+			if (exprInt != 1) {
+				formart = "dd日/HH时";
+			}
+		} else {
+			param.put("expr", 1);
+		}
+		
 		Option option = new Option();
 		option.yAxis(new ValueAxis());
 		option.title("运行记录");
 		option.tooltip(Trigger.axis);
 		List<HashMap<String, Object>> result = rootMapper.selectEchartData(param);
-		HashMap<String, Object> item = null;
-		CategoryAxis xAxis = new CategoryAxis();
-		for (int i = 0; i < result.size(); i++) {
-			item = result.get(i);
-			Line line = new Line();
-//			line.setSmooth(true);
-			line.name(item.getOrDefault("name", "").toString());
-			line.stack(item.getOrDefault("code", "").toString());
-			List<HashMap<String, Object>> datas = (List<HashMap<String, Object>>) item.get("datas");
-			for (int j = 0; j < datas.size(); j++) {
-				line.data().add(datas.get(j).get("value"));
-				if (option.getxAxis() == null || option.getxAxis().size() <= 0) {
-					xAxis.data().add(DateFormatUtils.format((Date)datas.get(j).get("dataTime"), "HH:mm"));
+		
+		if (result == null || result.size() == 0) {
+			option.title("暂无数据");
+			option.title().left(X.center);
+			option.title().top(Y.center);
+		} else {
+			option.title().left(X.left);
+			option.title().top(15);
+			HashMap<String, Object> item = null;
+			CategoryAxis xAxis = new CategoryAxis();
+			xAxis.setBoundaryGap(false);
+			for (int i = 0; i < result.size(); i++) {
+				item = result.get(i);
+				Line line = new Line();
+				line.name(item.getOrDefault("name", "").toString());
+				line.stack(item.getOrDefault("code", "").toString());
+				List<HashMap<String, Object>> datas = (List<HashMap<String, Object>>) item.get("datas");
+				for (int j = 0; j < datas.size(); j++) {
+					line.data().add(datas.get(j).get("value"));
+					if (option.getxAxis() == null || option.getxAxis().size() <= 0) {
+						xAxis.data().add(DateFormatUtils.format((Date)datas.get(j).get("dataTime"), formart));
+					}
 				}
+				if (option.getxAxis() == null || option.getxAxis().size() <= 0) {
+					option.xAxis().add(xAxis);
+				}
+				option.series().add(line);
+				option.legend().data().add(item.getOrDefault("name", "").toString());
+				option.legend().top(15);
 			}
-			if (option.getxAxis() == null || option.getxAxis().size() <= 0) {
-				option.xAxis().add(xAxis);
-			}
-			option.series().add(line);
-			option.legend().data().add(item.getOrDefault("name", "").toString());
 		}
+		
+		
 		return option;
 	}
 	

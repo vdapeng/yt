@@ -3,7 +3,6 @@ package com.vdaoyun.systemapi.mq;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -83,15 +82,13 @@ public class MQMessageListener implements MessageListener {
 			String terminalId = data.getTerminalID();				// 设备编号
 			Date postTime = data.getPostTime();		 				// 上传时间
 			Integer SampeFrequency = data.getSampeFrequency();		// 数据采集频率
-			Set<String> keys = data.getData().get(0).keySet();		// 数据所有key
+			Set<String> keys = data.getData().get(0).keySet();	// 数据所有key
 			List<HashMap<String, Object>> list = data.getData();	// 采集到的数据列表
 			HashMap<String, Object> item = null;					// 临时变量，用于存储data
-			String key = "";										// 临时变量，用于存储key
 			List<SensorRecord> sensorRecords = new ArrayList<>();
 			for (int i = 0; i < list.size(); i++) {
 				item = list.get(i);
-				for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
-					key = (String) iterator.next();
+				for (String key : keys) {
 					if (!key.contains("Temperature")) {
 						SensorRecord sensorRecord = new SensorRecord();
 						sensorRecord.setCode(key);

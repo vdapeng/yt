@@ -11,4 +11,6 @@ public interface DeviceRecordMapper extends BaseMapper<DeviceRecord> {
 	public List<DeviceRecord> selectPageInfo(Map<String, Object> param);
 	
 	public DeviceRecord selectInfoByKey(Integer id);
+	
+	List<DeviceRecord> selectEchartData(Map<String, Object> param);
 }

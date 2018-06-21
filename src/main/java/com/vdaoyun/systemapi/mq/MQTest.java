@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.vdaoyun.systemapi.mq.model.MQDeviceRecordData;
 import com.vdaoyun.systemapi.mq.model.MQDeviceRecordModel;
@@ -61,7 +62,7 @@ public class MQTest {
 	// 发送mq消息
 	private void SendMessage(String topic, Object record) {
 		byte[] body = null;
-		String content = JSONObject.toJSONString(record);
+		String content = JSONObject.toJSONString(record, true);
 		try {
 			body = content.getBytes("UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -77,7 +78,7 @@ public class MQTest {
 	 * 
 	 * @Title: sendDeviceWarnData
 	 *  
-	 * @Description: 模拟设备报警，每十分钟一次
+	 * @Description: 模拟设备报警，每三十分钟一次
 	 *   void
 	 */
 	@Scheduled(cron = "0 0/30 * * * ? ")
@@ -132,7 +133,7 @@ public class MQTest {
 		record.setPostTime(new Date());
 		record.setSampeFrequency(300);
 		record.setData(data);
-		SendMessage(MQConstants.CGQ_TOPIC, record);
+		SendMessage(MQConstants.CGQ_TOPIC, JSON.toJSON(record));
 	}
 
 }

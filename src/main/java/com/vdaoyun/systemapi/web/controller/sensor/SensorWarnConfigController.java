@@ -1,11 +1,9 @@
-package com.vdaoyun.systemapi.web.controller.device;
-
-import java.util.HashMap;
+package com.vdaoyun.systemapi.web.controller.sensor;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,43 +11,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
+import com.vdaoyun.systemapi.web.model.sensor.SensorWarnConfig;
+import com.vdaoyun.systemapi.web.service.sensor.SensorWarnConfigService;
+
 import com.vdaoyun.common.bean.AjaxJson;
-import com.vdaoyun.systemapi.web.model.device.DeviceRecord;
-import com.vdaoyun.systemapi.web.service.device.DeviceRecordService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-@Api(value = "设备运行记录")
+@Api(value = "探测器报警配置表")
 @RestController
-@RequestMapping(value = "/device/record")
-public class DeviceRecordController {
+@RequestMapping(value = "/sensor/warn/config")
+public class SensorWarnConfigController {
 	
 	@Autowired
-	private DeviceRecordService service;
+	private SensorWarnConfigService service;
 	
 	@ApiOperation(value = "列表查询")
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
 			@RequestParam(value = "pageSize", defaultValue = "10", required = false) @ApiParam(value = "每页条数") Integer pageSize,
-			@RequestParam(value = "order", defaultValue = "postTime", required = false) @ApiParam(value = "排序字段")  String order,
+			@RequestParam(value = "order", defaultValue = "code", required = false) @ApiParam(value = "排序字段")  String order,
 			@RequestParam(value = "sort", defaultValue = "DESC", required = false) @ApiParam(value = "排序方式") String sort,
-			@RequestBody DeviceRecord entity
+			@RequestBody SensorWarnConfig entity
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
-		return ajaxJson;
-	}
-	
-	@ApiOperation("探测器运行轨迹图")
-	@RequestMapping(value = "echart", method = RequestMethod.POST)
-	public AjaxJson selectEchartData(@RequestBody HashMap<String, Object> param) {
-		AjaxJson ajaxJson = new AjaxJson();
-		ajaxJson.setData(JSON.parse(JSON.toJSONString(service.selectEchartData(param))));
 		return ajaxJson;
 	}
 	
@@ -65,9 +55,10 @@ public class DeviceRecordController {
 	}
 	
 	@ApiOperation(value = "新增")
+	@ApiImplicitParam(name = "entity", paramType = "body", value = "实体", dataType = "SensorWarnConfig")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
-		@RequestBody @Valid @ApiParam(value = "DeviceRecord") DeviceRecord entity,
+		@RequestBody @Valid SensorWarnConfig entity,
 		BindingResult bindingResult
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -86,7 +77,7 @@ public class DeviceRecordController {
 	@ApiOperation(value = "编辑")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(
-		@RequestBody @ApiParam(value = "设备运行记录") DeviceRecord entity, 
+		@RequestBody @ApiParam(value = "探测器报警配置表") SensorWarnConfig entity, 
 		@PathVariable(value = "id") @ApiParam(value = "主键") Long id
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -99,9 +90,10 @@ public class DeviceRecordController {
 	}
 	
 	@ApiOperation(value = "通过主键删除")
+	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
-		@PathVariable(value = "id") @ApiParam(value = "主键") Long id
+		@PathVariable(value = "id") Long id
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		Boolean result = service.delete(id) > 0;

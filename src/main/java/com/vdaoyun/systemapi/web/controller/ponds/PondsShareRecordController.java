@@ -39,7 +39,7 @@ public class PondsShareRecordController {
 			@RequestBody PondsShareRecord entity
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
-		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
+		ajaxJson.setData(service.selectPageInfoEx(entity, pageNum, pageSize, order, sort));
 		return ajaxJson;
 	}
 	

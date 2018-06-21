@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.sensor.SensorWarnConfigMapper">
+  <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.sensor.SensorWarnConfig">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="id" jdbcType="INTEGER" property="id" />
+    	<result column="code" jdbcType="VARCHAR" property="code" />
+    	<result column="upper" jdbcType="VARCHAR" property="upper" />
+    	<result column="lower" jdbcType="VARCHAR" property="lower" />
+    	<result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  
+	<sql id="Where_Clause">
+		<where>
+			<if test="entity.id != '' and entity.id != null">
+				AND id = #{entity.id}
+			</if>
+			<if test="entity.code != '' and entity.code != null">
+				AND code = #{entity.code}
+			</if>
+			<if test="entity.upper != '' and entity.upper != null">
+				AND upper = #{entity.upper}
+			</if>
+			<if test="entity.lower != '' and entity.lower != null">
+				AND lower = #{entity.lower}
+			</if>
+			<if test="entity.remark != '' and entity.remark != null">
+				AND remark = #{entity.remark}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectByForeign" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT 
+		id AS id
+		,code AS code
+		,upper AS upper
+		,lower AS lower
+		,remark AS remark
+		FROM sensor_warn_config WHERE id = #{foreignId}
+	</select>
+	
+	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,code AS code
+		,upper AS upper
+		,lower AS lower
+		,remark AS remark
+		FROM sensor_warn_config
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		id AS id
+		,code AS code
+		,upper AS upper
+		,lower AS lower
+		,remark AS remark
+		FROM sensor_warn_config
+		 WHERE id = #{id}
+	</select>
+	
+</mapper>

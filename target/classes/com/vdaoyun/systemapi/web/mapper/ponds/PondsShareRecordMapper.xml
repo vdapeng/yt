@@ -65,4 +65,46 @@
 		 WHERE id = #{id}
 	</select>
 	
+	<select id="selectPageInfoEx" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id ,
+			a.create_date createDate,
+			a.pondsId ,
+			a.name pondsName ,
+			a.address pondsAddress ,
+			a.nickname ,
+			a.true_name trueName,
+			a.avatar_url avatarUrl,
+			b.nickname shareNickName ,
+			b.true_name shareTrueName ,
+			b.avatar_url shareAvatarUrl
+		FROM
+			(
+				SELECT
+					a.id ,
+					a.share_openid ,
+					a.create_date ,
+					b.id pondsId ,
+					b. NAME ,
+					b.address ,
+					c.avatar_url ,
+					c.true_name ,
+					c.nickname
+				FROM
+					ponds_share_record a ,
+					ponds b ,
+					`user` c
+				WHERE
+					a.openid = c.openid
+				AND a.ponds_id = b.id
+			) a ,
+			`user` b
+		WHERE
+			a.share_openid = b.openid
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	
 </mapper>

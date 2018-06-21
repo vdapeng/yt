@@ -86,6 +86,7 @@
 		</collection>
 	</resultMap>
 	
+	<!-- 搜索ECHART图表数据 -->
 	<select id="selectEchartData" parameterType="java.util.Map" resultMap="EchartData">
 		SELECT
 			a.*, b. NAME
@@ -95,7 +96,13 @@
 		WHERE
 			a.terminal_id = b.terminal_id
 		AND a.`code` = b.`code`
-		AND b.ponds_id = #{pondsId}
+		AND data_time > DATE_SUB(NOW(),INTERVAL #{expr} DAY)
+		<if test="pondsId != null">
+			AND b.ponds_id = #{pondsId}
+		</if>
+		<if test="terminalId != null">
+			AND b.terminal_id = #{terminalId}
+		</if>
 		ORDER BY a.data_time ASC
 	</select>
 	

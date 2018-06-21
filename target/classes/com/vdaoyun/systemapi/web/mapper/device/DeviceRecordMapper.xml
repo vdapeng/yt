@@ -113,4 +113,8 @@
 		 WHERE id = #{id}
 	</select>
 	
+	<select id="selectEchartData" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT * FROM device_record
+	</select>
+	
 </mapper>
