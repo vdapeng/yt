@@ -18,6 +18,7 @@ import com.vdaoyun.systemapi.web.mapper.ponds.PondsShareRecordMapper;
 import com.vdaoyun.systemapi.web.model.ponds.PondsShareRecord;
 
 @Service
+@Transactional
 public class PondsShareRecordService extends BaseService<PondsShareRecord> {
 	
 //	@Override

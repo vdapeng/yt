@@ -114,7 +114,24 @@
 	</select>
 	
 	<select id="selectEchartData" parameterType="java.util.Map" resultMap="BaseResultMap">
-		SELECT * FROM device_record
+		SELECT 
+		id AS id
+		,terminal_id AS terminalId
+		,post_time AS postTime
+		,solar_voltage AS solarVoltage
+		,battery_voltage AS batteryVoltage
+		,battery_temperature AS batteryTemperature
+		,system_temperature AS systemTemperature
+		,battery_level AS batteryLevel
+		,charger_status AS chargerStatus
+		,shell_temperature AS shellTemperature
+		,gps AS gps
+		,power_key AS powerKey
+		FROM device_record
+		WHERE 1=1
+		<if test="terminalId != '' and terminalId != null">
+			AND terminal_id = #{terminalId}
+		</if>
 	</select>
 	
 </mapper>

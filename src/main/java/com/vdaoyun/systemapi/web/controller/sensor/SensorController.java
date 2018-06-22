@@ -1,9 +1,12 @@
 package com.vdaoyun.systemapi.web.controller.sensor;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
-import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
 import com.vdaoyun.systemapi.web.service.sensor.SensorService;
-
-import com.vdaoyun.common.bean.AjaxJson;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -64,13 +66,28 @@ public class SensorController {
 		if (bindingResult.hasErrors()) {
 			ajaxJson.setSuccess(false);
 			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
+			return ajaxJson;
 		}
 		Boolean result = service.insertInfo(entity) > 0;
 		ajaxJson.setData(entity);
 		ajaxJson.setSuccess(result);
 		ajaxJson.setMsg(result ? "新增成功" : "新增失败");
 		return ajaxJson;
-
+	}
+	
+	@ApiOperation("批量新增")
+	@RequestMapping(value = "batch", method = RequestMethod.POST)
+	public AjaxJson batchInsert(@RequestBody @Valid List<Sensor> list, BindingResult bindingResult) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		if (bindingResult.hasErrors()) {
+			ajaxJson.setSuccess(false);
+			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
+			return ajaxJson;
+		}
+		Boolean result = service.batchInsert(list) > 0;
+		ajaxJson.setSuccess(result);
+		ajaxJson.setMsg(result ? "新增成功" : "新增失败");
+		return ajaxJson;
 	}
 	
 	@ApiOperation(value = "编辑")
@@ -89,15 +106,44 @@ public class SensorController {
 	}
 	
 	@ApiOperation(value = "通过主键删除")
-	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
-		@PathVariable(value = "id") Integer id
+		@PathVariable(value = "id") @ApiParam(value = "主键") Long id
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		Boolean result = service.delete(id) > 0;
 		ajaxJson.setMsg(result ? "删除成功" : "删除失败");
 		ajaxJson.setSuccess(result);
+		return ajaxJson;
+	}
+	
+	@ApiOperation("通过塘口编号查询探测器列表")
+	@RequestMapping(value = "pid", method = RequestMethod.GET)
+	public AjaxJson selectListByPondsId(@RequestParam("pondsId") Long pondsId) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectListByPondsId(pondsId));
+		return ajaxJson;
+	}
+	
+	@ApiOperation("通过具体的探测器类型编号{code}和具体的设备编号{terminalId}，查找相关探测器列表。")
+	@GetMapping("code")
+	public AjaxJson selectListByCode(
+			@RequestParam("code") @ApiParam("具体探测器类型编码。例如：HP") String code,
+			@RequestParam("terminalId") @ApiParam("设备编号") String terminalId
+	) throws Exception 	{
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectListByCode(code, terminalId));
+		return ajaxJson;
+	}
+	
+	@ApiOperation("通过总探测器类型编号{groupCode}和具体的设备编号{terminalId}，查找相关探测器列表。")
+	@GetMapping("groupCode")
+	public AjaxJson selectListByGroupCode(
+			@RequestParam(name = "groupCode", required = false, defaultValue = "CGQ") @ApiParam("总探测器类型编码。例如：CGQ") String groupCode,
+			@RequestParam("terminalId") @ApiParam("设备编号") String terminalId
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectListByGroupCode(groupCode, terminalId));
 		return ajaxJson;
 	}
 

@@ -17,6 +17,7 @@ import com.vdaoyun.systemapi.web.mapper.sensor.SensorMapper;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
 
 @Service
+@Transactional
 public class SensorService extends BaseService<Sensor> {
 	
 //	@Override
@@ -55,14 +56,27 @@ public class SensorService extends BaseService<Sensor> {
 		return new PageInfo<>(list);
 	}
 	
-	
-	@Transactional
 	public Integer insertInfo(Sensor entity) {
 		entity.setCreateDate(new Date());
-		Integer result = super.insert(entity);
-		if (result > 0) {
-		}
-		return result;
+		return super.insert(entity);
+	}
+	
+	public List<HashMap<String, Object>> selectListByPondsId(Long pondsId) {
+		return rootMapper.selectListByPondsId(pondsId);
 	}
 
+	public List<HashMap<String, Object>> selectListByCode(String code, String terminalId) {
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("groupCode", code);
+		param.put("terminalId", terminalId);
+		return rootMapper.selectListByCode(param);
+	}
+	
+	public List<HashMap<String, Object>> selectListByGroupCode(String groupCode, String terminalId) {
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("groupCode", groupCode);
+		param.put("terminalId", terminalId);
+		return rootMapper.selectListByGroupCode(param);
+	}
+	
 }

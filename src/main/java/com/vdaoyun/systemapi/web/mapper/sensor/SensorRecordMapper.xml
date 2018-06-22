@@ -95,8 +95,9 @@
 			sensor b
 		WHERE
 			a.terminal_id = b.terminal_id
+		AND b.is_enable = 'y'
 		AND a.`code` = b.`code`
-		AND data_time > DATE_SUB(NOW(),INTERVAL #{expr} DAY)
+		AND a.data_time > DATE_SUB(NOW(),INTERVAL #{expr} DAY)
 		<if test="pondsId != null">
 			AND b.ponds_id = #{pondsId}
 		</if>

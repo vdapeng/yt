@@ -74,12 +74,24 @@ public class Sensor implements Serializable {
 	/**
      * 创建人
      */
-    @NotNull(message = "创建人 is required")
+//    @NotNull(message = "创建人 is required")
     @Column(name = "user_id")
     @ApiModelProperty(name = "userId", value = "创建人" )
     private Long userId;
     
-  	/**
+    @Column(name = "is_enable")
+    @ApiModelProperty(name = "isEnable", value = "是否启用，y：启用 n:未启用")
+    private String isEnable;
+    
+  	public String getIsEnable() {
+		return isEnable;
+	}
+
+	public void setIsEnable(String isEnable) {
+		this.isEnable = isEnable;
+	}
+
+	/**
      * 获取
      *
      * @return remark - 

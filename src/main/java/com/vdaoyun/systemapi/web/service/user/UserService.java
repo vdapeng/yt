@@ -17,6 +17,7 @@ import com.vdaoyun.systemapi.web.mapper.user.UserMapper;
 import com.vdaoyun.systemapi.web.model.user.User;
 
 @Service
+@Transactional
 public class UserService extends BaseService<User> {
 	
 //	@Override

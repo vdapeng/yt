@@ -56,7 +56,19 @@ public class SensorWarnConfig implements Serializable {
     @ApiModelProperty(name = "remark", value = "备注说明" )
     private String remark;
     
-  	/**
+    @Column(name = "unit")
+    @ApiModelProperty(name = "unit", value = "单位" )
+    private String unit;
+    
+  	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	/**
      * 获取
      *
      * @return remark - 

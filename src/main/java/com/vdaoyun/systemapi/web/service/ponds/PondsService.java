@@ -17,6 +17,7 @@ import com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 
 @Service
+@Transactional
 public class PondsService extends BaseService<Ponds> {
 	
 //	@Override

@@ -7,6 +7,7 @@
     	<result column="code" jdbcType="VARCHAR" property="code" />
     	<result column="upper" jdbcType="VARCHAR" property="upper" />
     	<result column="lower" jdbcType="VARCHAR" property="lower" />
+    	<result column="unit" jdbcType="VARCHAR" property="unit" />
     	<result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   
@@ -24,6 +25,9 @@
 			<if test="entity.lower != '' and entity.lower != null">
 				AND lower = #{entity.lower}
 			</if>
+			<if test="entity.unit != '' and entity.unit != null">
+				AND unit = #{entity.unit}
+			</if>
 			<if test="entity.remark != '' and entity.remark != null">
 				AND remark = #{entity.remark}
 			</if>
@@ -37,6 +41,7 @@
 		,upper AS upper
 		,lower AS lower
 		,remark AS remark
+		,unit
 		FROM sensor_warn_config WHERE id = #{foreignId}
 	</select>
 	
@@ -47,6 +52,7 @@
 		,upper AS upper
 		,lower AS lower
 		,remark AS remark
+		,unit
 		FROM sensor_warn_config
 		<include refid="Where_Clause" />
 		<if test="orderByClause != null and orderByClause != ''">
@@ -55,12 +61,7 @@
 	</select>
 	
 	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-		SELECT 
-		id AS id
-		,code AS code
-		,upper AS upper
-		,lower AS lower
-		,remark AS remark
+		SELECT  id AS id ,code AS code ,upper AS upper ,lower AS lower ,remark AS remark ,unit
 		FROM sensor_warn_config
 		 WHERE id = #{id}
 	</select>

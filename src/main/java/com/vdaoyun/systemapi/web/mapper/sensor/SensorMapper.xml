@@ -86,4 +86,89 @@
 		 WHERE id = #{id}
 	</select>
 	
+	<!-- 通过塘口编号查询探测器列表 -->
+	<select id="selectListByPondsId" parameterType="java.lang.Long" resultType="java.util.Map">
+		SELECT
+			a.id ,
+			a.ponds_id pondsId ,
+			a.terminal_id terminalId ,
+			a.`code` ,
+			a.unit ,
+			a.`name` ,
+			a.create_date createDate ,
+			b. NAME deviceName
+		FROM
+			sensor a ,
+			device b
+		WHERE
+			a.terminal_id = b.terminal_id
+		AND a.ponds_id = #{pondsId}
+	</select>
+	
+	<!-- 通过设备编号查询探测器列表 -->
+	<select id="selectListByTerminalId"  parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			a.id ,
+			a.ponds_id pondsId ,
+			a.terminal_id terminalId ,
+			a.`code` ,
+			a.unit ,
+			a.`name` ,
+			a.create_date createDate ,
+			b.`name` pondsName,
+			b.address
+		FROM
+			sensor a ,
+			ponds b
+		WHERE
+			a.ponds_id = b.id
+		AND a.terminal_id = #{terminalId}
+	</select>
+	
+	<select id="selectListByCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.code, a.name,  b.id, b.pondsId,b.isEnable
+		FROM
+			(
+				SELECT
+					a.*
+				FROM
+					sys_dict a ,
+					sys_dict_group b
+				WHERE
+					a.group_id = b.dict_group_id
+				AND b.group_code = #{groupCode}
+			) a
+		LEFT JOIN(
+			SELECT
+				code, id, ponds_id pondsId, is_enable isEnable
+			FROM
+				sensor
+			WHERE
+				terminal_id = #{terminalId}
+		) b ON a. CODE = b.`code`;
+	</select>
+	
+	<select id="selectListByGroupCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.code, a.name, b.id, b.pondsId, b.isEnable
+		FROM
+			(
+				SELECT * FROM sys_dict WHERE group_id in ( 
+					SELECT dict_group_id FROM sys_dict_group WHERE group_code in
+					(
+					SELECT `code` FROM sys_dict a, sys_dict_group b WHERE
+					a.group_id = b.dict_group_id AND b.group_code = #{groupCode})
+				)
+			) a
+		LEFT JOIN(
+			SELECT
+				code, id, ponds_id pondsId, is_enable isEnable
+			FROM
+				sensor
+			WHERE
+				terminal_id = #{terminalId}
+		) b ON a. CODE = b.`code`;
+	</select>
+	
 </mapper>

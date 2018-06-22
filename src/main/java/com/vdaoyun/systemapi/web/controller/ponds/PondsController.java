@@ -78,6 +78,7 @@ public class PondsController {
 		if (bindingResult.hasErrors()) {
 			ajaxJson.setSuccess(false);
 			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
+			return ajaxJson;
 		}
 		Boolean result = service.insertInfo(entity) > 0;
 		ajaxJson.setData(entity);
