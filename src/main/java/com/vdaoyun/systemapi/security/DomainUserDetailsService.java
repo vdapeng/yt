@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vdaoyun.systemapi.web.user.model.SysUser;
-import com.vdaoyun.systemapi.web.user.service.SysUserService;
+import com.vdaoyun.systemapi.web.base.user.model.SysUser;
+import com.vdaoyun.systemapi.web.base.user.service.SysUserService;
 
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {

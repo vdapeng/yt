@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vdaoyun.systemapi.web.base.role.dao.SysRoleUserMapper">
+	<resultMap id="BaseResultMap"
+		type="com.vdaoyun.systemapi.web.base.role.model.SysRoleUser">
+		<id column="role_user_id" property="roleUserId" jdbcType="INTEGER" />
+		<result column="role_id" property="roleId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Where_Clause">
+		<where>
+			<if test='roleUserId != "" and roleUserId != null'>
+				role_user_id = #{sysRoleUser.roleUserId,jdbcType=INTEGER
+				}
+			</if>
+			<if test='roleId != "" and roleId != null'>
+				and role_id = #{sysRoleUser.roleId,jdbcType=INTEGER }
+			</if>
+			<if test='userId != "" and userId != null'>
+				and user_id = #{sysRoleUser.userId,jdbcType=INTEGER }
+			</if>
+		</where>
+	</sql>
+	<select id="selectTableList" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		select
+		role_user_id roleUserId,role_id roleId,user_id userId
+		from
+		sys_role_user
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+</mapper>
