@@ -97,6 +97,12 @@
 				WHERE
 					a.openid = c.openid
 				AND a.ponds_id = b.id
+				<if test="entity.openid != '' and entity.openid != null">
+					AND a.openid = #{entity.openid}
+				</if>
+				<if test="entity.shareOpenid != '' and entity.shareOpenid != null">
+					AND a.share_openid = #{entity.shareOpenid}
+				</if>
 			) a ,
 			`user` b
 		WHERE

@@ -1,5 +1,7 @@
 package com.vdaoyun.systemapi.web.controller.ponds;
 
+import java.util.HashMap;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 import com.vdaoyun.systemapi.web.service.ponds.PondsService;
+import com.vdaoyun.systemapi.web.service.sensor.SensorRecordService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -46,6 +49,30 @@ public class PondsController {
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
+		return ajaxJson;
+	}
+	
+	@ApiOperation(tags = {"A小程序_____首页列表查询"}, value = "")
+	@RequestMapping(value = "mini", method = RequestMethod.POST)
+	public AjaxJson selectEx(
+			@RequestParam(value = "pageNum", defaultValue = "1", required = false) Integer pageNum,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+			@RequestParam(value = "order", defaultValue = "createDate", required = false) String order,
+			@RequestParam(value = "sort", defaultValue = "DESC", required = false) String sort,
+			@RequestBody Ponds entity
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectPageInfoEx(entity, pageNum, pageSize, order, sort));
+		return ajaxJson;
+	}
+	
+	@ApiOperation(tags = {"A小程序_____塘口详情_基本信息和探测器信息"}, value = "")
+	@RequestMapping(value = "mini/{id}", method = RequestMethod.GET)
+	public AjaxJson selectExDetail(
+			@PathVariable(value = "id") Long id
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectInfoEx(id));
 		return ajaxJson;
 	}
 	

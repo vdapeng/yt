@@ -2,7 +2,7 @@
 # 新版本
 NEW_TAG=1.0.0
 # 工作空间  DOCKER-HUB 服务器，这里使用阿里云DOCKER-HUB服务器
-WORKSPACE=registry.cn-beijing.aliyuncs.com
+WORKSPACE=registry-vpc.cn-beijing.aliyuncs.com
 # 命名空间  对应阿里云 NAMESPACE
 NAMESPACE=wdy
 # 项目名

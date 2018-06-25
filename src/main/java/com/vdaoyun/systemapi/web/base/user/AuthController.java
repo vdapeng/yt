@@ -19,6 +19,8 @@ import com.vdaoyun.systemapi.security.LoginVM;
 import com.vdaoyun.systemapi.security.jwt.JWTConfigurer;
 import com.vdaoyun.systemapi.security.jwt.TokenProvider;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping(value = "/api")
 public class AuthController {
@@ -32,6 +34,7 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }
 
+    @ApiOperation(value = "", hidden = true)
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
 

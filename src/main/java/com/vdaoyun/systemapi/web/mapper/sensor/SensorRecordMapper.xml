@@ -107,4 +107,31 @@
 		ORDER BY a.data_time ASC
 	</select>
 	
+	<!-- 根据塘口编号 查询该塘口下所有探测器最新的一条记录 -->
+	<select id="selectNewDateByPonds" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.`name`, a.upper, a.lower, a.unit, a.remark, b.`value`, b.temperature_value temperatureValue
+		FROM 
+			(
+		
+				SELECT
+					a.id ,
+					a.ponds_id ,
+					a.terminal_id ,
+					a.`code` ,
+					a.`name` ,
+					b.upper ,
+					b.lower ,
+					b.unit ,
+					b.remark
+				FROM
+					sensor a
+				LEFT JOIN sensor_warn_config b ON a.`code` = b.`code`
+				WHERE
+					a.is_enable = 'y' AND a.ponds_id = #{pondsId}
+		
+			) a
+		LEFT JOIN sensor_record b ON a.terminal_id = b.terminal_id AND a.`code` = b.`code` GROUP BY b.terminal_id, b.`code` ORDER BY b.data_time DESC;
+	</select>
+	
 </mapper>

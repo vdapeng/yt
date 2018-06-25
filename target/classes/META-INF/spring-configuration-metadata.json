@@ -1,0 +1,40 @@
+{
+  "groups": [{
+    "name": "mqtt",
+    "type": "com.vdaoyun.systemapi.mq.MQProperty",
+    "sourceType": "com.vdaoyun.systemapi.mq.MQProperty"
+  }],
+  "properties": [
+    {
+      "name": "mqtt.acess-key",
+      "type": "java.lang.String",
+      "sourceType": "com.vdaoyun.systemapi.mq.MQProperty"
+    },
+    {
+      "name": "mqtt.consumer-i-d",
+      "type": "java.lang.String",
+      "sourceType": "com.vdaoyun.systemapi.mq.MQProperty"
+    },
+    {
+      "name": "mqtt.gload-target-i-d",
+      "type": "java.lang.String",
+      "sourceType": "com.vdaoyun.systemapi.mq.MQProperty"
+    },
+    {
+      "name": "mqtt.producer-id",
+      "type": "java.lang.String",
+      "sourceType": "com.vdaoyun.systemapi.mq.MQProperty"
+    },
+    {
+      "name": "mqtt.root-topic",
+      "type": "java.lang.String",
+      "sourceType": "com.vdaoyun.systemapi.mq.MQProperty"
+    },
+    {
+      "name": "mqtt.secret-key",
+      "type": "java.lang.String",
+      "sourceType": "com.vdaoyun.systemapi.mq.MQProperty"
+    }
+  ],
+  "hints": []
+}

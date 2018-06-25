@@ -3,7 +3,6 @@
 <mapper namespace="com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper">
   <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.ponds.Ponds">
     <id column="id" jdbcType="INTEGER" property="id" />
-    	<result column="id" jdbcType="INTEGER" property="id" />
     	<result column="name" jdbcType="VARCHAR" property="name" />
     	<result column="address" jdbcType="VARCHAR" property="address" />
     	<result column="latitude" jdbcType="VARCHAR" property="latitude" />
@@ -91,6 +90,55 @@
 		,enabled AS enabled
 		FROM ponds
 		 WHERE id = #{id}
+	</select>
+	
+	<resultMap id="ExResultMap" type="java.util.Map">
+	    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="name" jdbcType="VARCHAR" property="name" />
+    	<result column="address" jdbcType="VARCHAR" property="address" />
+    	<result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    	<result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    	<result column="user_id" jdbcType="INTEGER" property="userId" />
+    	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    	<result column="activated" jdbcType="VARCHAR" property="activated" />
+    	<result column="enabled" jdbcType="VARCHAR" property="enabled" />
+    	<collection property="sensorList" 
+    			select="com.vdaoyun.systemapi.web.mapper.sensor.SensorRecordMapper.selectNewDateByPonds" 
+    			column="{pondsId = id}" 
+    			ofType="java.util.Map"></collection>
+  </resultMap>
+	
+	<!-- 查询塘口列表  带有塘口中所有探测器的最新一条数据 -->
+	<select id="selectPageInfoEx" parameterType="java.util.Map" resultMap="ExResultMap">
+		SELECT 
+		id AS id
+		,name AS name
+		,address AS address
+		,latitude AS latitude
+		,longitude AS longitude
+		,user_id AS userId
+		,create_date AS createDate
+		,activated AS activated
+		,enabled AS enabled
+		FROM ponds
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectInfoEx" parameterType="java.lang.Long" resultMap="ExResultMap">
+		SELECT 
+		id AS id
+		,name AS name
+		,address AS address
+		,latitude AS latitude
+		,longitude AS longitude
+		,user_id AS userId
+		,create_date AS createDate
+		,activated AS activated
+		,enabled AS enabled
+		FROM ponds WHERE id = #{id}
 	</select>
 	
 </mapper>
