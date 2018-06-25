@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.vdaoyun.common.api.base.mapper.BaseMapper;
+import com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecord;
 
 public interface SensorRecordMapper extends BaseMapper<SensorRecord> {
@@ -14,5 +15,5 @@ public interface SensorRecordMapper extends BaseMapper<SensorRecord> {
 	public SensorRecord selectInfoByKey(Integer id);
 	
 	
-	List<HashMap<String, Object>> selectEchartData(Map<String, Object> param);
+	List<HashMap<String, Object>> selectEchartData(SensorEchartParams params);
 }

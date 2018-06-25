@@ -1,7 +1,5 @@
 package com.vdaoyun.systemapi.web.controller.sensor;
 
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.vdaoyun.common.bean.AjaxJson;
+import com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecord;
 import com.vdaoyun.systemapi.web.service.sensor.SensorRecordService;
 
@@ -47,9 +46,9 @@ public class SensorRecordController {
 	
 	@ApiOperation(tags = {"A小程序_____塘口详情_探测器运行轨迹图"}, value = "探测器运行轨迹图")
 	@RequestMapping(value = "echart", method = RequestMethod.POST)
-	public AjaxJson selectEchartData(@RequestBody Map<String, Object> param) {
+	public AjaxJson selectEchartData(@RequestBody SensorEchartParams params) {
 		AjaxJson ajaxJson = new AjaxJson();
-		ajaxJson.setData(JSON.parse(JSON.toJSONString(service.selectEchartData(param))));
+		ajaxJson.setData(JSON.parse(JSON.toJSONString(service.selectEchartData(params))));
 		return ajaxJson;
 	}
 	

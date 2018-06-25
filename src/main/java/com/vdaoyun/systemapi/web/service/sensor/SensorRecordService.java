@@ -22,6 +22,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.systemapi.web.mapper.sensor.SensorRecordMapper;
+import com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecord;
 
 @Service
@@ -43,28 +44,21 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Option selectEchartData(Map<String, Object> param) {
+	public Option selectEchartData(SensorEchartParams params) {
 		String formart = "HH:mm";
-		if (param.containsKey("expr")) {
-			String expr = (String) param.get("expr");
-			Integer exprInt = Integer.parseInt(expr);
-			if (exprInt > 7) {
-				param.put("expr", 7);
-			} else {
-				param.put("expr", Integer.parseInt(expr));
-			}
-			if (exprInt != 1) {
-				formart = "dd日/HH时";
-			}
-		} else {
-			param.put("expr", 1);
+		Integer exprInt = params.getExpr();
+		if (exprInt > 7) {
+			params.setExpr(7);
+		}
+		if (exprInt != 1) {
+			formart = "dd日/HH时";
 		}
 		
 		Option option = new Option();
 		option.yAxis(new ValueAxis());
 		option.title("运行记录");
 		option.tooltip(Trigger.axis);
-		List<HashMap<String, Object>> result = rootMapper.selectEchartData(param);
+		List<HashMap<String, Object>> result = rootMapper.selectEchartData(params);
 		
 		if (result == null || result.size() == 0) {
 			option.title("暂无数据");

@@ -87,7 +87,7 @@
 	</resultMap>
 	
 	<!-- 搜索ECHART图表数据 -->
-	<select id="selectEchartData" parameterType="java.util.Map" resultMap="EchartData">
+	<select id="selectEchartData" parameterType="com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams" resultMap="EchartData">
 		SELECT
 			a.*, b. NAME
 		FROM
