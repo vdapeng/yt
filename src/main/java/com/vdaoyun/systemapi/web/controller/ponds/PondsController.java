@@ -1,7 +1,5 @@
 package com.vdaoyun.systemapi.web.controller.ponds;
 
-import java.util.HashMap;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 import com.vdaoyun.systemapi.web.service.ponds.PondsService;
-import com.vdaoyun.systemapi.web.service.sensor.SensorRecordService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,7 +29,7 @@ public class PondsController {
 	@Autowired
 	private PondsService service;
 	
-	@ApiOperation(value = "列表查询")
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表"}, value = "列表查询")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", paramType = "query"),
 		@ApiImplicitParam(name = "pageSize", value = "每页条数", defaultValue = "10", paramType = "query"),
@@ -52,7 +49,7 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"A小程序_____首页列表查询"}, value = "")
+	@ApiOperation(tags = {"A小程序_____首页_列表查询"}, value = "")
 	@RequestMapping(value = "mini", method = RequestMethod.POST)
 	public AjaxJson selectEx(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) Integer pageNum,
@@ -66,7 +63,7 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"A小程序_____塘口详情_基本信息和探测器信息"}, value = "")
+	@ApiOperation(tags = {"A小程序_____首页_塘口详情_基本信息和探测器信息"}, value = "")
 	@RequestMapping(value = "mini/{id}", method = RequestMethod.GET)
 	public AjaxJson selectExDetail(
 			@PathVariable(value = "id") Long id
@@ -95,7 +92,7 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "新增")
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_新增"}, value = "新增")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
 		@RequestBody @Valid @ApiParam(value = "Ponds") Ponds entity,
@@ -115,7 +112,7 @@ public class PondsController {
 
 	}
 	
-	@ApiOperation(value = "编辑")
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_编辑"}, value = "编辑")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "id", paramType = "path", value = "主键", dataType = "Integer"),
 			@ApiImplicitParam(name = "entity", paramType = "body", value = "实体", dataType = "Ponds")
@@ -134,7 +131,7 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除")
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_删除"}, value = "通过主键删除")
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(

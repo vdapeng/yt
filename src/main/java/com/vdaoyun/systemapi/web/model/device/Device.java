@@ -28,7 +28,7 @@ public class Device implements Serializable {
 	@Id
     @NotNull(message = "设备编号 is required")
     @Column(name = "terminal_id")
-    @ApiModelProperty(name = "terminalId", value = "设备编号" )
+    @ApiModelProperty(name = "terminalId", value = "设备编号", required = true )
     private String terminalId;
 	/**
      * 名称
@@ -57,7 +57,6 @@ public class Device implements Serializable {
 	/**
      * 创建人
      */
-    @NotNull(message = "创建人 is required")
     @Column(name = "user_id")
     @ApiModelProperty(name = "userId", value = "创建人" )
     private Long userId;

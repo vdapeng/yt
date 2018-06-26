@@ -34,21 +34,21 @@ public class Sensor implements Serializable {
 	/**
      * 
      */
-    @NotNull(message = " is required")
+    @NotNull(message = "塘口编号不可以为空")
     @Column(name = "ponds_id")
     @ApiModelProperty(name = "pondsId", value = "" )
     private Long pondsId;
 	/**
      * 塘口编号
      */
-    @NotNull(message = "塘口编号 is required")
+    @NotNull(message = "设备编号不可以为空")
     @Column(name = "terminal_id")
     @ApiModelProperty(name = "terminalId", value = "塘口编号" )
     private String terminalId;
 	/**
      * 编码
      */
-    @NotNull(message = "编码 is required")
+    @NotNull(message = "探测器编码不可以为空")
     @Column(name = "code")
     @ApiModelProperty(name = "code", value = "编码" )
     private String code;
@@ -61,7 +61,7 @@ public class Sensor implements Serializable {
 	/**
      * 名称
      */
-    @NotNull(message = "名称 is required")
+    @NotNull(message = "探测器名称不可以为空")
     @Column(name = "name")
     @ApiModelProperty(name = "name", value = "名称" )
     private String name;
@@ -74,7 +74,6 @@ public class Sensor implements Serializable {
 	/**
      * 创建人
      */
-//    @NotNull(message = "创建人 is required")
     @Column(name = "user_id")
     @ApiModelProperty(name = "userId", value = "创建人" )
     private Long userId;

@@ -2,8 +2,9 @@ package com.vdaoyun.systemapi.web.controller.user;
 
 import javax.validation.Valid;
 
-import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
+import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.model.user.User;
 import com.vdaoyun.systemapi.web.service.user.UserService;
-
-import com.vdaoyun.common.bean.AjaxJson;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -54,7 +55,33 @@ public class UserController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "新增")
+	@ApiOperation(tags = {"H后台管理____用户管理_用户激活/用户禁用"}, value ="")
+	@GetMapping(value = "/enable/{id}")
+	public AjaxJson enable(@PathVariable(value = "id") Long id) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		User user = service.selectByPrimaryKey(id);
+		Boolean result = false;
+		if (user == null) {
+			ajaxJson.setMsg("用户信息不存在");
+		} else if (user.getIsEnable().equals(YesOrNo.NO.toString())) {
+			result = service.enable(id);
+		} else {
+			result = service.disEnable(id);
+		}
+		ajaxJson.setSuccess(result);
+		ajaxJson.setMsg(result ? "操作成功" : "操作失败");
+		return ajaxJson;
+	}
+	
+	@ApiOperation(tags = {"A小程序_____我的_查询用户信息"},value = "新增")
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
+	public AjaxJson selectInfo(@RequestParam(value = "openid") @ApiParam("微信openid") String openid) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectInfoByOpenid(openid));
+		return ajaxJson;
+	}
+	
+	@ApiOperation(tags = {"A小程序_____注册_新增用户"},value = "新增")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
 		@RequestBody @Valid @ApiParam(value = "User") User entity,
@@ -64,16 +91,20 @@ public class UserController {
 		if (bindingResult.hasErrors()) {
 			ajaxJson.setSuccess(false);
 			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
+		} else if (service.isExit(entity.getOpenid(), entity.getMobile())) {
+			ajaxJson.setSuccess(false);
+			ajaxJson.setMsg("请勿重复注册");
+		} else {
+			Boolean result = service.insertInfo(entity) > 0;
+			ajaxJson.setData(entity);
+			ajaxJson.setSuccess(result);
+			ajaxJson.setMsg(result ? "新增成功" : "新增失败");
 		}
-		Boolean result = service.insertInfo(entity) > 0;
-		ajaxJson.setData(entity);
-		ajaxJson.setSuccess(result);
-		ajaxJson.setMsg(result ? "新增成功" : "新增失败");
 		return ajaxJson;
 
 	}
 	
-	@ApiOperation(value = "编辑")
+	@ApiOperation(tags = {"A小程序_____我的_编辑用户信息"}, value = "编辑")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(
 		@RequestBody @ApiParam(value = "用户") User entity, 
@@ -88,7 +119,7 @@ public class UserController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除")
+	@ApiOperation(value = "通过主键删除", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(

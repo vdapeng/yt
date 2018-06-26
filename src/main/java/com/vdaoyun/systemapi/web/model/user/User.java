@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -46,7 +48,7 @@ public class User implements Serializable {
 	/**
      * 手机号码
      */
-    @NotNull(message = "手机号码 is required")
+    @NotNull(message = "手机号码不可以为空")
     @Column(name = "mobile")
     @ApiModelProperty(name = "mobile", value = "手机号码" )
     private String mobile;
@@ -54,12 +56,13 @@ public class User implements Serializable {
      * 
      */
     @Column(name = "password")
+    @JsonIgnore
     @ApiModelProperty(name = "password", value = "" )
     private String password;
 	/**
      * 微信openid
      */
-    @NotNull(message = "微信openid is required")
+    @NotNull(message = "微信openid不可以为空")
     @Column(name = "openid")
     @ApiModelProperty(name = "openid", value = "微信openid" )
     private String openid;
@@ -79,34 +82,46 @@ public class User implements Serializable {
      * 
      */
     @Column(name = "create_date")
-    @ApiModelProperty(name = "createDate", value = "" )
+    @ApiModelProperty(name = "createDate", value = "创建时间" )
     private Date createDate;
 	/**
      * 
      */
     @Column(name = "last_update_date")
-    @ApiModelProperty(name = "lastUpdateDate", value = "" )
+    @ApiModelProperty(name = "lastUpdateDate", value = "最后更新时间" )
     private Date lastUpdateDate;
 	/**
      * 
      */
     @Column(name = "country")
-    @ApiModelProperty(name = "country", value = "" )
+    @ApiModelProperty(name = "country", value = "国家" )
     private String country;
 	/**
      * 
      */
     @Column(name = "province")
-    @ApiModelProperty(name = "province", value = "" )
+    @ApiModelProperty(name = "province", value = "省份" )
     private String province;
 	/**
      * 
      */
     @Column(name = "city")
-    @ApiModelProperty(name = "city", value = "" )
+    @ApiModelProperty(name = "city", value = "城市" )
     private String city;
     
-  	/**
+    @Column(name = "is_enable")
+    @ApiModelProperty(name = "is_enable", value = "是否激活")
+    private String isEnable;
+    
+  	public String getIsEnable() {
+		return isEnable;
+	}
+
+	public void setIsEnable(String isEnable) {
+		this.isEnable = isEnable;
+	}
+
+	/**
      * 获取
      *
      * @return remark - 

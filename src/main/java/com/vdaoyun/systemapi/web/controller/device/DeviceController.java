@@ -27,7 +27,7 @@ public class DeviceController {
 	@Autowired
 	private DeviceService service;
 	
-	@ApiOperation(value = "列表查询")
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_终端列表"}, value = "列表查询")
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
@@ -59,7 +59,7 @@ public class DeviceController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "新增")
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_新增终端"}, value = "")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
 		@RequestBody @Valid @ApiParam(value = "Device") Device entity,
@@ -79,7 +79,7 @@ public class DeviceController {
 
 	}
 	
-	@ApiOperation(value = "编辑")
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_终端信息编辑"}, value = "编辑")
 	@RequestMapping(value = "/{terminalId}", method = RequestMethod.PUT)
 	public AjaxJson update(
 		@RequestBody @ApiParam(value = "设备") Device entity, 
@@ -94,7 +94,7 @@ public class DeviceController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除")
+	@ApiOperation(value = "通过主键删除", hidden = true)
 	@RequestMapping(value = "/{terminalId}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
 		@PathVariable(value = "terminalId") @ApiParam(value = "设备编号") String terminalId

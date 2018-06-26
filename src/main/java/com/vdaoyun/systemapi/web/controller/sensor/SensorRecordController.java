@@ -44,7 +44,7 @@ public class SensorRecordController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"A小程序_____塘口详情_探测器运行轨迹图"}, value = "探测器运行轨迹图")
+	@ApiOperation(tags = {"A小程序_____首页_塘口详情_探测器运行轨迹图"}, value = "探测器运行轨迹图")
 	@RequestMapping(value = "echart", method = RequestMethod.POST)
 	public AjaxJson selectEchartData(@RequestBody SensorEchartParams params) {
 		AjaxJson ajaxJson = new AjaxJson();

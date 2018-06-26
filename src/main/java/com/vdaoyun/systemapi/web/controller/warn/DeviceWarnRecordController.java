@@ -29,7 +29,7 @@ public class DeviceWarnRecordController {
 	@Autowired
 	private DeviceWarnRecordService service;
 	
-	@ApiOperation(value = "列表查询")
+	@ApiOperation(tags = {"A小程序_____日志_报警列表"}, value = "列表查询")
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,

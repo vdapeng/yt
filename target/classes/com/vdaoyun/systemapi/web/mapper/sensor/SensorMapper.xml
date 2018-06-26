@@ -103,6 +103,7 @@
 		WHERE
 			a.terminal_id = b.terminal_id
 		AND a.ponds_id = #{pondsId}
+		AND a.is_enable = 'y'
 	</select>
 	
 	<!-- 通过设备编号查询探测器列表 -->

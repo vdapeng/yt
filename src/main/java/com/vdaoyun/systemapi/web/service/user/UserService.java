@@ -13,8 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.user.UserMapper;
 import com.vdaoyun.systemapi.web.model.user.User;
+
+import tk.mybatis.mapper.entity.Example;
 
 @Service
 @Transactional
@@ -28,10 +31,37 @@ public class UserService extends BaseService<User> {
 //		return super.update(entity);
 //	} 
 	
+	public boolean enable(Long id) {
+		User entity = new User();
+		entity.setId(id);
+		entity.setIsEnable(YesOrNo.YES.toString());
+		return mapper.updateByPrimaryKeySelective(entity) > 0;
+	}
+
+	public boolean disEnable(Long id) {
+		User entity = new User();
+		entity.setId(id);
+		entity.setIsEnable(YesOrNo.NO.toString());
+		return mapper.updateByPrimaryKeySelective(entity) > 0;
+	}
+	
 	@Override
 	public int insert(User entity) {
 		entity.setCreateDate(new Date());
 		return super.insert(entity);
+	}
+	
+	public User selectInfoByOpenid(String openid) {
+		User record = new User();
+		record.setOpenid(openid);
+		return mapper.selectOne(record);
+	}
+	
+	public Boolean isExit(String openid, String mobile) {
+		Example example = new Example(User.class);
+		example.createCriteria().andEqualTo("openid", openid);
+		example.or().andEqualTo("mobile", mobile);
+		return mapper.selectCountByExample(example) > 0;
 	}
 	
 	@Autowired

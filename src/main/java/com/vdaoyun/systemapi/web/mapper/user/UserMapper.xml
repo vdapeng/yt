@@ -16,6 +16,7 @@
     	<result column="country" jdbcType="VARCHAR" property="country" />
     	<result column="province" jdbcType="VARCHAR" property="province" />
     	<result column="city" jdbcType="VARCHAR" property="city" />
+    	<result column="is_enable" jdbcType="VARCHAR" property="isEnable" />
   </resultMap>
   
 	<sql id="Where_Clause">
@@ -59,6 +60,9 @@
 			<if test="entity.city != '' and entity.city != null">
 				AND city = #{entity.city}
 			</if>
+			<if test="entity.isEnable != '' and entity.isEnable != null">
+				AND is_enable = #{entity.isEnable}
+			</if>
 		</where>
 	</sql>
 	
@@ -77,6 +81,7 @@
 		,country AS country
 		,province AS province
 		,city AS city
+		,is_enable AS isEnable
 		FROM user WHERE id = #{foreignId}
 	</select>
 	
@@ -95,6 +100,7 @@
 		,country AS country
 		,province AS province
 		,city AS city
+		,is_enable AS isEnable
 		FROM user
 		<include refid="Where_Clause" />
 		<if test="orderByClause != null and orderByClause != ''">
@@ -117,6 +123,7 @@
 		,country AS country
 		,province AS province
 		,city AS city
+		,is_enable AS isEnable
 		FROM user
 		 WHERE id = #{id}
 	</select>

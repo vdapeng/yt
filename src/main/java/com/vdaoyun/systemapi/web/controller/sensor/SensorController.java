@@ -75,6 +75,32 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_保存探测器"}, value = "新增")
+	@RequestMapping(value = "save", method = RequestMethod.POST)
+	public AjaxJson miniSave(
+		@RequestBody @Valid @ApiParam(value = "Sensor") Sensor entity,
+		BindingResult bindingResult
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		if (bindingResult.hasErrors()) {
+			ajaxJson.setSuccess(false);
+			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
+			return ajaxJson;
+		}
+		Sensor sensor = service.isExit(entity.getTerminalId(), entity.getCode());
+		Boolean result;
+		if (sensor != null) {
+			entity.setId(sensor.getId());
+			result = service.update(entity) > 0;
+		} else {
+			result = service.insertInfo(entity) > 0;
+		}
+		ajaxJson.setData(entity);
+		ajaxJson.setSuccess(result);
+		ajaxJson.setMsg(result ? "操作成功" : "操作失败");
+		return ajaxJson;
+	}
+	
 	@ApiOperation("批量新增")
 	@RequestMapping(value = "batch", method = RequestMethod.POST)
 	public AjaxJson batchInsert(@RequestBody @Valid List<Sensor> list, BindingResult bindingResult) throws Exception {
@@ -136,7 +162,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation("通过总探测器类型编号{groupCode}和具体的设备编号{terminalId}，查找相关探测器列表。")
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_根据终端编号查询探测器列表"},  value = "通过总探测器类型编号{groupCode}和具体的设备编号{terminalId}，查找相关探测器列表。")
 	@GetMapping("groupCode")
 	public AjaxJson selectListByGroupCode(
 			@RequestParam(name = "groupCode", required = false, defaultValue = "CGQ") @ApiParam("总探测器类型编码。例如：CGQ") String groupCode,

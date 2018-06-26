@@ -34,6 +34,13 @@ public class SensorService extends BaseService<Sensor> {
 		return super.insert(entity);
 	}
 	
+	public Sensor isExit(String terminalId, String code) {
+		Sensor record = new Sensor();
+		record.setTerminalId(terminalId);
+		record.setCode(code);
+		return mapper.selectOne(record);
+	}
+	
 	@Autowired
 	private SensorMapper rootMapper;
 	

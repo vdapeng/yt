@@ -53,7 +53,7 @@ public class PondsShareRecordController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"A小程序_____共享塘口"}, value = "新增")
+	@ApiOperation(tags = {"A小程序_____首页_共享塘口"}, value = "新增")
 	@ApiImplicitParam(name = "entity", paramType = "body", value = "实体", dataType = "PondsShareRecord")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
@@ -88,7 +88,7 @@ public class PondsShareRecordController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"A小程序_____取消共享塘口/取消关注塘口"}, value = "通过主键删除")
+	@ApiOperation(tags = {"A小程序_____共享_取消共享塘口/取消关注塘口"}, value = "通过主键删除")
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
@@ -101,7 +101,7 @@ public class PondsShareRecordController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"A小程序_____我分享的塘口"}, value = "我分享的塘口")
+	@ApiOperation(tags = {"A小程序_____共享_我分享的塘口"}, value = "我分享的塘口")
 	@RequestMapping(value = "{openId}/share", method = RequestMethod.GET)
 	public AjaxJson myShare(
 		@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
@@ -116,7 +116,7 @@ public class PondsShareRecordController {
 		ajaxJson.setData(service.selectPageInfoEx(entity, pageNum, pageSize, order, sort));
 		return ajaxJson;
 	}
-	@ApiOperation(tags = {"A小程序_____分享给我的塘口"}, value = "分享给我的塘口")
+	@ApiOperation(tags = {"A小程序_____共享_分享给我的塘口"}, value = "分享给我的塘口")
 	@RequestMapping(value = "/share/{openId}", method = RequestMethod.GET)
 	public AjaxJson shareMe(
 		@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
