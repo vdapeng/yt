@@ -1,47 +1,17 @@
-#server:
-#  port: 28005
-#
-#spring:
-#  application:
-#    name: system.api
-#  datasource:
-#    type: com.alibaba.druid.pool.DruidDataSource
-#    url: jdbc:mysql://gitlab.vdaoyun.com:28036/zhgd?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
-#    username: root
-#    password: wdy2018
-#    driver-class-name: com.mysql.jdbc.Driver
-##  jackson:
-##    time-zone: GMT+8
-##    date-format: yyyy-MM-dd HH:mm:ss
-##    joda-date-time-format: yyyy-MM-dd HH:mm:ss 
-#    
-#eureka:
-#  client:
-#    serviceUrl: 
-#        defaultZone: http://admin:admin@172.17.61.228:28001/eureka/
-#    registryFetchIntervalSeconds: 5
-#  instance:
-#    leaseRenewalIntervalInSeconds: 10
-#    prefer-ip-address: true
-#    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
-#    
-#mybatis:
-#  type-aliases-package: com.vdaoyun.systemapi.web
-#  configuration:
-#    cache-enabled: true
-#
-#mapper:
-#  not-empty: false
-#  identity: MYSQL
-#  mappers:
-#  - com.vdaoyun.common.api.base.mapper.BaseMapper
-#
-#pagehelper:
-#  helper-dialect: mysql
-#  reasonable: true
-#  support-methods-arguments: true
-#  params: count\=countSql
-#
-#logging:
-#  level:
-#    com.vdaoyun.systemapi: DEBUG
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.github.binarywang.demo.wx.mp: DEBUG
+
+wechat:
+  mp:
+    appId:
+    secret:
+    token:
+    aesKey:
+  miniapp:
+    appid: 111
+    secret: 111
+    token: 111
+    aesKey: 111
+    msgDataFormat: JSON

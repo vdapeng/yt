@@ -3,17 +3,12 @@ package com.vdaoyun.systemapi.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 	
 	
-	private static final Logger log = LoggerFactory.getLogger(LoginInterceptor.class);
-
-
 	/**
      *预处理回调方法，实现处理器的预处理（如登录检查）。
      *第三个参数为响应的处理器，即controller。
@@ -23,10 +18,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, 
             Object handler) throws Exception {
-//    	String ip = ServiceUtil.getIpAddress(request);
-//    	log.info("ip==========" + ip);
-//    	AjaxJson ajaxJson = new AjaxJson();
-//    	response.getWriter().write(JSON.toJSONString(ajaxJson));
         return true;
     }
 
