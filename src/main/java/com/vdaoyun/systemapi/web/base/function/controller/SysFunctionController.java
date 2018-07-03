@@ -25,6 +25,7 @@ import com.vdaoyun.systemapi.web.base.function.service.SysFunctionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -38,7 +39,8 @@ import io.swagger.annotations.ApiParam;
  * 
  * @date 2017-3-30 20:58:54
  */
-@Api(tags = { "菜单相关接口" })
+@ApiIgnore
+@Api(tags = { "菜单相关接口" }, hidden = true)
 @RestController
 @RequestMapping("/sys/function")
 public class SysFunctionController {

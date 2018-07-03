@@ -6,6 +6,8 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxErrorException;
+import springfox.documentation.annotations.ApiIgnore;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import java.util.List;
  *
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
  */
+@ApiIgnore
 @RestController
 @RequestMapping("/miniapp/media")
 public class WxMaMediaController {

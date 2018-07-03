@@ -21,7 +21,9 @@ import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.base.function.model.SysFunctionOperation;
 import com.vdaoyun.systemapi.web.base.function.service.SysFunctionOperationService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -35,6 +37,8 @@ import io.swagger.annotations.ApiOperation;
  * 
  * @date 2017-3-30 20:58:54
  */
+@ApiIgnore
+@Api(hidden = true)
 @RestController
 @RequestMapping("/sys/function/operation")
 public class SysFunctionOperationController {

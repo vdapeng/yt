@@ -3,7 +3,6 @@
 <mapper namespace="com.vdaoyun.systemapi.web.mapper.warn.DeviceWarnRecordMapper">
   <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.warn.DeviceWarnRecord">
     <id column="id" jdbcType="INTEGER" property="id" />
-    	<result column="id" jdbcType="INTEGER" property="id" />
     	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
     	<result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
     	<result column="alaram_business" jdbcType="VARCHAR" property="alaramBusiness" />
@@ -58,6 +57,71 @@
 			order by ${orderByClause}
 		</if>
 	</select>
+	
+	  <resultMap id="BaseResultMapEx" type="java.util.Map">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="terminalId" jdbcType="VARCHAR" property="terminalId" />
+    	<result column="postTime" jdbcType="TIMESTAMP" property="postTime" />
+    	<result column="alaramBusiness" jdbcType="VARCHAR" property="alaramBusiness" />
+    	<result column="alaramEquipment" jdbcType="VARCHAR" property="alaramEquipment" />
+    	<result column="alaram_business_name" jdbcType="VARCHAR" property="alaramBusinessName" />
+    	<result column="alaram_equipment_name" jdbcType="VARCHAR" property="alaramEquipmentName" />
+    	<collection property="pondsList" ofType="java.util.Map">
+    		<id column="pondsId" jdbcType="INTEGER" property="pondsId" />
+    		<result column="pondsName" jdbcType="VARCHAR" property="pondsName" />
+    		<collection property="sensorList" ofType="java.util.Map">
+    			<id column="code" jdbcType="VARCHAR" property="code" />
+    			<result column="name" jdbcType="VARCHAR" property="name" />
+    		</collection>
+    	</collection>
+  </resultMap>
+	<select id="selectPageInfoEx" parameterType="java.util.Map" resultMap="BaseResultMapEx">
+		<![CDATA[ SELECT a.*, b.`name` pondsName FROM (
+		SELECT a.*, b.`code`, b.ponds_id pondsId, b.`name`  FROM (
+		SELECT a.*, GROUP_CONCAT(c.name separator '&') as alaram_business_name 
+		FROM( SELECT a.id AS id
+		,a.terminal_id AS terminalId
+		,a.post_time AS postTime
+		,a.alaram_business AS alaramBusiness
+		,a.alaram_equipment AS alaramEquipment, GROUP_CONCAT(b.name separator '&') as alaram_equipment_name 
+		FROM device_warn_record a LEFT JOIN device_warn_type b ON INSTR(a.alaram_equipment, 
+		b.`code`) > 0 GROUP BY a.id) a LEFT JOIN device_warn_type c ON INSTR(a.alaramBusiness, 
+		c.`code`) > 0 GROUP BY a.id  LIMIT #{begin}, #{end}) a LEFT JOIN sensor b ON a.terminalId = b.terminal_id AND INSTR(a.alaramBusiness, b.`code`) > 0) a 
+		LEFT JOIN ponds b ON a.pondsId = b.id ]]>
+		WHERE 1=1
+		<if test="entity.userId != null">
+			AND b.user_id = #{entity.userId}
+		</if>
+		<if test="entity.pondsId != null">
+			AND b.id = #{entity.pondsId}
+		</if>
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="countPageInfoEx" parameterType="java.util.Map" resultType="java.lang.Long">
+		<![CDATA[ SELECT COUNT(0) FROM (
+		SELECT a.*, b.`name` pondsName FROM (
+		SELECT a.*, b.`code`, b.ponds_id pondsId, b.`name`  FROM (
+		SELECT a.*, GROUP_CONCAT(c.name separator '&') as alaram_business_name 
+		FROM( SELECT a.id AS id
+		,a.terminal_id AS terminalId
+		,a.post_time AS postTime
+		,a.alaram_business AS alaramBusiness
+		,a.alaram_equipment AS alaramEquipment, GROUP_CONCAT(b.name separator '&') as alaram_equipment_name 
+		FROM device_warn_record a LEFT JOIN device_warn_type b ON INSTR(a.alaram_equipment, 
+		b.`code`) > 0 GROUP BY a.id) a LEFT JOIN device_warn_type c ON INSTR(a.alaramBusiness, 
+		c.`code`) > 0 GROUP BY a.id  LIMIT 0, 10) a LEFT JOIN sensor b ON a.terminalId = b.terminal_id AND INSTR(a.alaramBusiness, b.`code`) > 0) a 
+		LEFT JOIN ponds b ON a.pondsId = b.id  ]]>
+		<if test="userId != null">
+			WHERE b.user_id = #{userId}
+		</if>
+		GROUP BY id) a
+	</select>
+	
+	
+	
 	
 	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
 		SELECT 

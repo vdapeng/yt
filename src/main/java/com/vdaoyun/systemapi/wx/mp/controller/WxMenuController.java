@@ -7,6 +7,8 @@ import me.chanjar.weixin.mp.api.WxMpMenuService;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.menu.WxMpGetSelfMenuInfoResult;
 import me.chanjar.weixin.mp.bean.menu.WxMpMenu;
+import springfox.documentation.annotations.ApiIgnore;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +40,7 @@ public class WxMenuController implements WxMpMenuService {
    * @param menu
    * @return 如果是个性化菜单，则返回menuid，否则返回null
    */
+  @ApiIgnore
   @Override
   @PostMapping("/create")
   public String menuCreate(@RequestBody WxMenu menu) throws WxErrorException {

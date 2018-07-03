@@ -73,7 +73,7 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation("搜索所有鱼塘列表")
+	@ApiOperation(value = "搜索所有鱼塘列表", hidden = true)
 	@RequestMapping(value = "all", method = RequestMethod.GET)
 	public AjaxJson selectAll() throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -81,7 +81,7 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键查询详情")
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public AjaxJson getById(

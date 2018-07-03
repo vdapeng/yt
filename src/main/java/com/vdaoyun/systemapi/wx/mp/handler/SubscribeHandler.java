@@ -2,8 +2,10 @@ package com.vdaoyun.systemapi.wx.mp.handler;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.vdaoyun.systemapi.web.service.user.WxUserService;
 import com.vdaoyun.systemapi.wx.mp.builder.TextBuilder;
 
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -18,6 +20,9 @@ import me.chanjar.weixin.mp.bean.result.WxMpUser;
  */
 @Component
 public class SubscribeHandler extends AbstractHandler {
+	
+	@Autowired
+	private WxUserService userService;
 
   @Override
   public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -32,6 +37,7 @@ public class SubscribeHandler extends AbstractHandler {
 
     if (userWxInfo != null) {
       // TODO 可以添加关注用户到本地
+    	userService.save(userWxInfo);
     }
 
     WxMpXmlOutMessage responseResult = null;

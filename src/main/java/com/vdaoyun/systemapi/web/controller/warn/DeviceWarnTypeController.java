@@ -29,7 +29,7 @@ public class DeviceWarnTypeController {
 	@Autowired
 	private DeviceWarnTypeService service;
 	
-	@ApiOperation(value = "列表查询")
+	@ApiOperation(value = "列表查询", hidden = true)
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
@@ -43,7 +43,7 @@ public class DeviceWarnTypeController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "获取所有类目")
+	@ApiOperation(value = "获取所有类目", hidden = true)
 	@RequestMapping(value = "all", method = RequestMethod.GET)
 	public AjaxJson selectAllByTerminalId(@RequestParam(value = "terminalId") @ApiParam(value = "设备编号") String terminalId) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -51,7 +51,7 @@ public class DeviceWarnTypeController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键查询详情")
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Long", paramType = "path")	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public AjaxJson getById(
@@ -62,7 +62,7 @@ public class DeviceWarnTypeController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "新增")
+	@ApiOperation(value = "新增", hidden = true)
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
 		@RequestBody @Valid @ApiParam(value = "DeviceWarnType") DeviceWarnType entity,
@@ -81,7 +81,7 @@ public class DeviceWarnTypeController {
 
 	}
 	
-	@ApiOperation(value = "编辑")
+	@ApiOperation(value = "编辑", hidden = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(
 		@RequestBody @ApiParam(value = "异常类型") DeviceWarnType entity, 
@@ -96,7 +96,7 @@ public class DeviceWarnTypeController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除")
+	@ApiOperation(value = "通过主键删除", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(

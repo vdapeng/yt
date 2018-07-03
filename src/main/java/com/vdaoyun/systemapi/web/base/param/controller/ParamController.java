@@ -29,6 +29,7 @@ import com.vdaoyun.util.StringTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -42,7 +43,8 @@ import io.swagger.annotations.ApiParam;
  * 
  * @date 2017-7-17 10:34:23
  */
-@Api(tags = { "参数信息相关接口" })
+@ApiIgnore
+@Api(tags = { "参数信息相关接口" }, hidden = true)
 @RestController
 @RequestMapping(value = "/sys/param")
 public class ParamController {

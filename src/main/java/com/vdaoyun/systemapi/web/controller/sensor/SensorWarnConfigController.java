@@ -29,7 +29,7 @@ public class SensorWarnConfigController {
 	@Autowired
 	private SensorWarnConfigService service;
 	
-	@ApiOperation(value = "列表查询")
+	@ApiOperation(value = "列表查询", hidden = true)
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
@@ -43,7 +43,7 @@ public class SensorWarnConfigController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键查询详情")
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Long", paramType = "path")	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public AjaxJson getById(
@@ -54,7 +54,7 @@ public class SensorWarnConfigController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "新增")
+	@ApiOperation(value = "新增", hidden = true)
 	@ApiImplicitParam(name = "entity", paramType = "body", value = "实体", dataType = "SensorWarnConfig")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
@@ -74,7 +74,7 @@ public class SensorWarnConfigController {
 
 	}
 	
-	@ApiOperation(value = "编辑")
+	@ApiOperation(value = "编辑", hidden = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(
 		@RequestBody @ApiParam(value = "探测器报警配置表") SensorWarnConfig entity, 
@@ -89,7 +89,7 @@ public class SensorWarnConfigController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除")
+	@ApiOperation(value = "通过主键删除", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(

@@ -29,6 +29,7 @@ import com.vdaoyun.systemapi.web.base.user.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -42,7 +43,8 @@ import io.swagger.annotations.ApiParam;
  * 
  * @date 2017-3-30 15:16:51
  */
-@Api(tags = { "用户信息相关接口" })
+@ApiIgnore
+@Api(tags = { "用户信息相关接口" }, hidden = true)
 @RestController
 @RequestMapping("/sys/user")
 public class SysUserController {

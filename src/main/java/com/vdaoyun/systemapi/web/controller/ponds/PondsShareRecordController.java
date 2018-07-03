@@ -28,7 +28,7 @@ public class PondsShareRecordController {
 	@Autowired
 	private PondsShareRecordService service;
 	
-	@ApiOperation(value = "列表查询")
+	@ApiOperation(value = "列表查询", hidden = true)
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
@@ -42,7 +42,7 @@ public class PondsShareRecordController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键查询详情")
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Long", paramType = "path")	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public AjaxJson getById(
@@ -73,7 +73,7 @@ public class PondsShareRecordController {
 
 	}
 	
-	@ApiOperation(value = "编辑")
+	@ApiOperation(value = "编辑", hidden = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(
 		@RequestBody @ApiParam(value = "鱼塘分享记录") PondsShareRecord entity, 

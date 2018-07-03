@@ -31,7 +31,7 @@ public class SensorController {
 	@Autowired
 	private SensorService service;
 	
-	@ApiOperation(value = "列表查询")
+	@ApiOperation(value = "列表查询", hidden = true)
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
@@ -45,7 +45,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键查询详情")
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Long", paramType = "path")	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public AjaxJson getById(
@@ -56,7 +56,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "新增")
+	@ApiOperation(value = "新增", hidden = true)
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
 		@RequestBody @Valid @ApiParam(value = "Sensor") Sensor entity,
@@ -101,7 +101,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation("批量新增")
+	@ApiOperation(value = "批量新增", hidden = true)
 	@RequestMapping(value = "batch", method = RequestMethod.POST)
 	public AjaxJson batchInsert(@RequestBody @Valid List<Sensor> list, BindingResult bindingResult) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -116,7 +116,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "编辑")
+	@ApiOperation(value = "编辑", hidden = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(
 		@RequestBody @ApiParam(value = "传感器") Sensor entity, 
@@ -131,7 +131,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除")
+	@ApiOperation(value = "通过主键删除", hidden = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
 		@PathVariable(value = "id") @ApiParam(value = "主键") Long id
@@ -143,7 +143,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation("通过塘口编号查询探测器列表")
+	@ApiOperation(value = "通过塘口编号查询探测器列表", hidden = true)
 	@RequestMapping(value = "pid", method = RequestMethod.GET)
 	public AjaxJson selectListByPondsId(@RequestParam("pondsId") Long pondsId) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -151,7 +151,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation("通过具体的探测器类型编号{code}和具体的设备编号{terminalId}，查找相关探测器列表。")
+	@ApiOperation(value = "通过具体的探测器类型编号{code}和具体的设备编号{terminalId}，查找相关探测器列表。", hidden = true)
 	@GetMapping("code")
 	public AjaxJson selectListByCode(
 			@RequestParam("code") @ApiParam("具体探测器类型编码。例如：HP") String code,

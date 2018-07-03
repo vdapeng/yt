@@ -17,6 +17,7 @@ import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.user.UserMapper;
 import com.vdaoyun.systemapi.web.model.user.User;
 
+import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import tk.mybatis.mapper.entity.Example;
 
 @Service
@@ -31,6 +32,7 @@ public class UserService extends BaseService<User> {
 //		return super.update(entity);
 //	} 
 	
+	// 启用
 	public boolean enable(Long id) {
 		User entity = new User();
 		entity.setId(id);
@@ -38,6 +40,7 @@ public class UserService extends BaseService<User> {
 		return mapper.updateByPrimaryKeySelective(entity) > 0;
 	}
 
+	
 	public boolean disEnable(Long id) {
 		User entity = new User();
 		entity.setId(id);
@@ -94,5 +97,54 @@ public class UserService extends BaseService<User> {
 		}
 		return result;
 	}
-
+	
+	/**
+	 * 
+	 * @Title: saveMini
+	 *  
+	 * @Description: 保存小程序相关信息
+	 *  
+	 * @param openid
+	 * @param unionid void
+	 */
+	public void saveMini(String openid, String unionid) {
+		Example example = new Example(User.class);
+		example.createCriteria().andEqualTo("openid", openid);
+		example.or().andEqualTo("unionid", unionid);
+		int t = mapper.selectCountByExample(example);
+		if (t < 1) {
+			mapper.insertSelective(new User(openid, unionid));
+		}
+	}
+	
+	public void save(WxMaUserInfo userInfo) {
+		saveMini(userInfo.getOpenId(), userInfo.getUnionId());
+		Example example = new Example(User.class);
+		example.createCriteria().andEqualTo("openid", userInfo.getOpenId());
+		example.or().andEqualTo("unionid", userInfo.getUnionId());
+		mapper.updateByExampleSelective(new User(userInfo), example);
+	}
+	
+	/**
+	 * 
+	 * @Title: bindMobile
+	 *  
+	 * @Description: 绑定手机号码
+	 *  
+	 * @param openid
+	 * @param unionid
+	 * @param mobile void
+	 */
+	public void bindMobile(String openid, String unionid, String mobile) {
+		Example example = new Example(User.class);
+		example.createCriteria().andEqualTo("openid", openid);
+		example.or().andEqualTo("unionid", unionid);
+		if (mapper.selectCountByExample(example) < 1) {
+			saveMini(openid, unionid);
+		} 
+		User record = new User();
+		record.setMobile(mobile);
+		mapper.updateByExampleSelective(record, example);
+	}
+	
 }

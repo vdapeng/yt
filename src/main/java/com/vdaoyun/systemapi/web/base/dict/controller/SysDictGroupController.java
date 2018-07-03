@@ -28,6 +28,7 @@ import com.vdaoyun.systemapi.web.base.dict.service.SysDictService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -41,7 +42,8 @@ import io.swagger.annotations.ApiParam;
  * 
  * @date 2017-8-23 8:57:36
  */
-@Api(tags = { "数据字典分组相关接口" })
+@ApiIgnore
+@Api(tags = { "数据字典分组相关接口" }, hidden = true)
 @RestController
 @RequestMapping(value = "/sys/dictgroup")
 public class SysDictGroupController {

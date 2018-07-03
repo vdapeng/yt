@@ -1,5 +1,7 @@
 package com.vdaoyun.systemapi.web.controller.warn;
 
+import java.util.HashMap;
+
 import javax.validation.Valid;
 
 import org.springframework.validation.BindingResult;
@@ -43,7 +45,21 @@ public class DeviceWarnRecordController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键查询详情")
+	@ApiOperation(tags = {"A小程序_____日志_报警列表_2"}, value = "列表查询")
+	@RequestMapping(value = "list2", method = RequestMethod.POST)
+	public AjaxJson selectEx(
+			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) @ApiParam(value = "每页条数") Integer pageSize,
+			@RequestParam(value = "order", defaultValue = "id", required = false) @ApiParam(value = "排序字段")  String order,
+			@RequestParam(value = "sort", defaultValue = "DESC", required = false) @ApiParam(value = "排序方式") String sort,
+			@RequestBody HashMap<String, Object> entity
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectPageInfoEx(entity, pageNum, pageSize, order, sort));
+		return ajaxJson;
+	}
+	
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Long", paramType = "path")	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public AjaxJson getById(
@@ -54,7 +70,7 @@ public class DeviceWarnRecordController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "新增")
+	@ApiOperation(value = "新增", hidden = true)
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
 		@RequestBody @Valid @ApiParam(value = "DeviceWarnRecord") DeviceWarnRecord entity,
@@ -73,7 +89,7 @@ public class DeviceWarnRecordController {
 
 	}
 	
-	@ApiOperation(value = "编辑")
+	@ApiOperation(value = "编辑", hidden = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(
 		@RequestBody @ApiParam(value = "异常记录") DeviceWarnRecord entity, 
@@ -88,7 +104,7 @@ public class DeviceWarnRecordController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除")
+	@ApiOperation(value = "通过主键删除", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(

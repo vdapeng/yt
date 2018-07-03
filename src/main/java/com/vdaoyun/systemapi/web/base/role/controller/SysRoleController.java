@@ -31,6 +31,7 @@ import com.vdaoyun.systemapi.web.base.role.service.SysRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -44,7 +45,8 @@ import io.swagger.annotations.ApiParam;
  * 
  * @date 2017-3-30 21:05:17
  */
-@Api(tags = { "角色相关接口" })
+@ApiIgnore
+@Api(tags = { "角色相关接口" }, hidden = true)
 @RestController
 @RequestMapping("/sys/role")
 public class SysRoleController {

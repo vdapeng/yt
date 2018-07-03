@@ -5,13 +5,13 @@ logging:
 
 wechat:
   mp:
-    appId:
-    secret:
-    token:
-    aesKey:
+    appId: wx29042d05638e3b46
+    secret: 52fef061a620eddc249885fc6795978a
+    token: hjkjiot
+    aesKey: RsmFdzocFXEfgzPb7oCkGnIrqGTPdkkYxnnj85hiWgb
   miniapp:
-    appid: 111
-    secret: 111
-    token: 111
-    aesKey: 111
+    appid: wxe577a8c9a04b0a6d
+    secret: b423727cde584c61af6f1a43d9b4c5fb
+    token: hjkjiot
+    aesKey: RsmFdzocFXEfgzPb7oCkGnIrqGTPdkkYxnnj85hiWgb
     msgDataFormat: JSON

@@ -12,20 +12,20 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
 
 @ApiModel(value = "用户")
-@Table(name = "user")
-public class User implements Serializable {
+@Table(name = "wx_user")
+public class WxUser implements Serializable {
 	
-	public User() {
+	public WxUser() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public User(String openid, String unionid) {
+	public WxUser(String openid, String unionid) {
 		this.openid = openid;
 		this.unionid = unionid;
 		this.createDate = new Date();
@@ -83,6 +83,8 @@ public class User implements Serializable {
     @ApiModelProperty(name = "unionid", value = "微信unionid" )
     private String unionid;
     
+    
+    
 	public String getUnionid() {
 		return unionid;
 	}
@@ -138,7 +140,19 @@ public class User implements Serializable {
     @ApiModelProperty(name = "is_enable", value = "是否激活")
     private String isEnable;
     
-  	public String getIsEnable() {
+    @Column(name = "is_subscribe")
+    @ApiModelProperty(name = "is_subscribe", value = "是否关注")
+    private String isSubscribe;
+    
+  	public String getIsSubscribe() {
+		return isSubscribe;
+	}
+
+	public void setIsSubscribe(String isSubscribe) {
+		this.isSubscribe = isSubscribe;
+	}
+
+	public String getIsEnable() {
 		return isEnable;
 	}
 
@@ -368,17 +382,17 @@ public class User implements Serializable {
         this.city = city;
     }
     
-    public User(WxMaUserInfo wxMpUser) {
+    public WxUser(WxMpUser wxMpUser) {
     	this.openid = wxMpUser.getOpenId();
     	this.unionid = wxMpUser.getUnionId();
-    	this.avatarUrl = wxMpUser.getAvatarUrl();
-    	this.nickname = wxMpUser.getNickName();
-    	this.trueName = wxMpUser.getNickName();
-    	this.gender = wxMpUser.getGender();
+    	this.avatarUrl = wxMpUser.getHeadImgUrl();
+    	this.nickname = wxMpUser.getNickname();
+    	this.trueName = wxMpUser.getNickname();
+    	this.gender = String.valueOf(wxMpUser.getSex());
+    	this.createDate = new Date();
     	this.country = wxMpUser.getCountry();
     	this.province = wxMpUser.getProvince();
     	this.city = wxMpUser.getCity();
-    	this.createDate = new Date();
     }
     
 }

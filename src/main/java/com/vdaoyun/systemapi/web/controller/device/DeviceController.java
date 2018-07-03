@@ -41,7 +41,7 @@ public class DeviceController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation("搜索所有设备列表")
+	@ApiOperation(value = "搜索所有设备列表", hidden = true)
 	@RequestMapping(value = "all", method = RequestMethod.GET)
 	public AjaxJson selectAll() throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -49,7 +49,7 @@ public class DeviceController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键查询详情")
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@RequestMapping(value = "/{terminalId}", method = RequestMethod.GET)
 	public AjaxJson getById(
 		@PathVariable(value = "terminalId") @ApiParam(value = "设备编号") String id

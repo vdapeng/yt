@@ -30,7 +30,7 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
-	@ApiOperation(value = "列表查询")
+	@ApiOperation(value = "列表查询", hidden = true)
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
@@ -44,7 +44,7 @@ public class UserController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键查询详情")
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Long", paramType = "path")	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public AjaxJson getById(
@@ -55,7 +55,7 @@ public class UserController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"H后台管理____用户管理_用户激活/用户禁用"}, value ="")
+	@ApiOperation(tags = {"H后台管理____用户管理_用户激活/用户禁用"}, value ="", hidden = true)
 	@GetMapping(value = "/enable/{id}")
 	public AjaxJson enable(@PathVariable(value = "id") Long id) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -81,7 +81,20 @@ public class UserController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"A小程序_____注册_新增用户"},value = "新增")
+	@ApiOperation(tags = {"A小程序_____注册_绑定手机号"},value = "新增")
+	@RequestMapping(value = "/bind", method = RequestMethod.POST)
+	public AjaxJson bindMobile(
+			@RequestParam("mobile") @ApiParam("手机号码") String mobile,
+			@RequestParam("openid") @ApiParam("小程序openid") String openid,
+			@RequestParam(value = "unionid", required = false) @ApiParam("小程序unionid") String unionid
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		service.bindMobile(openid, unionid, mobile);
+		ajaxJson.setMsg("等待后台审核");
+		return ajaxJson;
+	}
+	
+	@ApiOperation(tags = {"A小程序_____注册_新增用户"},value = "新增", hidden = true)
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
 		@RequestBody @Valid @ApiParam(value = "User") User entity,
