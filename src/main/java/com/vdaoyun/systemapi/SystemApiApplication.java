@@ -8,9 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import com.vdaoyun.systemapi.common.utils.EnvironmentUtil;
 
@@ -41,6 +44,14 @@ public class SystemApiApplication {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"),
             env.getActiveProfiles());
+	}
+	
+	@Bean
+	public ServletRegistrationBean dispatcherServlet() {
+	    ServletRegistrationBean registration = new ServletRegistrationBean(
+	            new DispatcherServlet(), "/");
+	    registration.setAsyncSupported(true);
+	    return registration;
 	}
 	
 //	private CorsConfiguration buildConfig() {
