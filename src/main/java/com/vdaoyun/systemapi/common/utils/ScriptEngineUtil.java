@@ -9,8 +9,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import org.apache.commons.collections.MapUtils;
-
 /**
  * 
  * @Package com.vdaoyun.systemapi.common.utils
@@ -56,7 +54,7 @@ public class ScriptEngineUtil {
 		Object result = null;
 		try {
 			JSFunction = compilable.compile(script);
-			if (MapUtils.isNotEmpty(params)) {
+			if (params != null && !params.isEmpty()) {
 				params.forEach((key, val) -> {
 					bindings.put(key, val);
 				});
