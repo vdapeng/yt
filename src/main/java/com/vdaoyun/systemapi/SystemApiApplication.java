@@ -9,18 +9,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.vdaoyun.systemapi.common.utils.EnvironmentUtil;
 
+@EnableAsync
 @SpringBootApplication
-@ServletComponentScan//servlet扫描
+@ServletComponentScan//	servlet扫描
 @EnableTransactionManagement
 public class SystemApiApplication {
 	
-	
 	private static final Logger log = LoggerFactory.getLogger(SystemApiApplication.class);
-
 
 	public static void main(String[] args) throws UnknownHostException {
 		Environment env = SpringApplication.run(SystemApiApplication.class, args).getEnvironment();
@@ -41,8 +41,6 @@ public class SystemApiApplication {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"),
             env.getActiveProfiles());
-		
-		
 	}
 	
 //	private CorsConfiguration buildConfig() {

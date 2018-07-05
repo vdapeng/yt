@@ -29,6 +29,11 @@ public class MQSensorRecordModel extends MQAbstractModel {
 	private Integer SampeFrequency;
 	
 	/**
+	 * 报警信息
+	 */
+	private String Alaram_Business;
+	
+	/**
 	 * 运行数据
 	 */
 	private List<HashMap<String, Object>> data;
@@ -47,6 +52,14 @@ public class MQSensorRecordModel extends MQAbstractModel {
 
 	public void setData(List<HashMap<String, Object>> data) {
 		this.data = data;
+	}
+
+	public String getAlaram_Business() {
+		return Alaram_Business;
+	}
+
+	public void setAlaram_Business(String alaram_Business) {
+		Alaram_Business = alaram_Business;
 	}
 
 }

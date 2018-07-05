@@ -59,6 +59,20 @@ public class DeviceWarnRecordController {
 		return ajaxJson;
 	}
 	
+	@ApiOperation(tags = {"A小程序_____日志_报警列表_3"}, value = "列表查询")
+	@RequestMapping(value = "/mini/list", method = RequestMethod.POST)
+	public AjaxJson alarmList(
+			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam(value = "页码") Integer pageNum,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) @ApiParam(value = "每页条数") Integer pageSize,
+			@RequestParam(value = "order", defaultValue = "id", required = false) @ApiParam(value = "排序字段")  String order,
+			@RequestParam(value = "sort", defaultValue = "DESC", required = false) @ApiParam(value = "排序方式") String sort,
+			@RequestBody HashMap<String, Object> entity
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.alarmList(entity, pageNum, pageSize, order, sort));
+		return ajaxJson;
+	}
+	
 	@ApiOperation(value = "通过主键查询详情", hidden = true)
 	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Long", paramType = "path")	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

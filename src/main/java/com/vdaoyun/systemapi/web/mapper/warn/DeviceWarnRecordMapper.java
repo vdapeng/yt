@@ -16,4 +16,7 @@ public interface DeviceWarnRecordMapper extends BaseMapper<DeviceWarnRecord> {
 	Long countPageInfoEx(Map<String, Object> param);
 	
 	public DeviceWarnRecord selectInfoByKey(Integer id);
+	
+	// 报警列表
+	List<HashMap<String, Object>> alarmList(HashMap<String, Object> param);
 }

@@ -10,8 +10,14 @@ abstract class MQAbstractModel implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 设备编号
+	 */
 	private String TerminalID;
 	
+	/**
+	 * 推送时间
+	 */
 	private Date PostTime;
 
 	public String getTerminalID() {

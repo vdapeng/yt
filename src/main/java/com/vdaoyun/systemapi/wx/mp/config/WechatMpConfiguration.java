@@ -80,7 +80,7 @@ public class WechatMpConfiguration {
   }
 
   @Bean
-  public WxMpMessageRouter router(WxMpService wxMpService) {
+  public WxMpMessageRouter wxMpMessageRouter(WxMpService wxMpService) {
     final WxMpMessageRouter newRouter = new WxMpMessageRouter(wxMpService);
 
     // 记录所有事件的日志 （异步执行）

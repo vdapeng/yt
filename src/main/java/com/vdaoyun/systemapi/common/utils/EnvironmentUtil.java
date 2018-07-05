@@ -19,14 +19,14 @@ public final class EnvironmentUtil {
 	
 	/**
 	 * 
-	 * @Title: isDev
+	 * @Title: 是否为开发模式
 	 *  
-	 * @Description: 是否为开发模式
+	 * @Description: 获取当前环境是否为开发环境
 	 *  
-	 * @return Boolean
+	 * @return Boolean 是/否
 	 */
 	public static Boolean isDev() {
-		return getProperty(STRING_SPRING_CLOUD_CONFIG_PROFILE).toLowerCase().equals(DEV);
+		return getProperty(STRING_SPRING_CLOUD_CONFIG_PROFILE).equalsIgnoreCase(DEV);
 	}
 
 }

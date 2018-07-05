@@ -81,7 +81,7 @@ public class WxMaConfiguration {
     };
     
     @Bean
-    public WxMaMessageRouter router(WxMaService service) {
+    public WxMaMessageRouter wxMaMessageRouter(WxMaService service) {
         final WxMaMessageRouter router = new WxMaMessageRouter(service);
         router
                 .rule().handler(logHandler).next()

@@ -89,4 +89,17 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 		return result;
 	}
 
+	public List<HashMap<String, Object>> alarmList(
+			HashMap<String, Object> entity, 
+			Integer wdy_pageNum, 
+			Integer wdy_pageSize, 
+			String wdy_pageOrder, 
+			String wdy_pageSort) {
+		HashMap<String, Object> param = new HashMap<>();
+		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
+		param.put("entity", entity);
+		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
+		return rootMapper.alarmList(param);
+	}
+	
 }

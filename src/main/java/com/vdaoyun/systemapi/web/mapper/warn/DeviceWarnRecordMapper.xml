@@ -100,6 +100,68 @@
 		</if>
 	</select>
 	
+	
+	<resultMap type="java.util.Map" id="alarmResult">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="terminalId" jdbcType="VARCHAR" property="terminalId" />
+		<result column="postTime" jdbcType="TIMESTAMP" property="postTime" />
+    	<result column="alaramBusiness" jdbcType="VARCHAR" property="alaramBusiness" />
+    	<result column="alaramEquipment" jdbcType="VARCHAR" property="alaramEquipment" />
+    	<result column="alaram_business_name" jdbcType="VARCHAR" property="alaramBusinessName" />
+    	<result column="alaram_equipment_name" jdbcType="VARCHAR" property="alaramEquipmentName" />
+		<collection column="{terminalId = terminalId, alaramBusiness = alaramBusiness}" property="pondsList" select="alarmPonds" javaType="java.util.List" ofType="java.util.Map"></collection>
+	</resultMap>
+	
+ 	<select id="alarmList" parameterType="java.util.Map" resultMap="alarmResult">
+		SELECT
+			a.*
+		FROM
+			<![CDATA[ (
+				SELECT
+					a.*, GROUP_CONCAT(c. NAME SEPARATOR '&') AS alaram_business_name
+				FROM
+					(
+						SELECT
+							a.id AS id ,
+							a.terminal_id AS terminalId ,
+							a.post_time AS postTime ,
+							a.alaram_business AS alaramBusiness ,
+							a.alaram_equipment AS alaramEquipment ,
+							GROUP_CONCAT(b. NAME SEPARATOR '&') AS alaram_equipment_name
+						FROM
+							device_warn_record a
+						LEFT JOIN device_warn_type b ON INSTR(a.alaram_equipment , b.`code`) > 0
+						GROUP BY
+							a.id
+					) a
+				LEFT JOIN device_warn_type c ON INSTR(a.alaramBusiness , c.`code`) > 0
+				GROUP BY
+					a.id
+			) a  ]]>,
+			(
+				SELECT
+					b.terminal_id ,
+					b.`code`
+				FROM
+					ponds a ,
+					sensor b ,
+					`user` c
+				WHERE
+					a.id = b.ponds_id
+				AND a.user_id = c.id
+				<if test="entity.openid != null and entity.openid != ''">
+					AND c.openid = #{entity.openid}
+				</if>
+			) b
+		WHERE
+			a.terminalId = b.terminal_id
+		AND INSTR(a.alaramBusiness , b.`code`) > 0	
+	</select>
+	
+	<select id="alarmPonds" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT a.id, a.`name`, b.`name` sensorName FROM ponds a, sensor b WHERE a.id = b.id AND b.terminal_id = #{terminalId} AND INSTR(#{alaramBusiness} , b.`code`) > 0
+	</select> 
+	
 	<select id="countPageInfoEx" parameterType="java.util.Map" resultType="java.lang.Long">
 		<![CDATA[ SELECT COUNT(0) FROM (
 		SELECT a.*, b.`name` pondsName FROM (
@@ -112,7 +174,7 @@
 		,a.alaram_equipment AS alaramEquipment, GROUP_CONCAT(b.name separator '&') as alaram_equipment_name 
 		FROM device_warn_record a LEFT JOIN device_warn_type b ON INSTR(a.alaram_equipment, 
 		b.`code`) > 0 GROUP BY a.id) a LEFT JOIN device_warn_type c ON INSTR(a.alaramBusiness, 
-		c.`code`) > 0 GROUP BY a.id  LIMIT 0, 10) a LEFT JOIN sensor b ON a.terminalId = b.terminal_id AND INSTR(a.alaramBusiness, b.`code`) > 0) a 
+		c.`code`) > 0 GROUP BY a.id  LIMIT 0, 100000) a LEFT JOIN sensor b ON a.terminalId = b.terminal_id AND INSTR(a.alaramBusiness, b.`code`) > 0) a 
 		LEFT JOIN ponds b ON a.pondsId = b.id  ]]>
 		<if test="userId != null">
 			WHERE b.user_id = #{userId}

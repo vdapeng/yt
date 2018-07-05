@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaMessage;
 import cn.binarywang.wx.miniapp.constant.WxMaConstants;
+import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -30,8 +31,8 @@ public class WxPortalController {
     @Autowired
     private WxMaService wxService;
 
-//    @Autowired
-//    private WxMaMessageRouter router;
+    @Autowired
+    private WxMaMessageRouter router;
 
     @GetMapping(produces = "text/plain;charset=utf-8")
     public String authGet(@RequestParam(name = "signature", required = false) String signature,
@@ -97,7 +98,7 @@ public class WxPortalController {
 
     private void route(WxMaMessage message) {
         try {
-//            this.router.route(message);
+            this.router.route(message);
         } catch (Exception e) {
             this.logger.error(e.getMessage(), e);
         }
