@@ -2,6 +2,7 @@ package com.vdaoyun.systemapi.mq;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +53,7 @@ public class MQTest {
 		List<MQDeviceRecordData> data = new ArrayList<>();
 		data.add(item);
 		MQDeviceRecordModel record = new MQDeviceRecordModel();
-		record.setTerminalID("TK232");
+		record.setTerminalID(Arrays.asList(new String[] {"TK232", "TK233"}).get(RandomUtils.nextInt(0, 1)));
 		record.setPostTime(new Date());
 		record.setSampeFrequency(0);
 		record.setData(data);
@@ -72,8 +73,6 @@ public class MQTest {
 		mqProducerService.send(topic, body);
 	}
 	
-	
-	
 	/**
 	 * 
 	 * @Title: sendDeviceWarnData
@@ -84,9 +83,9 @@ public class MQTest {
 	@Scheduled(cron = "0 0/30 * * * ? ")
 	public void sendDeviceWarnData() {
 		MQDeviceWarnModel record = new MQDeviceWarnModel();
-		record.setTerminalID("TK232");
+		record.setTerminalID(Arrays.asList(new String[] {"TK232", "TK233"}).get(RandomUtils.nextInt(0, 1)));
 		record.setPostTime(new Date());
-		record.setAlaram_Business("PH&DO");
+		record.setAlaram_Business("PH_1&DO_1");
 		record.setAlaram_Equipment("BATTERYLOW&TEMPERATUREHIGH");
 		SendMessage(MQConstants.WARN_TOPIC, record);
 	}
@@ -95,6 +94,15 @@ public class MQTest {
 //	public void sendToClient() {
 //		byte[] body = "HELLO WORLD".getBytes();
 //		mqProducerService.sendToClient("ADMIN", body);
+//	}
+	
+//	public static void main(String[] args) {
+//		Optional<String> test = Optional.ofNullable(null).map((str) -> str.toString().toUpperCase());
+//		System.out.println(test.orElse("TEST IS NULL"));
+//		Optional.ofNullable(test.orElse("THIS IS DEFAULT VALUE")).map(val -> val.toString().toUpperCase()).ifPresent(val -> {
+//			System.out.println(val);
+//		});
+//		System.out.println(Optional.ofNullable(test.orElse("THIS IS DEFAULT VALUE")).filter(u -> u.length() > 10).orElseThrow(() -> new NullPointerException()));
 //	}
 	
 	/**
@@ -129,7 +137,7 @@ public class MQTest {
 		data.add(item);
 		data.add(item);
 		MQSensorRecordModel record = new MQSensorRecordModel();
-		record.setTerminalID("TK232");
+		record.setTerminalID(Arrays.asList(new String[] {"TK232", "TK233"}).get(RandomUtils.nextInt(0, 1)));
 		record.setPostTime(new Date());
 		record.setSampeFrequency(300);
 		record.setData(data);

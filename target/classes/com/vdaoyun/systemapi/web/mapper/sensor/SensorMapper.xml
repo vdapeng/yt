@@ -11,6 +11,7 @@
     	<result column="name" jdbcType="VARCHAR" property="name" />
     	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     	<result column="user_id" jdbcType="INTEGER" property="userId" />
+    	<result column="is_alarm" jdbcType="INTEGER" property="isAlarm" />
   </resultMap>
   
 	<sql id="Where_Clause">
@@ -65,6 +66,7 @@
 		,name AS name
 		,create_date AS createDate
 		,user_id AS userId
+		,is_alarm AS isAlarm
 		FROM sensor
 		<include refid="Where_Clause" />
 		<if test="orderByClause != null and orderByClause != ''">

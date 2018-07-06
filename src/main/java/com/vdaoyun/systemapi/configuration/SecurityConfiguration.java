@@ -18,13 +18,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
-import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+//import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import com.vdaoyun.systemapi.security.jwt.JWTConfigurer;
 import com.vdaoyun.systemapi.security.jwt.TokenProvider;
 
 @Configuration
-@Import(SecurityProblemSupport.class)
+//@Import(SecurityProblemSupport.class)
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -37,14 +37,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final CorsFilter corsFilter;
 
-    private final SecurityProblemSupport problemSupport;
+//    private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService,TokenProvider tokenProvider,CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+//    SecurityProblemSupport problemSupport
+    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService,TokenProvider tokenProvider,CorsFilter corsFilter) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
         this.tokenProvider = tokenProvider;
         this.corsFilter = corsFilter;
-        this.problemSupport = problemSupport;
+//        this.problemSupport = problemSupport;
     }
 
     @PostConstruct
@@ -80,8 +81,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling()
-            .authenticationEntryPoint(problemSupport)
-            .accessDeniedHandler(problemSupport)
+//            .authenticationEntryPoint(problemSupport)
+//            .accessDeniedHandler(problemSupport)
         .and()
             .csrf()
             .disable()

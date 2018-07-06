@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
@@ -61,8 +62,21 @@ public class Ponds implements Serializable {
      */
     @NotNull(message = "userId is required")
     @Column(name = "user_id")
-    @ApiModelProperty(name = "userId", value = "创建人" )
+    @ApiModelProperty(name = "userId", value = "用户编号" )
     private Long userId;
+    
+    @Transient
+    @ApiModelProperty(value = "小程序openid")
+    private String openid;
+    
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+
 	/**
      * 创建时间
      */

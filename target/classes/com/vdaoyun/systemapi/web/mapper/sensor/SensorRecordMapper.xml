@@ -110,7 +110,7 @@
 	<!-- 根据塘口编号 查询该塘口下所有探测器最新的一条记录 -->
 	<select id="selectNewDateByPonds" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
-			a.`name`, a.upper, a.lower, a.unit, a.remark, b.`value`, b.temperature_value temperatureValue
+			a.`name`, a.upper, a.lower, a.unit, a.remark, b.`value`, b.temperature_value temperatureValue, a.is_alarm isAlarm
 		FROM 
 			(
 		
@@ -120,6 +120,7 @@
 					a.terminal_id ,
 					a.`code` ,
 					a.`name` ,
+					a.is_alarm,
 					b.upper ,
 					b.lower ,
 					b.unit ,

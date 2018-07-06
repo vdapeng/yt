@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
+import com.vdaoyun.systemapi.mq.MQConstants;
 import com.vdaoyun.systemapi.web.mapper.warn.DeviceWarnRecordMapper;
 import com.vdaoyun.systemapi.web.model.warn.DeviceWarnRecord;
+import com.vdaoyun.systemapi.web.service.sensor.SensorService;
 
 @Service
 @Transactional
@@ -31,6 +33,26 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 	public int insert(DeviceWarnRecord entity) {
 //		entity.setCreateDate(new Date());
 		return super.insert(entity);
+	}
+	
+	@Autowired
+	private SensorService sensorService;
+	
+	/**
+	 * 
+	* @Title: 设备报警 
+	* @Description: 当设备报警时调用；1：新增报警记录 2：将报警探测器状态修改为报警状态
+	* @param @param entity    设定文件 
+	* @return void    返回类型 
+	* @throws
+	 */
+	public void alarm(DeviceWarnRecord entity) {
+		mapper.insert(entity);
+		String alaramBusiness = entity.getAlaramBusiness();
+		if (StringUtils.isNotEmpty(alaramBusiness)) {
+			String[] alarms = alaramBusiness.split(MQConstants.WARN_SEPARATOR);
+			sensorService.alarm(alarms, entity.getTerminalId());
+		}
 	}
 	
 	@Autowired
@@ -89,7 +111,7 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 		return result;
 	}
 
-	public List<HashMap<String, Object>> alarmList(
+	public PageInfo<HashMap<String, Object>> alarmList(
 			HashMap<String, Object> entity, 
 			Integer wdy_pageNum, 
 			Integer wdy_pageSize, 
@@ -99,7 +121,7 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
 		param.put("entity", entity);
 		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
-		return rootMapper.alarmList(param);
+		return new PageInfo<>(rootMapper.alarmList(param));
 	}
 	
 }

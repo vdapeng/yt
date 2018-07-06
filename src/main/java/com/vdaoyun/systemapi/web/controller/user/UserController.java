@@ -1,5 +1,7 @@
 package com.vdaoyun.systemapi.web.controller.user;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.common.bean.AjaxJson;
+import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.user.User;
 import com.vdaoyun.systemapi.web.service.user.UserService;
 
@@ -84,11 +87,12 @@ public class UserController {
 	@ApiOperation(tags = {"A小程序_____注册_绑定手机号"},value = "新增")
 	@RequestMapping(value = "/bind", method = RequestMethod.POST)
 	public AjaxJson bindMobile(
-			@RequestParam("mobile") @ApiParam("手机号码") String mobile,
-			@RequestParam("openid") @ApiParam("小程序openid") String openid,
+			@RequestParam("mobile") @ApiParam(value = "手机号码", required = true) String mobile,
+			@RequestParam("openid") @ApiParam(value = "小程序openid", required = true) String openid,
 			@RequestParam(value = "unionid", required = false) @ApiParam("小程序unionid") String unionid
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
+		Optional.of(mobile).filter(val -> mobile.length() == 11).orElseThrow(() -> new ParamException("请输入正确的手机号码", "mobile"));
 		service.bindMobile(openid, unionid, mobile);
 		ajaxJson.setMsg("等待后台审核");
 		return ajaxJson;

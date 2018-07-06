@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -17,6 +21,14 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "传感器")
 @Table(name = "sensor")
 public class Sensor implements Serializable {
+	
+	public Sensor() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Sensor(String isAlarm) {
+		this.isAlarm = StringUtils.trimToEmpty(isAlarm).equalsIgnoreCase(YesOrNo.YES.toString()) ? YesOrNo.YES.toString() : YesOrNo.NO.toString();
+	}
 
 	/**
 	 * 
@@ -82,7 +94,19 @@ public class Sensor implements Serializable {
     @ApiModelProperty(name = "isEnable", value = "是否启用，y：启用 n:未启用")
     private String isEnable;
     
-  	public String getIsEnable() {
+    @Column(name = "is_alarm")
+    @ApiModelProperty(name = "isAlarm", value = "是否报警，y：报警 n:未报警")
+    private String isAlarm;
+    
+  	public String getIsAlarm() {
+		return isAlarm;
+	}
+
+	public void setIsAlarm(String isAlarm) {
+		this.isAlarm = isAlarm;
+	}
+
+	public String getIsEnable() {
 		return isEnable;
 	}
 

@@ -15,10 +15,10 @@
 	<sql id="Where_Clause">
 		<where>
 			<if test="entity.terminalId != '' and entity.terminalId != null">
-				AND terminal_id = #{entity.terminalId}
+				AND a.terminal_id = #{entity.terminalId}
 			</if>
 			<if test="entity.name != '' and entity.name != null">
-				AND name = #{entity.name}
+				AND a.name = #{entity.name}
 			</if>
 			<if test="entity.longitude != '' and entity.longitude != null">
 				AND longitude = #{entity.longitude}
@@ -30,7 +30,10 @@
 				AND create_date = #{entity.createDate}
 			</if>
 			<if test="entity.userId != '' and entity.userId != null">
-				AND user_id = #{entity.userId}
+				AND a.user_id = #{entity.userId}
+			</if>
+			<if test="entity.openid != '' and entity.openid != null">
+				AND a.user_id = (select id FROM `user` WHERE openid = #{entity.openid})
 			</if>
 		</where>
 	</sql>
@@ -54,8 +57,9 @@
 		,a.latitude AS latitude
 		,a.create_date AS createDate
 		,a.user_id AS userId,
-		count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id GROUP BY a.terminal_id
+		count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id 
 		<include refid="Where_Clause" />
+		GROUP BY a.terminal_id
 		<if test="orderByClause != null and orderByClause != ''">
 			order by ${orderByClause}
 		</if>

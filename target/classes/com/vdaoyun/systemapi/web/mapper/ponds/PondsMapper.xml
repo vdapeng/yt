@@ -33,6 +33,9 @@
 			<if test="entity.userId != '' and entity.userId != null">
 				AND user_id = #{entity.userId}
 			</if>
+			<if test="entity.openid != '' and entity.openid != null">
+				AND user_id = (select id FROM `user` WHERE openid = #{entity.openid})
+			</if>
 			<if test="entity.createDate != '' and entity.createDate != null">
 				AND create_date = #{entity.createDate}
 			</if>

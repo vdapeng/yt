@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,19 +31,13 @@ public class PondsController {
 	private PondsService service;
 	
 	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表"}, value = "列表查询")
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", paramType = "query"),
-		@ApiImplicitParam(name = "pageSize", value = "每页条数", defaultValue = "10", paramType = "query"),
-		@ApiImplicitParam(name = "order", value = "排序字段", defaultValue= "createDate", paramType = "query"),
-		@ApiImplicitParam(name = "sort", value = "排序方式", defaultValue = "DESC", paramType = "query")
-	})
-	@RequestMapping(value = "list", method = RequestMethod.POST)
+	@PostMapping("list")
 	public AjaxJson select(
-			@RequestParam(value = "pageNum", defaultValue = "1", required = false) Integer pageNum,
-			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-			@RequestParam(value = "order", defaultValue = "createDate", required = false) String order,
-			@RequestParam(value = "sort", defaultValue = "DESC", required = false) String sort,
-			@RequestBody Ponds entity
+			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam("页码") Integer pageNum,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) @ApiParam("每页条数") Integer pageSize,
+			@RequestParam(value = "order", defaultValue = "createDate", required = false) @ApiParam("排序字段") String order,
+			@RequestParam(value = "sort", defaultValue = "DESC", required = false) @ApiParam("排序方式") String sort,
+			@RequestBody @ApiParam("查询条件") Ponds entity
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));

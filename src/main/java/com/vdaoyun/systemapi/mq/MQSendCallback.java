@@ -31,7 +31,7 @@ public class MQSendCallback implements SendCallback {
 
 	@Override
 	public void onSuccess(SendResult arg0) {
-		log.info(arg0.toString());
+		log.debug(arg0.toString());
 	}
 
 }

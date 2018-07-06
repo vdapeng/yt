@@ -1,5 +1,6 @@
 package com.vdaoyun.systemapi.web.service.sensor;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,12 +14,28 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.sensor.SensorMapper;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
+
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Service
 @Transactional
 public class SensorService extends BaseService<Sensor> {
+	
+	public void alarm(String[] codes, String terminalId) {
+		Example example = new Example(Sensor.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("terminalId", terminalId);
+		// 将该设备下所有探测器状态设置为非报警状态
+		mapper.updateByExampleSelective(new Sensor(YesOrNo.NO.toString()), example);
+		criteria.andIn("code", Arrays.asList(codes));
+		// 将该设备下报警的探测器状态设置为报警状态
+		mapper.updateByExampleSelective(new Sensor(YesOrNo.YES.toString()), example);
+		
+	}
 	
 //	@Override
 //	public int delete(Object key) {

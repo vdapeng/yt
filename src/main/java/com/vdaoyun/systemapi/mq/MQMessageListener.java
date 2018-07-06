@@ -1,5 +1,6 @@
 package com.vdaoyun.systemapi.mq;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,10 +56,13 @@ public class MQMessageListener implements MessageListener {
 	@Override
 	public Action consume(Message message, ConsumeContext context) {
 		String secondTopic = message.getUserProperties("mqttSecondTopic");
-		log.info("=====================================");
-		log.info("recv msg secondTopic:"+ secondTopic);
-		log.info("=====================================");
 		byte[] body = message.getBody();
+		log.debug("\n=====================================\n\t"
+				+ "SECONDTOPIC: \t{}\n\t"
+				+ "CONTENT: \t{}\n\t"
+				+ "DATETIME:\t{}\n"
+				+ "=====================================", 
+				secondTopic, JSON.toJSONString(JSONObject.parse(body, Feature.AllowArbitraryCommas)), LocalDateTime.now());
 		switch (secondTopic) {
 		case MQConstants.DEVICE_TOPIC:
 			if (body != null && body.length > 0) {
@@ -75,7 +79,7 @@ public class MQMessageListener implements MessageListener {
 		case MQConstants.WARN_TOPIC:
 			MQDeviceWarnModel record = JSONObject.parseObject(body, MQDeviceWarnModel.class, Feature.AllowArbitraryCommas);
 			DeviceWarnRecord entity = new DeviceWarnRecord(record);
-			deviceWarnRecordService.insert(entity);
+			deviceWarnRecordService.alarm(entity);
 			break;
 		case MQConstants.CGQ_TOPIC:
 			MQSensorRecordModel data = JSON.parseObject(body, MQSensorRecordModel.class, Feature.AllowArbitraryCommas);

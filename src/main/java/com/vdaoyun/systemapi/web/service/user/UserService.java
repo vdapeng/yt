@@ -89,7 +89,6 @@ public class UserService extends BaseService<User> {
 		return new PageInfo<>(list);
 	}
 	
-	
 	@Transactional
 	public Integer insertInfo(User entity) {
 		Integer result = super.insert(entity);

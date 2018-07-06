@@ -114,6 +114,7 @@
 	
  	<select id="alarmList" parameterType="java.util.Map" resultMap="alarmResult">
 		SELECT
+			DISTINCT
 			a.*
 		FROM
 			<![CDATA[ (
@@ -158,8 +159,17 @@
 		AND INSTR(a.alaramBusiness , b.`code`) > 0	
 	</select>
 	
-	<select id="alarmPonds" resultType="java.util.Map" parameterType="java.util.Map">
-		SELECT a.id, a.`name`, b.`name` sensorName FROM ponds a, sensor b WHERE a.id = b.id AND b.terminal_id = #{terminalId} AND INSTR(#{alaramBusiness} , b.`code`) > 0
+	<resultMap type="java.util.Map" id="alarmPondsResult">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<collection property="sensorList" ofType="java.util.Map" javaType="java.util.List">
+			<id column="code" property="code" jdbcType="VARCHAR" />
+			<result column="terminal_id" property="terminalId" jdbcType="VARCHAR" />
+			<result column="sensorName" property="name" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+	<select id="alarmPonds" resultMap="alarmPondsResult" parameterType="java.util.Map">
+		SELECT a.id, a.`name`, b.`code`, b.terminal_id,  b.`name` sensorName FROM ponds a, sensor b WHERE a.id = b.ponds_id AND b.terminal_id = #{terminalId} AND INSTR(#{alaramBusiness} , b.`code`) > 0
 	</select> 
 	
 	<select id="countPageInfoEx" parameterType="java.util.Map" resultType="java.lang.Long">

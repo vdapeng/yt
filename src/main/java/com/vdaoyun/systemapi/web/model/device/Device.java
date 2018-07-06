@@ -61,6 +61,10 @@ public class Device implements Serializable {
     @ApiModelProperty(name = "userId", value = "创建人" )
     private Long userId;
     
+    @Transient
+    @ApiModelProperty(name = "openid", value = "小程序openid" )
+    private String openid;
+    
   	/**
      * 获取设备编号
      *
@@ -174,6 +178,14 @@ public class Device implements Serializable {
 
 	public void setSensorCount(Integer sensorCount) {
 		this.sensorCount = sensorCount;
+	}
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
     
     
