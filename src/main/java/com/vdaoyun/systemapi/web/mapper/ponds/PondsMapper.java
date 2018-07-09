@@ -9,7 +9,7 @@ import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 
 public interface PondsMapper extends BaseMapper<Ponds> {
 
-	public List<Ponds> selectPageInfo(Map<String, Object> param);
+	public List<HashMap<String, Object>> selectPageInfo(Map<String, Object> param);
 	
 	public Ponds selectInfoByKey(Integer id);
 	

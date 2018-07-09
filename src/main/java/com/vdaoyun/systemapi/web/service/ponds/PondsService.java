@@ -41,7 +41,7 @@ public class PondsService extends BaseService<Ponds> {
 	@Autowired
 	private PondsMapper rootMapper;
 	
-	public PageInfo<Ponds> selectPageInfo(
+	public PageInfo<HashMap<String, Object>> selectPageInfo(
 		Ponds entity, 
 		Integer wdy_pageNum, 
 		Integer wdy_pageSize, 
@@ -56,7 +56,7 @@ public class PondsService extends BaseService<Ponds> {
 			param.put("orderByClause", "createDate DESC");
 		}
 		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
-		List<Ponds> list = rootMapper.selectPageInfo(param);
+		List<HashMap<String, Object>> list = rootMapper.selectPageInfo(param);
 		return new PageInfo<>(list);
 	}
 	
