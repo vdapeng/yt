@@ -1,5 +1,6 @@
 package com.vdaoyun.systemapi.web.service.sensor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.sensor.SensorMapper;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
+import com.vdaoyun.systemapi.web.model.sensor.SensorConfig;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
@@ -51,10 +53,11 @@ public class SensorService extends BaseService<Sensor> {
 		return super.insert(entity);
 	}
 	
-	public Sensor isExit(String terminalId, String code) {
+	public Sensor isExit(String terminalId, String code, Long pondsId) {
 		Sensor record = new Sensor();
 		record.setTerminalId(terminalId);
 		record.setCode(code);
+		record.setPondsId(pondsId);
 		return mapper.selectOne(record);
 	}
 	
@@ -88,6 +91,22 @@ public class SensorService extends BaseService<Sensor> {
 	public List<HashMap<String, Object>> selectListByPondsId(Long pondsId) {
 		return rootMapper.selectListByPondsId(pondsId);
 	}
+	
+	public List<Sensor> selectSensorsByPondsId(Long pondsId) {
+		Example example = new Example(Sensor.class);
+		example.setDistinct(true);
+		example.createCriteria().andEqualTo("pondsId", pondsId);
+		return mapper.selectByExample(example);
+	}
+	
+	public List<Sensor> selectSensorsByTerminalId(String terminalId, String code) {
+		Example example = new Example(Sensor.class);
+		example.setDistinct(true);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("terminalId", terminalId);
+		criteria.andEqualTo("code", code);
+		return mapper.selectByExample(example);
+	}
 
 	public List<HashMap<String, Object>> selectListByCode(String code, String terminalId) {
 		HashMap<String, Object> param = new HashMap<>();
@@ -103,4 +122,35 @@ public class SensorService extends BaseService<Sensor> {
 		return rootMapper.selectListByGroupCode(param);
 	}
 	
+	public List<HashMap<String, Object>> selectListByPondsIdForJson(Long pondsId, String terminalId) {
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("pondsId", pondsId);
+		param.put("terminalId", terminalId);
+		return rootMapper.selectListByPondsIdForJson(param);
+	}
+	
+	public List<HashMap<String, Object>> selectByTerminalId(
+			String terminalId) {
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("terminalId", terminalId);
+		param.put("orderByClause", "createDate DESC");
+		return rootMapper.selectByTerminalId(param);
+	}
+	
+	public void batchConfig(String terminalId, Long pondsId, List<SensorConfig> sensorConfigs) {
+		if (sensorConfigs.size() < 1) {
+			return;
+		}
+		List<Sensor> sensors = new ArrayList<>();
+		for (SensorConfig sensorConfig : sensorConfigs) {
+			if (sensorConfig.getIsEnable().equals(YesOrNo.YES.toString())) {
+				sensors.add(new Sensor(terminalId, pondsId, sensorConfig.getCode(), sensorConfig.getName()));
+			}
+		}
+		mapper.delete(new Sensor(terminalId, pondsId));
+		if (sensors.size() < 1) {
+			return;
+		}
+		mapper.insertList(sensors);
+	}
 }

@@ -25,13 +25,13 @@
 				AND id = #{entity.id}
 			</if>
 			<if test="entity.nickname != '' and entity.nickname != null">
-				AND nickname = #{entity.nickname}
+				AND nickname like CONCAT(#{entity.nickname}, '%')
 			</if>
 			<if test="entity.trueName != '' and entity.trueName != null">
-				AND true_name = #{entity.trueName}
+				AND true_name like CONCAT(#{entity.trueName}, '%')
 			</if>
 			<if test="entity.mobile != '' and entity.mobile != null">
-				AND mobile = #{entity.mobile}
+				AND mobile like CONCAT(#{entity.mobile}, '%')  
 			</if>
 			<if test="entity.password != '' and entity.password != null">
 				AND password = #{entity.password}

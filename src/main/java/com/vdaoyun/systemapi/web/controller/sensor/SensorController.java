@@ -8,14 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.common.bean.AjaxJson;
+import com.vdaoyun.systemapi.common.utils.AjaxJsonUtils;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
+import com.vdaoyun.systemapi.web.model.sensor.SensorConfig;
 import com.vdaoyun.systemapi.web.service.sensor.SensorService;
 
 import io.swagger.annotations.Api;
@@ -43,6 +47,14 @@ public class SensorController {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
 		return ajaxJson;
+	}
+	
+	@ApiOperation(value = "通过终端编号查询该终端下所有探测器信息，包含所属塘口基本信息，用于通过终端查看探测器信息", hidden = true)
+	@GetMapping("{terminalId}/list")
+	public AjaxJson selectByTerminalId(
+			@PathVariable("terminalId") String terminalId
+	) throws Exception {
+		return AjaxJsonUtils.ajaxJson(service.selectByTerminalId(terminalId));
 	}
 	
 	@ApiOperation(value = "通过主键查询详情", hidden = true)
@@ -87,14 +99,15 @@ public class SensorController {
 			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
 			return ajaxJson;
 		}
-		Sensor sensor = service.isExit(entity.getTerminalId(), entity.getCode());
-		Boolean result;
-		if (sensor != null) {
+		Sensor sensor = service.isExit(entity.getTerminalId(), entity.getCode(), entity.getPondsId());
+		Boolean result = true;
+		if (sensor != null && entity.getIsEnable().equalsIgnoreCase(YesOrNo.NO.toString())) {
 			entity.setId(sensor.getId());
-			result = service.update(entity) > 0;
-		} else {
+//			result = service.update(entity) > 0;
+			result = service.delete(sensor.getId()) > 0;
+		} else if (sensor == null && entity.getIsEnable().equalsIgnoreCase(YesOrNo.YES.toString())) {
 			result = service.insertInfo(entity) > 0;
-		}
+		} 
 		ajaxJson.setData(entity);
 		ajaxJson.setSuccess(result);
 		ajaxJson.setMsg(result ? "操作成功" : "操作失败");
@@ -143,12 +156,18 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过塘口编号查询探测器列表", hidden = true)
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_根据塘口编号查询探测器列表"}, value = "")
 	@RequestMapping(value = "pid", method = RequestMethod.GET)
 	public AjaxJson selectListByPondsId(@RequestParam("pondsId") Long pondsId) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectListByPondsId(pondsId));
 		return ajaxJson;
+	}
+	
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_根据塘口编号和设备编号查询探测器列表"}, value = "")
+	@GetMapping("ptid")
+	public AjaxJson selectListByPondsIdForJson(@RequestParam Long pondsId, @RequestParam String terminalId) throws Exception {
+		return AjaxJsonUtils.ajaxJson(service.selectListByPondsIdForJson(pondsId, terminalId));
 	}
 	
 	@ApiOperation(value = "通过具体的探测器类型编号{code}和具体的设备编号{terminalId}，查找相关探测器列表。", hidden = true)
@@ -173,4 +192,11 @@ public class SensorController {
 		return ajaxJson;
 	}
 
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_批量配置塘口探测器"},  value = "")
+	@PutMapping("config")
+	public AjaxJson batchConfig(
+			@RequestParam String terminalId, @RequestParam Long pondsId, @RequestBody List<SensorConfig> sensorConfigs) throws Exception {
+		service.batchConfig(terminalId, pondsId, sensorConfigs);
+		return new AjaxJson();
+	}
 }

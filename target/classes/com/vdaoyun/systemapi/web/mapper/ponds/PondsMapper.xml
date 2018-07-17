@@ -72,6 +72,7 @@
 			a.user_id AS userId ,
 			a.create_date AS createDate ,
 			a.activated ,
+			a.terminal_id terminalId,
 			a.enabled,
 			b.nickname,
 			b.true_name trueName,

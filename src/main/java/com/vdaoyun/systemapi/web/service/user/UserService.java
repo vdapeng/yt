@@ -60,6 +60,13 @@ public class UserService extends BaseService<User> {
 		return mapper.selectOne(record);
 	}
 	
+	public User selectInfoByOpenid(String openid, String unionid) {
+		User record = new User();
+		record.setOpenid(openid);
+		record.setUnionid(unionid);
+		return mapper.selectOne(record);
+	}
+	
 	public Boolean isExit(String openid, String mobile) {
 		Example example = new Example(User.class);
 		example.createCriteria().andEqualTo("openid", openid);
@@ -144,6 +151,15 @@ public class UserService extends BaseService<User> {
 		User record = new User();
 		record.setMobile(mobile);
 		mapper.updateByExampleSelective(record, example);
+	}
+	
+	public List<User> search(String search) {
+		Example example = new Example(User.class);
+		example.createCriteria().andLike("nickname", search + "%");
+		example.or().andLike("trueName", search + "%");
+		example.or().andLike("mobile", search + "%");
+		return mapper.selectByExample(example);
+				
 	}
 	
 }

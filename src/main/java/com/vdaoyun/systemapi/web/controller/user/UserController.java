@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.common.bean.AjaxJson;
+import com.vdaoyun.systemapi.common.utils.AjaxJsonUtils;
 import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.user.User;
 import com.vdaoyun.systemapi.web.service.user.UserService;
@@ -45,6 +47,12 @@ public class UserController {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
 		return ajaxJson;
+	}
+	
+	@GetMapping("search")
+	@ApiOperation(value = "关键字搜索用户", hidden = true)
+	public AjaxJson search(@RequestParam(value = "search") String search) throws Exception {
+		return AjaxJsonUtils.ajaxJson(service.search(search));
 	}
 	
 	@ApiOperation(value = "通过主键查询详情", hidden = true)
@@ -93,6 +101,14 @@ public class UserController {
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		Optional.of(mobile).filter(val -> mobile.length() == 11).orElseThrow(() -> new ParamException("请输入正确的手机号码", "mobile"));
+		
+		User user = service.selectInfoByOpenid(openid, unionid);
+		if (user == null) {
+			throw new ParamException("用户不存在");
+		}
+		if (StringUtils.isNotEmpty(user.getMobile())) {
+			throw new ParamException("请勿重复绑定");
+		}
 		service.bindMobile(openid, unionid, mobile);
 		ajaxJson.setMsg("等待后台审核");
 		return ajaxJson;

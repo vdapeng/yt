@@ -13,12 +13,17 @@ public class WebsocketConfigration implements WebSocketConfigurer {
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(wsHandler(), "/endpointChat").setAllowedOrigins("*").withSockJS();
+		registry.addHandler(wsOnlineHandler(), "/socket/online").setAllowedOrigins("*").withSockJS();
 	}
-
+	
 	@Bean
 	public WsHandler wsHandler() {
 		return new WsHandler();
 	}
     
+	@Bean
+	public WsOnlineHandler wsOnlineHandler() {
+		return new WsOnlineHandler();
+	}
 
 }

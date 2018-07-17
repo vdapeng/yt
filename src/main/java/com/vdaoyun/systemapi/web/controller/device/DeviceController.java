@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vdaoyun.common.bean.AjaxJson;
+import com.vdaoyun.systemapi.common.utils.AjaxJsonUtils;
 import com.vdaoyun.systemapi.web.model.device.Device;
 import com.vdaoyun.systemapi.web.service.device.DeviceService;
 
@@ -47,6 +49,12 @@ public class DeviceController {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectAll());
 		return ajaxJson;
+	}
+	
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_通过用户编号查询设备列表"},value = "")
+	@GetMapping("/{userId}/devices")
+	public AjaxJson selectListByUserId(@PathVariable("userId") @ApiParam("用户编号") Long userId) throws Exception {
+		return AjaxJsonUtils.ajaxJson(service.selectListByUserId(userId));
 	}
 	
 	@ApiOperation(value = "通过主键查询详情", hidden = true)
@@ -94,7 +102,7 @@ public class DeviceController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除", hidden = true)
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_终端删除"}, value = "")
 	@RequestMapping(value = "/{terminalId}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
 		@PathVariable(value = "terminalId") @ApiParam(value = "设备编号") String terminalId

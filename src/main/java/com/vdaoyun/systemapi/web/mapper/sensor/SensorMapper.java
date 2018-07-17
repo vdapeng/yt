@@ -18,4 +18,9 @@ public interface SensorMapper extends BaseMapper<Sensor> {
 	List<HashMap<String, Object>> selectListByCode(HashMap<String, Object> param);
 	
 	List<HashMap<String, Object>> selectListByGroupCode(HashMap<String, Object> param);
+	
+	List<HashMap<String, Object>> selectListByPondsIdForJson(HashMap<String, Object> param);
+	
+	List<HashMap<String, Object>> selectByTerminalId(HashMap<String, Object> param);
+	
 }

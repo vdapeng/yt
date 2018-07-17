@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vdaoyun.systemapi.web.model.user.User;
 import com.vdaoyun.systemapi.web.service.user.UserService;
 import com.vdaoyun.systemapi.wx.miniapp.utils.JsonUtils;
 
@@ -17,6 +18,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import me.chanjar.weixin.common.error.WxErrorException;
 
 /**
@@ -51,7 +53,9 @@ public class WxMaUserController {
             this.logger.info(session.getUnionid());
             //TODO 可以增加自己的逻辑，关联业务相关数据
             userService.saveMini(session.getOpenid(), session.getUnionid());
-            return JsonUtils.toJson(session);
+            User user = userService.selectInfoByOpenid(session.getOpenid(), session.getUnionid());
+            user.setSessionKey(session.getSessionKey());
+            return JsonUtils.toJson(user);
         } catch (WxErrorException e) {
             this.logger.error(e.getMessage(), e);
             return e.toString();
@@ -65,7 +69,7 @@ public class WxMaUserController {
      */
     @ApiOperation(tags = {"A小程序_____API_获取用户信息接口"},value = "获取用户信息接口")
     @GetMapping("/info")
-    public String info(String sessionKey, String signature, String rawData, String encryptedData, String iv) {
+    public String info(@ApiParam String sessionKey,@ApiParam String signature,@ApiParam String rawData,@ApiParam String encryptedData,@ApiParam String iv) {
         // 用户信息校验
         if (!this.wxService.getUserService().checkUserInfo(sessionKey, rawData, signature)) {
             return "user check failed";
@@ -84,7 +88,7 @@ public class WxMaUserController {
      */
     @ApiOperation(tags = {"A小程序_____API_获取用户绑定手机号信息"},value = "获取用户绑定手机号信息")
     @GetMapping("/phone")
-    public String phone(String sessionKey, String signature, String rawData, String encryptedData, String iv) {
+    public String phone(@ApiParam String sessionKey,@ApiParam String signature,@ApiParam String rawData,@ApiParam String encryptedData,@ApiParam String iv) {
         // 用户信息校验
         if (!this.wxService.getUserService().checkUserInfo(sessionKey, rawData, signature)) {
             return "user check failed";

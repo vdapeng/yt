@@ -34,19 +34,19 @@ public class PondsShareRecord implements Serializable {
      * 
      */
     @Column(name = "openid")
-    @ApiModelProperty(name = "openid", value = "" )
+    @ApiModelProperty(name = "openid", value = "被共享人openid" )
     private String openid;
 	/**
      * 
      */
     @Column(name = "share_openid")
-    @ApiModelProperty(name = "shareOpenid", value = "" )
+    @ApiModelProperty(name = "shareOpenid", value = "共享人openid" )
     private String shareOpenid;
 	/**
      * 
      */
     @Column(name = "ponds_id")
-    @ApiModelProperty(name = "pondsId", value = "" )
+    @ApiModelProperty(name = "pondsId", value = "共享塘口id" )
     private Long pondsId;
 	/**
      * 

@@ -29,6 +29,19 @@ public class Sensor implements Serializable {
 	public Sensor(String isAlarm) {
 		this.isAlarm = StringUtils.trimToEmpty(isAlarm).equalsIgnoreCase(YesOrNo.YES.toString()) ? YesOrNo.YES.toString() : YesOrNo.NO.toString();
 	}
+	
+	public Sensor(String terminalId, Long pondsId, String code, String name) {
+		this.terminalId = terminalId;
+		this.pondsId = pondsId;
+		this.code = code;
+		this.name = name;
+		this.createDate = new Date();
+	}
+	
+	public Sensor(String terminalId, Long pondsId) {
+		this.terminalId = terminalId;
+		this.pondsId = pondsId;
+	}
 
 	/**
 	 * 

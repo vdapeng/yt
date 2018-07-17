@@ -108,6 +108,57 @@
 		AND a.is_enable = 'y'
 	</select>
 	
+	
+	<select id="selectListByPondsIdForJson" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT DISTINCT
+			a.*, IF(b.ponds_id > 0,'y', 'n') isEnable
+		FROM
+			(
+				SELECT
+					*
+				FROM
+					(
+						SELECT
+							*
+						FROM
+							sys_dict
+						WHERE
+							group_id IN(
+								SELECT
+									dict_group_id
+								FROM
+									sys_dict_group
+								WHERE
+									group_code IN(
+										SELECT
+											`code`
+										FROM
+											sys_dict a ,
+											sys_dict_group b
+										WHERE
+											a.group_id = b.dict_group_id
+										AND b.group_code = 'CGQ'
+									)
+							)
+					) a
+				WHERE
+					CODE NOT IN(
+						SELECT
+							a.`code`
+						FROM
+							sensor a 
+						WHERE
+							a.terminal_id = #{terminalId}
+							AND a.ponds_id != #{pondsId}
+					)
+			) a
+		LEFT JOIN(SELECT `code`, ponds_id FROM sensor WHERE ponds_id =  #{pondsId}) b ON a. CODE = b. CODE;
+	</select>
+	
+	
+	
+	
+	
 	<!-- 通过设备编号查询探测器列表 -->
 	<select id="selectListByTerminalId"  parameterType="java.lang.String" resultType="java.util.Map">
 		SELECT
@@ -172,6 +223,41 @@
 			WHERE
 				terminal_id = #{terminalId}
 		) b ON a. CODE = b.`code`;
+	</select>
+	
+	
+	<!-- 通过终端编号查询该终端下所有探测器信息，包含所属塘口基本信息，用于通过终端查看探测器信息 -->
+	<select id="selectByTerminalId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id ,
+			a.ponds_id pondsId ,
+			a.terminal_id terminalId ,
+			a.`code` ,
+			a.unit ,
+			a.`name` ,
+			a.create_date createDate, b.pondsName, b.nickname, b.avatarUrl, b.trueName
+		FROM
+			sensor a
+		LEFT JOIN(
+			SELECT
+				a.id ,
+				a.`name` pondsName,
+				b.nickname ,
+				b.avatar_url avatarUrl ,
+				b.true_name trueName
+			FROM
+				ponds a ,
+				`user` b
+			WHERE
+				a.user_id = b.id
+		) b ON a.ponds_id = b.id
+		WHERE 1=1
+		<if test="terminalId != null and terminalId != ''">
+			AND a.terminal_id = #{terminalId}
+		</if>
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
 	</select>
 	
 </mapper>

@@ -157,6 +157,9 @@
 		WHERE
 			a.terminalId = b.terminal_id
 		AND INSTR(a.alaramBusiness , b.`code`) > 0	
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
 	</select>
 	
 	<resultMap type="java.util.Map" id="alarmPondsResult">

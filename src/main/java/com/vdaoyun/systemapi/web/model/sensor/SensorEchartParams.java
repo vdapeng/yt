@@ -16,6 +16,9 @@ public class SensorEchartParams implements Serializable {
 	@ApiModelProperty(value = "设备编号，查询设备下所有探测器运行轨迹图时使用")
 	private String terminalId;
 	
+	@ApiModelProperty(value = "探测器编号，选填")
+	public String sensorCode;
+	
 	@ApiModelProperty(value = "时间段，单位:天，默认：1，即最近1天。建议数值不要过大，数值过大，查询速度慢，响应慢，影响体验感")
 	private Integer expr = 1;
 
@@ -41,6 +44,14 @@ public class SensorEchartParams implements Serializable {
 
 	public void setExpr(Integer expr) {
 		this.expr = expr;
+	}
+
+	public String getSensorCode() {
+		return sensorCode;
+	}
+
+	public void setSensorCode(String sensorCode) {
+		this.sensorCode = sensorCode;
 	}
 	
 }

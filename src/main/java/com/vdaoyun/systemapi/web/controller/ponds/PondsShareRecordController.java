@@ -1,5 +1,7 @@
 package com.vdaoyun.systemapi.web.controller.ponds;
 
+import java.util.HashMap;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +56,9 @@ public class PondsShareRecordController {
 	}
 	
 	@ApiOperation(tags = {"A小程序_____首页_共享塘口"}, value = "新增")
-	@ApiImplicitParam(name = "entity", paramType = "body", value = "实体", dataType = "PondsShareRecord")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(
-		@RequestBody @Valid PondsShareRecord entity,
+		@RequestBody @ApiParam("实体") @Valid PondsShareRecord entity,
 		BindingResult bindingResult
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -70,7 +71,24 @@ public class PondsShareRecordController {
 		ajaxJson.setSuccess(result);
 		ajaxJson.setMsg(result ? "新增成功" : "新增失败");
 		return ajaxJson;
-
+	}
+	
+	@ApiOperation(tags = {"A小程序_____首页_共享塘口"}, value = "新增")
+	@RequestMapping(value = "record", method = RequestMethod.POST)
+	public AjaxJson insertRecord(
+		@RequestBody @ApiParam("实体") HashMap<String, Object> entity,
+		BindingResult bindingResult
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		if (bindingResult.hasErrors()) {
+			ajaxJson.setSuccess(false);
+			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
+		}
+		Boolean result = true;
+		ajaxJson.setData(entity);
+		ajaxJson.setSuccess(result);
+		ajaxJson.setMsg(result ? "新增成功" : "新增失败");
+		return ajaxJson;
 	}
 	
 	@ApiOperation(value = "编辑", hidden = true)
@@ -112,7 +130,7 @@ public class PondsShareRecordController {
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		PondsShareRecord entity = new PondsShareRecord();
-		entity.setOpenid(openId);
+		entity.setShareOpenid(openId);
 		ajaxJson.setData(service.selectPageInfoEx(entity, pageNum, pageSize, order, sort));
 		return ajaxJson;
 	}
@@ -127,7 +145,7 @@ public class PondsShareRecordController {
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		PondsShareRecord entity = new PondsShareRecord();
-		entity.setShareOpenid(openId);
+		entity.setOpenid(openId);
 		ajaxJson.setData(service.selectPageInfoEx(entity, pageNum, pageSize, order, sort));
 		return ajaxJson;
 	}

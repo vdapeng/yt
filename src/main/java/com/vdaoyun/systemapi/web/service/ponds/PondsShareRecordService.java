@@ -73,6 +73,7 @@ public class PondsShareRecordService extends BaseService<PondsShareRecord> {
 	
 	@Transactional
 	public Integer insertInfo(PondsShareRecord entity) {
+		entity.setCreateDate(new Date());
 		Integer result = super.insert(entity);
 		if (result > 0) {
 		}

@@ -1,5 +1,7 @@
 package com.vdaoyun.systemapi.web.service.device;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -74,4 +76,10 @@ public class DeviceService extends BaseService<Device> {
 		return result;
 	}
 
+	public List<Device> selectListByUserId(Long userId) {
+		Device record = new Device();
+		record.setUserId(userId);
+		return mapper.select(record);
+	}
+	
 }

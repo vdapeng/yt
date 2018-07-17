@@ -1,9 +1,11 @@
 package com.vdaoyun.systemapi.web.service.sensor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -21,9 +23,11 @@ import com.github.abel533.echarts.series.Line;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
+import com.vdaoyun.systemapi.mq.model.MQSensorRecordModel;
 import com.vdaoyun.systemapi.web.mapper.sensor.SensorRecordMapper;
 import com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecord;
+import com.vdaoyun.util.DateUtil;
 
 @Service
 public class SensorRecordService extends BaseService<SensorRecord> {
@@ -131,4 +135,33 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 		return result;
 	}
 
+	public void insertRecord(MQSensorRecordModel data) {
+		String terminalId = data.getTerminalID();				// 设备编号
+		Date postTime = new Date();		 				// 上传时间
+		Integer SampeFrequency = data.getSampeFrequency();		// 数据采集频率
+		Set<String> keys = data.getData().get(0).keySet();		// 数据所有key
+		List<HashMap<String, Object>> list = data.getData();	// 采集到的数据列表
+		HashMap<String, Object> item = null;					// 临时变量，用于存储data
+		List<SensorRecord> sensorRecords = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			item = list.get(i);
+			for (String key : keys) {
+				if (!key.contains("_T")) {
+					SensorRecord sensorRecord = new SensorRecord();
+					sensorRecord.setCode(key);
+					sensorRecord.setTerminalId(terminalId);
+					sensorRecord.setValue(item.get(key).toString());
+					sensorRecord.setPostTime(postTime);
+					if (item.containsKey(key + "_T") && !item.containsKey(key + "_Temperature")) {
+						sensorRecord.setTemperatureValue(item.get(key + "_T").toString());				// 获取传感器温度值
+					} else {
+						sensorRecord.setTemperatureValue(item.get(key + "_Temperature").toString());	// 获取传感器温度值
+					}
+					sensorRecord.setDataTime(DateUtil.subtractDate(postTime, SampeFrequency/60 * (list.size() - 1 - i)));	// 计算数据生产时间
+					sensorRecords.add(sensorRecord);
+				}
+			}
+		}
+		batchInsert(sensorRecords);
+	}
 }

@@ -69,6 +69,21 @@ public class Ponds implements Serializable {
     @ApiModelProperty(value = "小程序openid")
     private String openid;
     
+    /**
+     * 设备编号
+     */
+    @Column(name = "terminal_id")
+    @ApiModelProperty(name = "terminal_id", value = "设备编号" )
+    private String terminalId;
+    
+	public String getTerminalId() {
+		return terminalId;
+	}
+
+	public void setTerminalId(String terminalId) {
+		this.terminalId = terminalId;
+	}
+
 	public String getOpenid() {
 		return openid;
 	}
