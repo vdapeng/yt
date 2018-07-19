@@ -73,11 +73,21 @@ public class PondsShareRecordService extends BaseService<PondsShareRecord> {
 	
 	@Transactional
 	public Integer insertInfo(PondsShareRecord entity) {
+		if (mapper.selectCount(entity) > 0 ) {
+			return 1;
+		} 
 		entity.setCreateDate(new Date());
 		Integer result = super.insert(entity);
 		if (result > 0) {
 		}
 		return result;
+	}
+	
+	// 判断塘口是否被分享
+	public Boolean isShare(Long pondsId) {
+		PondsShareRecord record = new PondsShareRecord();
+		record.setPondsId(pondsId);
+		return mapper.selectCount(record) > 0;
 	}
 
 }

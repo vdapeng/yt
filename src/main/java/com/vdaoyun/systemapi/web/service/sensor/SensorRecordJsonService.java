@@ -15,9 +15,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.github.abel533.echarts.Option;
+import com.github.abel533.echarts.Tooltip;
 import com.github.abel533.echarts.axis.CategoryAxis;
 import com.github.abel533.echarts.axis.ValueAxis;
+import com.github.abel533.echarts.code.Position;
 import com.github.abel533.echarts.code.Trigger;
+import com.github.abel533.echarts.code.TriggerOn;
 import com.github.abel533.echarts.code.X;
 import com.github.abel533.echarts.code.Y;
 import com.github.abel533.echarts.series.Line;
@@ -48,7 +51,6 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		option.yAxis(new ValueAxis());
 //		option.title("运行记录");
 		option.tooltip(Trigger.axis);
-		
 		// 取出该塘口所有探测器
 		List<Sensor> sensors = sensorService.selectSensorsByPondsId(params.getPondsId());
 		if (sensors == null || sensors.size() == 0) {
@@ -65,7 +67,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			params.setExpr(7);
 		}
 		
-		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 24 + " hour");
+		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 1 + " hour");
 		List<SensorRecordJson> list = mapper.selectByExample(example);
 		
 		if (list == null || list.size() == 0) {

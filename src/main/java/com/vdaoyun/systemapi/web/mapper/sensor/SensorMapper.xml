@@ -108,6 +108,24 @@
 		AND a.is_enable = 'y'
 	</select>
 	
+	<select id="selectListJsonByPondsId" parameterType="java.lang.Long" resultType="java.util.Map">
+		SELECT
+			a.id ,
+			a.ponds_id pondsId ,
+			a.terminal_id terminalId ,
+			a.`code` ,
+			a.`name` ,
+			a.is_alarm isAlarm,
+			a.create_date createDate,
+			b.unit,
+			b.upper,
+			b.lower,
+			b.remark
+		FROM
+			sensor a
+		LEFT JOIN sensor_warn_config b ON a.`code` = b.`code`
+		WHERE a.ponds_id = #{pondsId}
+	</select>
 	
 	<select id="selectListByPondsIdForJson" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT DISTINCT

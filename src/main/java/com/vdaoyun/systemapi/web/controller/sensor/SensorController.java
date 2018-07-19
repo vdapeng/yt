@@ -49,7 +49,7 @@ public class SensorController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过终端编号查询该终端下所有探测器信息，包含所属塘口基本信息，用于通过终端查看探测器信息", hidden = true)
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_通过终端编号查询该终端下所有探测器信息，包含所属塘口基本信息，用于通过终端查看探测器信息"}, value = "")
 	@GetMapping("{terminalId}/list")
 	public AjaxJson selectByTerminalId(
 			@PathVariable("terminalId") String terminalId
@@ -199,4 +199,5 @@ public class SensorController {
 		service.batchConfig(terminalId, pondsId, sensorConfigs);
 		return new AjaxJson();
 	}
+	
 }

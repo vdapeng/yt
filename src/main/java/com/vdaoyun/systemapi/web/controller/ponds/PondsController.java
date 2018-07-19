@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vdaoyun.common.bean.AjaxJson;
+import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 import com.vdaoyun.systemapi.web.service.ponds.PondsService;
+import com.vdaoyun.systemapi.web.service.ponds.PondsShareRecordService;
+import com.vdaoyun.systemapi.web.service.sensor.SensorService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,6 +32,10 @@ public class PondsController {
 	
 	@Autowired
 	private PondsService service;
+	@Autowired
+	private SensorService sensorService;
+	@Autowired
+	private PondsShareRecordService pondsShareRecordService;
 	
 	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表"}, value = "列表查询")
 	@PostMapping("list")
@@ -54,7 +61,8 @@ public class PondsController {
 			@RequestBody Ponds entity
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
-		ajaxJson.setData(service.selectPageInfoEx(entity, pageNum, pageSize, order, sort));
+//		ajaxJson.setData(service.selectPageInfoEx(entity, pageNum, pageSize, order, sort));
+		ajaxJson.setData(service.selectListJsonData(entity, pageNum, pageSize, order, sort));
 		return ajaxJson;
 	}
 	
@@ -64,7 +72,8 @@ public class PondsController {
 			@PathVariable(value = "id") Long id
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
-		ajaxJson.setData(service.selectInfoEx(id));
+//		ajaxJson.setData(service.selectInfoEx(id));
+		ajaxJson.setData(service.selectInfoJsonData(id));
 		return ajaxJson;
 	}
 	
@@ -132,6 +141,12 @@ public class PondsController {
 	public AjaxJson delete(
 		@PathVariable(value = "id") Long id
 	) throws Exception {
+		if (sensorService.isBindSensor(id)) {
+			throw new ParamException("该塘口已绑定探测器，请先解绑该塘口所有探测器");
+		}
+		if (pondsShareRecordService.isShare(id)) {
+			throw new ParamException("该塘口已被分享，请先取消该塘口所有分享");
+		}
 		AjaxJson ajaxJson = new AjaxJson();
 		Boolean result = service.delete(id) > 0;
 		ajaxJson.setMsg(result ? "删除成功" : "删除失败");

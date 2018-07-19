@@ -101,6 +101,53 @@
 		 WHERE id = #{id}
 	</select>
 	
+	<resultMap type="java.util.Map" id="JsonResultMap">
+		<id column="id" jdbcType="INTEGER" property="id" />
+    	<result column="name" jdbcType="VARCHAR" property="name" />
+    	<result column="address" jdbcType="VARCHAR" property="address" />
+    	<result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    	<result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    	<result column="user_id" jdbcType="INTEGER" property="userId" />
+    	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    	<result column="activated" jdbcType="VARCHAR" property="activated" />
+    	<result column="enabled" jdbcType="VARCHAR" property="enabled" />
+    	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
+		<association property="sensorJsonData" select="com.vdaoyun.systemapi.web.mapper.sensor.SensorRecordJsonMapper.selectNewByTerminalId" column="terminalId" javaType="java.util.Map"></association>
+		<collection property="sensorList" select="com.vdaoyun.systemapi.web.mapper.sensor.SensorMapper.selectListJsonByPondsId" column="id"></collection>
+	</resultMap>
+	<select resultMap="JsonResultMap" parameterType="java.util.Map" id="selectListJsonData">
+		SELECT 
+		id AS id
+		,name AS name
+		,address AS address
+		,latitude AS latitude
+		,longitude AS longitude
+		,user_id AS userId
+		,create_date AS createDate
+		,activated AS activated
+		,enabled AS enabled
+		,terminal_id AS terminalId
+		FROM ponds
+		<include refid="Where_Clause" />
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select resultMap="JsonResultMap" parameterType="java.lang.Long" id="selectInfoJsonData">
+		SELECT 
+		id AS id
+		,name AS name
+		,address AS address
+		,latitude AS latitude
+		,longitude AS longitude
+		,user_id AS userId
+		,create_date AS createDate
+		,activated AS activated
+		,enabled AS enabled
+		,terminal_id AS terminalId
+		FROM ponds  WHERE id = #{id}
+	</select>
+	
 	<resultMap id="ExResultMap" type="java.util.Map">
 	    <id column="id" jdbcType="INTEGER" property="id" />
     	<result column="name" jdbcType="VARCHAR" property="name" />

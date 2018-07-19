@@ -24,7 +24,8 @@ public class SensorRecordJsonController {
 	
 	@Autowired
 	private SensorRecordJsonService service;
-	
+
+	@ApiOperation(tags = {"A小程序_____首页_塘口详情_塘口24小时折线图"}, value = "")
 	@PostMapping("echart")
 	public AjaxJson selectEchartData(@RequestBody SensorEchartParams params) throws Exception {
 		return AjaxJsonUtils.ajaxJson(JSON.parse(JSON.toJSONString(service.selectEchartData(params))));

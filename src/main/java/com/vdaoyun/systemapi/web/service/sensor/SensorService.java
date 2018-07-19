@@ -153,4 +153,30 @@ public class SensorService extends BaseService<Sensor> {
 		}
 		mapper.insertList(sensors);
 	}
+	
+	// 判断塘口是否绑定探测器
+	public Boolean isBindSensor(Long pondsId) {
+		Sensor sensor = new Sensor();
+		sensor.setPondsId(pondsId);
+		return mapper.selectCount(sensor) > 0;
+	}
+	
+	// 批量配置 探测器是否报警
+	public void batchConfigAlarm(List<Sensor> sensorList) {
+		List<Long> alarmSensorIds = new ArrayList<>();
+		List<Long> noAlarmSensorIds = new ArrayList<>();
+		for (Sensor sensor : sensorList) {
+			if (sensor.getIsAlarm().equalsIgnoreCase(YesOrNo.YES.toString())) {
+				alarmSensorIds.add(sensor.getId());
+			} else {
+				noAlarmSensorIds.add(sensor.getId());
+			}
+		}
+		Example example = new Example(Sensor.class);
+		Criteria criteria = example.createCriteria().andIn("id", alarmSensorIds);
+		mapper.updateByExampleSelective(new Sensor(YesOrNo.YES.toString()), example);
+		example.clear();
+		criteria.andIn("id", noAlarmSensorIds);
+		mapper.updateByExampleSelective(new Sensor(YesOrNo.NO.toString()), example);
+	}
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
@@ -70,7 +71,8 @@ public class PondsService extends BaseService<Ponds> {
 		return result;
 	}
 	
-	public PageInfo<HashMap<String, Object>> selectPageInfoEx(Ponds entity, 
+	public PageInfo<HashMap<String, Object>> selectPageInfoEx(
+			Ponds entity, 
 			Integer wdy_pageNum, 
 			Integer wdy_pageSize, 
 			String wdy_pageOrder, 
@@ -88,5 +90,31 @@ public class PondsService extends BaseService<Ponds> {
 	}
 	
 	
-
+	@SuppressWarnings("unchecked")
+	public PageInfo<HashMap<String, Object>> selectListJsonData(Ponds entity, Integer wdy_pageNum, Integer wdy_pageSize,
+			String wdy_pageOrder, String wdy_pageSort) {
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("entity", entity);
+		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
+		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
+		List<HashMap<String, Object>> list = rootMapper.selectListJsonData(param);
+		for (HashMap<String, Object> hashMap : list) {
+			Object sensorJsonData = hashMap.get("sensorJsonData");
+			if (sensorJsonData != null) {
+				((HashMap<String, Object>) sensorJsonData).put("data_json", JSON.parse(((HashMap<String, Object>) sensorJsonData).get("data_json").toString()));
+			}
+		}
+		return new PageInfo<>(list);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public HashMap<String, Object> selectInfoJsonData(Long id) {
+		HashMap<String, Object> hashMap = rootMapper.selectInfoJsonData(id);
+		Object sensorJsonData = hashMap.get("sensorJsonData");
+		if (sensorJsonData != null) {
+			((HashMap<String, Object>) sensorJsonData).put("data_json", JSON.parse(((HashMap<String, Object>) sensorJsonData).get("data_json").toString()));
+		}
+		return hashMap;
+	}
+	
 }

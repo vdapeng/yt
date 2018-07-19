@@ -17,4 +17,8 @@ public interface PondsMapper extends BaseMapper<Ponds> {
 	
 	HashMap<String, Object> selectInfoEx(Long id);
 	
+	List<HashMap<String, Object>> selectListJsonData(HashMap<String, Object> param);
+	
+	HashMap<String, Object> selectInfoJsonData(Long id);
+	
 }

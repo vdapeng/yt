@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vdaoyun.systemapi.web.mapper.sensor.SensorRecordJsonMapper">
+  	
+  	<!-- 通过设备编号，查询最新一条运行数据 -->
+	<select id="selectNewByTerminalId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT * FROM sensor_record_json WHERE terminal_id = #{terminalId} ORDER BY post_time DESC LIMIT 1
+	</select>
+	
+</mapper>
