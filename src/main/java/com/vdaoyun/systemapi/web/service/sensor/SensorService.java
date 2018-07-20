@@ -150,7 +150,14 @@ public class SensorService extends BaseService<Sensor> {
 		List<String> delSensorCodes = new ArrayList<>();
 		for (SensorConfig sensorConfig : sensorConfigs) {
 			if (sensorConfig.getIsEnable().equals(YesOrNo.YES.toString())) {
-				sensors.add(new Sensor(terminalId, pondsId, sensorConfig.getCode(), sensorConfig.getName()));
+				Sensor sensor = new Sensor(terminalId, pondsId, sensorConfig.getCode(), sensorConfig.getName());
+				if (mapper.selectCount(sensor) < 1) {
+					sensor.setCreateDate(new Date());
+					sensor.setIsAlarm(YesOrNo.NO.toString());
+					sensor.setIsNoti(YesOrNo.YES.toString());
+					sensor.setIsEnable(YesOrNo.YES.toString());
+					sensors.add(sensor);
+				}
 			} else {
 				delSensorCodes.add(sensorConfig.getCode());
 			}
@@ -167,12 +174,13 @@ public class SensorService extends BaseService<Sensor> {
 		if (sensors.size() < 1) {
 			return;
 		}
-		for (Sensor sensor : sensors) {
-			if (mapper.selectCount(sensor) < 1) {
-				sensor.setCreateDate(new Date());
-				mapper.insertSelective(sensor);
-			}
-		}
+//		for (Sensor sensor : sensors) {
+//			if (mapper.selectCount(sensor) < 1) {
+//				sensor.setCreateDate(new Date());
+//				mapper.insertSelective(sensor);
+//			}
+//		}
+		mapper.insertList(sensors);
 	}
 	
 	// 判断塘口是否绑定探测器
