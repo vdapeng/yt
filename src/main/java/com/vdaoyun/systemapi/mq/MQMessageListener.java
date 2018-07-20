@@ -21,6 +21,7 @@ import com.vdaoyun.systemapi.web.model.warn.DeviceWarnRecord;
 import com.vdaoyun.systemapi.web.service.device.DeviceRecordService;
 import com.vdaoyun.systemapi.web.service.sensor.SensorRecordJsonService;
 import com.vdaoyun.systemapi.web.service.sensor.SensorRecordService;
+import com.vdaoyun.systemapi.web.service.warn.DeviceNotiRecordService;
 import com.vdaoyun.systemapi.web.service.warn.DeviceWarnRecordService;
 
 /**
@@ -48,9 +49,12 @@ public class MQMessageListener implements MessageListener {
 	private SensorRecordService sensorRecordService;
 	@Autowired
 	private SensorRecordJsonService sensorRecordJsonService;
+	@Autowired
+	private DeviceNotiRecordService deviceNotiRecordService;
 
 	@Override
 	public Action consume(Message message, ConsumeContext context) {
+		deviceNotiRecordService.sendWxMpTemplateMessage();
 		String secondTopic = message.getUserProperties("mqttSecondTopic");
 		byte[] body = message.getBody();
 		log.debug("\n=====================================\n\t"

@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,6 +100,11 @@ public class DeviceNotiRecordController {
 		ajaxJson.setMsg(result ? "删除成功" : "删除失败");
 		ajaxJson.setSuccess(result);
 		return ajaxJson;
+	}
+	
+	@GetMapping("noti")
+	public void noti() {
+		service.sendWxMpTemplateMessage();
 	}
 
 }
