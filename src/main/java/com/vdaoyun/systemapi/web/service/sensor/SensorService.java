@@ -27,6 +27,10 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 @Transactional
 public class SensorService extends BaseService<Sensor> {
 	
+	public List<Sensor> select(Sensor sensor) {
+		return mapper.select(sensor);
+	}
+	
 	public void alarm(String[] codes, String terminalId) {
 		Example example = new Example(Sensor.class);
 		Criteria criteria = example.createCriteria();
@@ -137,21 +141,38 @@ public class SensorService extends BaseService<Sensor> {
 		return rootMapper.selectByTerminalId(param);
 	}
 	
+	// 批量给塘口配置探测器
 	public void batchConfig(String terminalId, Long pondsId, List<SensorConfig> sensorConfigs) {
 		if (sensorConfigs.size() < 1) {
 			return;
 		}
 		List<Sensor> sensors = new ArrayList<>();
+		List<String> delSensorCodes = new ArrayList<>();
 		for (SensorConfig sensorConfig : sensorConfigs) {
 			if (sensorConfig.getIsEnable().equals(YesOrNo.YES.toString())) {
 				sensors.add(new Sensor(terminalId, pondsId, sensorConfig.getCode(), sensorConfig.getName()));
+			} else {
+				delSensorCodes.add(sensorConfig.getCode());
 			}
 		}
-		mapper.delete(new Sensor(terminalId, pondsId));
+		if (delSensorCodes.size() > 0) {
+			Example example = new Example(Sensor.class);
+			Criteria criteria = example.createCriteria();
+			criteria.andEqualTo("pondsId", pondsId);
+			criteria.andEqualTo("terminalId", terminalId);
+			criteria.andIn("code", delSensorCodes);
+			mapper.deleteByExample(example);
+		}
+//		mapper.delete(new Sensor(terminalId, pondsId));
 		if (sensors.size() < 1) {
 			return;
 		}
-		mapper.insertList(sensors);
+		for (Sensor sensor : sensors) {
+			if (mapper.selectCount(sensor) < 1) {
+				sensor.setCreateDate(new Date());
+				mapper.insertSelective(sensor);
+			}
+		}
 	}
 	
 	// 判断塘口是否绑定探测器
@@ -173,10 +194,39 @@ public class SensorService extends BaseService<Sensor> {
 			}
 		}
 		Example example = new Example(Sensor.class);
-		Criteria criteria = example.createCriteria().andIn("id", alarmSensorIds);
-		mapper.updateByExampleSelective(new Sensor(YesOrNo.YES.toString()), example);
-		example.clear();
-		criteria.andIn("id", noAlarmSensorIds);
-		mapper.updateByExampleSelective(new Sensor(YesOrNo.NO.toString()), example);
+		if (alarmSensorIds.size() > 0) {
+			example.createCriteria().andIn("id", alarmSensorIds);
+			mapper.updateByExampleSelective(new Sensor(YesOrNo.YES.toString()), example);
+		}
+		if (noAlarmSensorIds.size() > 0) {
+			example.clear();
+			example.createCriteria().andIn("id", noAlarmSensorIds);
+			mapper.updateByExampleSelective(new Sensor(YesOrNo.NO.toString()), example);
+		}
+	}
+	
+	public void batchConfigNoti(List<Sensor> sensorList) {
+		List<Long> notiSensorIds = new ArrayList<>();
+		List<Long> noNoitSensorIds = new ArrayList<>();
+		for (Sensor sensor : sensorList) {
+			if (sensor.getIsNoti().equalsIgnoreCase(YesOrNo.YES.toString())) {
+				notiSensorIds.add(sensor.getId());
+			} else {
+				noNoitSensorIds.add(sensor.getId());
+			}
+		}
+		Example example = new Example(Sensor.class);
+		Sensor sensor = new Sensor();
+		if (notiSensorIds.size() > 0) {
+			example.createCriteria().andIn("id", notiSensorIds);
+			sensor.setIsNoti(YesOrNo.YES.toString());
+			mapper.updateByExampleSelective(sensor, example);
+		}
+		if (noNoitSensorIds.size() >  0) {
+			example.clear();
+			example.createCriteria().andIn("id", noNoitSensorIds);
+			sensor.setIsNoti(YesOrNo.NO.toString());
+			mapper.updateByExampleSelective(sensor, example);
+		}
 	}
 }

@@ -35,6 +35,9 @@
 			<if test="entity.openid != '' and entity.openid != null">
 				AND a.user_id = (select id FROM `user` WHERE openid = #{entity.openid})
 			</if>
+			<if test="entity.isDel != '' and entity.isDel != null">
+				AND is_del = #{entity.isDel}
+			</if>
 		</where>
 	</sql>
 	
@@ -76,6 +79,20 @@
 		count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id 
 		WHERE a.terminal_id = #{id, jdbcType=VARCHAR}
 		GROUP BY a.terminal_id
+	</select>
+	
+	<resultMap id="BaseResultMapEx" type="com.vdaoyun.systemapi.web.model.device.Device">
+		<id column="terminalId" jdbcType="VARCHAR" property="terminalId" />
+    	<result column="name" jdbcType="VARCHAR" property="name" />
+    	<collection property="">
+    		<id column="code" jdbcType="VARCHAR" property="code" />
+    		<result column="sensorName" jdbcType="VARCHAR" property="sensorName" />
+    	</collection>
+	</resultMap>
+	<select id="selectInfoByPondsId" parameterType="java.util.Map" resultMap="BaseResultMapEx">
+		SELECT a.terminal_id terminalId, a.name, b.`name` sensorName , b.`code` FROM(
+		SELECT terminal_id, `name` FROM device WHERE terminal_id = #{terminalId}) a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id
+		WHERE b.ponds_id = #{pondsId}
 	</select>
 	
 </mapper>

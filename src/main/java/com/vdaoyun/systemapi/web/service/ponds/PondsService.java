@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 
@@ -21,13 +22,13 @@ import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 @Transactional
 public class PondsService extends BaseService<Ponds> {
 	
-//	@Override
-//	public int delete(Object key) {
-//		Ponds entity = new Ponds();
-//		entity.setIsDel(YesOrNo.YES.toString());
-//		entity.setId((Integer)key);
-//		return super.update(entity);
-//	} 
+	@Override
+	public int delete(Object key) {
+		Ponds entity = new Ponds();
+		entity.setIsDel(YesOrNo.YES.toString());
+		entity.setId((Long)key);
+		return super.update(entity);
+	} 
 	
 	@Override
 	public int insert(Ponds entity) {
@@ -50,6 +51,7 @@ public class PondsService extends BaseService<Ponds> {
 		String wdy_pageSort
 	) throws Exception {
 		Map<String, Object> param = new HashMap<>();
+		entity.setIsDel(YesOrNo.NO.toString());
 		param.put("entity", entity);
 		if (StringUtils.isNotEmpty(wdy_pageOrder) && StringUtils.isNotEmpty(wdy_pageSort)) {
 			param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
@@ -78,6 +80,7 @@ public class PondsService extends BaseService<Ponds> {
 			String wdy_pageOrder, 
 			String wdy_pageSort) {
 		HashMap<String, Object> param = new HashMap<>();
+		entity.setIsDel(YesOrNo.NO.toString());
 		param.put("entity", entity);
 		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
 		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
@@ -94,6 +97,7 @@ public class PondsService extends BaseService<Ponds> {
 	public PageInfo<HashMap<String, Object>> selectListJsonData(Ponds entity, Integer wdy_pageNum, Integer wdy_pageSize,
 			String wdy_pageOrder, String wdy_pageSort) {
 		HashMap<String, Object> param = new HashMap<>();
+		entity.setIsDel(YesOrNo.NO.toString());
 		param.put("entity", entity);
 		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
 		PageHelper.startPage(wdy_pageNum, wdy_pageSize);

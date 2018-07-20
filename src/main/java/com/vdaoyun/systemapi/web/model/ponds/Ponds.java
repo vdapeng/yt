@@ -69,7 +69,19 @@ public class Ponds implements Serializable {
     @ApiModelProperty(value = "小程序openid")
     private String openid;
     
-    /**
+    @Column(name = "is_del")
+    @ApiModelProperty(name = "is_del", value = "是否删除" )
+    private String isDel;
+    
+    public String getIsDel() {
+		return isDel;
+	}
+
+	public void setIsDel(String isDel) {
+		this.isDel = isDel;
+	}
+
+	/**
      * 设备编号
      */
     @Column(name = "terminal_id")

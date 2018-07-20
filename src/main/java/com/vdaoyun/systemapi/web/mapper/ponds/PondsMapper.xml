@@ -45,6 +45,9 @@
 			<if test="entity.enabled != '' and entity.enabled != null">
 				AND enabled = #{entity.enabled}
 			</if>
+			<if test="entity.isDel != '' and entity.isDel != null">
+				AND is_del = #{entity.isDel}
+			</if>
 		</where>
 	</sql>
 	

@@ -114,4 +114,11 @@ public class DeviceController {
 		return ajaxJson;
 	}
 
+	@ApiOperation(tags = {"B管理后台_____用户管理_终端"}, value = "", hidden = true)
+	@GetMapping("info")
+	public AjaxJson selectInfoByPondsId(String terminalId, Long pondsId) throws Exception {
+		return AjaxJsonUtils.ajaxJson(service.selectInfoByPondsId(terminalId, pondsId));
+	}
+	
+	
 }

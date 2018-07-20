@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.device.DeviceMapper;
 import com.vdaoyun.systemapi.web.model.device.Device;
 
@@ -24,8 +25,8 @@ public class DeviceService extends BaseService<Device> {
 	public int delete(Object key) {
 		Device entity = new Device();
 		entity.setTerminalId((String) key);
-		int result = mapper.delete(entity);
-		return result;
+		entity.setIsDel(YesOrNo.YES.toString());
+		return mapper.updateByPrimaryKeySelective(entity);
 	}
 
 	/**
@@ -54,6 +55,7 @@ public class DeviceService extends BaseService<Device> {
 			String wdy_pageOrder, String wdy_pageSort) throws Exception {
 
 		Map<String, Object> param = new HashMap<>();
+		entity.setIsDel(YesOrNo.NO.toString());
 		param.put("entity", entity);
 		if (StringUtils.isNotEmpty(wdy_pageOrder) && StringUtils.isNotEmpty(wdy_pageSort)) {
 			param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
@@ -76,8 +78,16 @@ public class DeviceService extends BaseService<Device> {
 
 	public List<Device> selectListByUserId(Long userId) {
 		Device record = new Device();
+		record.setIsDel(YesOrNo.NO.toString());
 		record.setUserId(userId);
 		return mapper.select(record);
+	}
+	
+	public HashMap<String, Object> selectInfoByPondsId(String terminalId, Long pondsId) {
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("terminalId", terminalId);
+		param.put("pondsId", pondsId);
+		return rootMapper.selectInfoByPondsId(param);
 	}
 	
 }

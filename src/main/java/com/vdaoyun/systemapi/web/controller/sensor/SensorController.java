@@ -200,4 +200,17 @@ public class SensorController {
 		return new AjaxJson();
 	}
 	
+	@ApiOperation(tags = {"A小程序_____我的_终端管理_根据塘口编号和设备编号查询探测器列表的是否报警推送消息"}, value = "")
+	@GetMapping("noti")
+	public AjaxJson selectListByPondsIdAndTerminalId(@RequestParam Long pondsId, @RequestParam String terminalId) throws Exception {
+		return AjaxJsonUtils.ajaxJson(service.select(new Sensor(terminalId, pondsId)));
+	}
+	
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_批量配置塘口探测器是否报警"},  value = "")
+	@PutMapping("config/noti")
+	public AjaxJson batchConfigNoti(@RequestBody List<Sensor> sensorList) throws Exception {
+		service.batchConfigNoti(sensorList);
+		return new AjaxJson();
+	}
+	
 }

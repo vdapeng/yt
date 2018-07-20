@@ -65,6 +65,18 @@ public class Device implements Serializable {
     @ApiModelProperty(name = "openid", value = "小程序openid" )
     private String openid;
     
+    @Column(name = "is_del")
+    @ApiModelProperty(name = "is_del", value = "是否删除" )
+    private String isDel;
+    
+    public String getIsDel() {
+		return isDel;
+	}
+
+	public void setIsDel(String isDel) {
+		this.isDel = isDel;
+	}
+    
   	/**
      * 获取设备编号
      *

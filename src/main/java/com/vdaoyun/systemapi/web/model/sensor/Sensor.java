@@ -35,7 +35,6 @@ public class Sensor implements Serializable {
 		this.pondsId = pondsId;
 		this.code = code;
 		this.name = name;
-		this.createDate = new Date();
 	}
 	
 	public Sensor(String terminalId, Long pondsId) {
@@ -111,7 +110,19 @@ public class Sensor implements Serializable {
     @ApiModelProperty(name = "isAlarm", value = "是否报警，y：报警 n:未报警")
     private String isAlarm;
     
-  	public String getIsAlarm() {
+    @Column(name = "is_noti")
+    @ApiModelProperty(name = "isNoti", value = "接收报警时是否通知，y：通知 n:不通知")
+    private String isNoti;
+    
+  	public String getIsNoti() {
+		return isNoti;
+	}
+
+	public void setIsNoti(String isNoti) {
+		this.isNoti = isNoti;
+	}
+
+	public String getIsAlarm() {
 		return isAlarm;
 	}
 
