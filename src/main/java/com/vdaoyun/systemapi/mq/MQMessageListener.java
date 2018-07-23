@@ -56,35 +56,51 @@ public class MQMessageListener implements MessageListener {
 	public Action consume(Message message, ConsumeContext context) {
 		String secondTopic = message.getUserProperties("mqttSecondTopic");
 		byte[] body = message.getBody();
+		String bodyJson = JSON.toJSONString(JSONObject.parse(body, Feature.AllowArbitraryCommas));
 		log.debug("\n=====================================\n\t"
 				+ "SECONDTOPIC: \t{}\n\t"
 				+ "CONTENT: \t{}\n\t"
 				+ "DATETIME:\t{}\n"
 				+ "=====================================", 
-				secondTopic, JSON.toJSONString(JSONObject.parse(body, Feature.AllowArbitraryCommas)), LocalDateTime.now());
-		switch (secondTopic) {
-		case MQConstants.DEVICE_TOPIC:
-			if (body != null && body.length > 0) {
-				MQDeviceRecordModel record = JSONObject.parseObject(body, MQDeviceRecordModel.class, Feature.AllowArbitraryCommas);
-				DeviceRecord entity = new DeviceRecord(record);
-				deviceRecordService.insert(entity);
-			}
-			break;
-		case MQConstants.WARN_TOPIC:
-			MQDeviceWarnModel record = JSONObject.parseObject(body, MQDeviceWarnModel.class, Feature.AllowArbitraryCommas);
+				secondTopic, bodyJson, LocalDateTime.now());
+		if (secondTopic.contains("BusinessData")) {
+			MQSensorRecordModel data = JSON.parseObject(bodyJson, MQSensorRecordModel.class);
+			sensorRecordService.insertRecord(data);
+			sensorRecordJsonService.insertRecord(data);
+		} else if (secondTopic.contains("Alarm")) {
+			MQDeviceWarnModel record = JSON.parseObject(bodyJson, MQDeviceWarnModel.class);
 			DeviceWarnRecord entity = new DeviceWarnRecord(record);
 			deviceWarnRecordService.alarm(entity);
 			// 报警发送微信通知
 			deviceNotiRecordService.sendWxMpTemplateMessage();
-			break;
-		case MQConstants.CGQ_TOPIC:
-			MQSensorRecordModel data = JSON.parseObject(body, MQSensorRecordModel.class, Feature.AllowArbitraryCommas);
-			sensorRecordService.insertRecord(data);
-			sensorRecordJsonService.insertRecord(data);
-			break;
-		default:
-			break;
+		} else if (secondTopic.contains("EquipmentData")) {
+			MQDeviceRecordModel record = JSON.parseObject(bodyJson, MQDeviceRecordModel.class);
+			DeviceRecord entity = new DeviceRecord(record);
+			deviceRecordService.insert(entity);
 		}
+//		switch (secondTopic) {
+//		case MQConstants.DEVICE_TOPIC:
+//			if (body != null && body.length > 0) {
+//				MQDeviceRecordModel record = JSON.parseObject(bodyJson, MQDeviceRecordModel.class);
+//				DeviceRecord entity = new DeviceRecord(record);
+//				deviceRecordService.insert(entity);
+//			}
+//			break;
+//		case MQConstants.WARN_TOPIC:
+//			MQDeviceWarnModel record = JSON.parseObject(bodyJson, MQDeviceWarnModel.class);
+//			DeviceWarnRecord entity = new DeviceWarnRecord(record);
+//			deviceWarnRecordService.alarm(entity);
+//			// 报警发送微信通知
+//			deviceNotiRecordService.sendWxMpTemplateMessage();
+//			break;
+//		case MQConstants.CGQ_TOPIC:
+//			MQSensorRecordModel data = JSON.parseObject(bodyJson, MQSensorRecordModel.class);
+//			sensorRecordService.insertRecord(data);
+//			sensorRecordJsonService.insertRecord(data);
+//			break;
+//		default:
+//			break;
+//		}
         return Action.CommitMessage;
 	}
 	

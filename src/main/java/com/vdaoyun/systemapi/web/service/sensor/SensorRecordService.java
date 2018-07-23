@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -135,6 +136,7 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 		return result;
 	}
 
+	@Async
 	public void insertRecord(MQSensorRecordModel data) {
 		String terminalId = data.getTerminalID();				// 设备编号
 		Date postTime = new Date();		 				// 上传时间
@@ -154,7 +156,7 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 					sensorRecord.setPostTime(postTime);
 					if (item.containsKey(key + "_T") && !item.containsKey(key + "_Temperature")) {
 						sensorRecord.setTemperatureValue(item.get(key + "_T").toString());				// 获取传感器温度值
-					} else {
+					} else if (item.containsKey(key + "_Temperature")) {
 						sensorRecord.setTemperatureValue(item.get(key + "_Temperature").toString());	// 获取传感器温度值
 					}
 					sensorRecord.setDataTime(DateUtil.subtractDate(postTime, SampeFrequency/60 * (list.size() - 1 - i)));	// 计算数据生产时间

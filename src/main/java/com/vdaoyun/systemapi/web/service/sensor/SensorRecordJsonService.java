@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +65,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			params.setExpr(7);
 		}
 		
-		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 1 + " hour").andEqualTo("terminalId", params.getTerminalId());
+		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 24 + " hour").andEqualTo("terminalId", params.getTerminalId());
 		List<SensorRecordJson> list = mapper.selectByExample(example);
 		
 		if (list == null || list.size() == 0) {
@@ -152,6 +153,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		return option;
 	}
 	
+	@Async
 	public void insertRecord(MQSensorRecordModel data) {
 		String terminalId = data.getTerminalID();				// 设备编号
 		Date postTime = new Date();		 						// 上传时间

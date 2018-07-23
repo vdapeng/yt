@@ -1,7 +1,6 @@
 package com.vdaoyun.systemapi.mq.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 abstract class MQAbstractModel implements Serializable {
 
@@ -18,7 +17,7 @@ abstract class MQAbstractModel implements Serializable {
 	/**
 	 * 推送时间
 	 */
-	private Date PostTime;
+	private String PostTime;
 
 	public String getTerminalID() {
 		return TerminalID;
@@ -28,11 +27,11 @@ abstract class MQAbstractModel implements Serializable {
 		TerminalID = terminalID;
 	}
 
-	public Date getPostTime() {
+	public String getPostTime() {
 		return PostTime;
 	}
 
-	public void setPostTime(Date postTime) {
+	public void setPostTime(String postTime) {
 		PostTime = postTime;
 	}
 	

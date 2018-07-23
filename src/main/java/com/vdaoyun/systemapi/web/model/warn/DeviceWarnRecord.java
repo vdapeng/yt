@@ -151,7 +151,7 @@ public class DeviceWarnRecord implements Serializable {
 
     public DeviceWarnRecord(MQDeviceWarnModel model) {
     	this.terminalId = model.getTerminalID();
-    	this.postTime = model.getPostTime();
+    	this.postTime = new Date();
     	this.alaramBusiness = model.getAlaram_Business();
     	this.alaramEquipment = model.getAlaram_Equipment();
 	}

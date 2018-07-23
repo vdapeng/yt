@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class DeviceRecordService extends BaseService<DeviceRecord> {
 //	} 
 	
 	@Override
+	@Async
 	public int insert(DeviceRecord entity) {
 //		entity.setCreateDate(new Date());
 		return super.insert(entity);

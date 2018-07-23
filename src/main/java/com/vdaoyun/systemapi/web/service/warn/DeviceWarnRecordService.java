@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,7 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 	* @return void    返回类型 
 	* @throws
 	 */
+	@Async
 	public void alarm(DeviceWarnRecord entity) {
 		mapper.insert(entity);
 		String alaramBusiness = entity.getAlaramBusiness();

@@ -3,7 +3,6 @@ package com.vdaoyun.systemapi.mq;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class MQTest {
 		data.add(item);
 		MQDeviceRecordModel record = new MQDeviceRecordModel();
 		record.setTerminalID(Arrays.asList(new String[] {"TK232", "TK233"}).get(RandomUtils.nextInt(0, 1)));
-		record.setPostTime(new Date());
+//		record.setPostTime(new Date());
 		record.setSampeFrequency(0);
 		record.setData(data);
 		SendMessage(MQConstants.DEVICE_TOPIC, record);
@@ -84,7 +83,7 @@ public class MQTest {
 	public void sendDeviceWarnData() {
 		MQDeviceWarnModel record = new MQDeviceWarnModel();
 		record.setTerminalID(Arrays.asList(new String[] {"TK232", "TK233"}).get(RandomUtils.nextInt(0, 1)));
-		record.setPostTime(new Date());
+//		record.setPostTime(new Date());
 		record.setAlaram_Business("PH_1&DO_1");
 		record.setAlaram_Equipment("BATTERYLOW&TEMPERATUREHIGH");
 		SendMessage(MQConstants.WARN_TOPIC, record);
@@ -138,7 +137,7 @@ public class MQTest {
 		data.add(item);
 		MQSensorRecordModel record = new MQSensorRecordModel();
 		record.setTerminalID(Arrays.asList(new String[] {"TK232", "TK233"}).get(RandomUtils.nextInt(0, 1)));
-		record.setPostTime(new Date());
+//		record.setPostTime(new Date());
 		record.setSampeFrequency(300);
 		record.setData(data);
 		SendMessage(MQConstants.CGQ_TOPIC, JSON.toJSON(record));

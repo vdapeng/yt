@@ -312,7 +312,7 @@ public class DeviceRecord implements Serializable {
     
     public DeviceRecord(MQDeviceRecordModel model) {
     	this.terminalId = model.getTerminalID();
-    	this.postTime = model.getPostTime();
+    	this.postTime = new Date();
     	MQDeviceRecordData data = model.getData().get(0);
 		this.batteryLevel = data.getBatteryLevel();
 		this.solarVoltage = data.getSolarVoltage();
