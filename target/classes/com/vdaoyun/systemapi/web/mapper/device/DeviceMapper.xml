@@ -52,15 +52,18 @@
 		FROM device WHERE id = #{foreignId}
 	</select>
 	
-	<select id="selectPageInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+	<select id="selectPageInfo" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT 
 		a.terminal_id AS terminalId
 		,a.name AS name
 		,a.longitude AS longitude
 		,a.latitude AS latitude
 		,a.create_date AS createDate
-		,a.user_id AS userId,
-		count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id 
+		,a.user_id AS userId
+		,c.true_name trueName
+		,c.nickname
+		,c.avatar_url avatarUrl
+		,count(b.id) sensorCount FROM device a LEFT JOIN sensor b ON a.terminal_id = b.terminal_id LEFT JOIN `user` c ON a.user_id = c.id
 		<include refid="Where_Clause" />
 		GROUP BY a.terminal_id
 		<if test="orderByClause != null and orderByClause != ''">

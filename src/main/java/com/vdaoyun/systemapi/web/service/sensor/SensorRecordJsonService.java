@@ -64,7 +64,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			params.setExpr(7);
 		}
 		
-		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 1 + " hour");
+		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 1 + " hour").andEqualTo("terminalId", params.getTerminalId());
 		List<SensorRecordJson> list = mapper.selectByExample(example);
 		
 		if (list == null || list.size() == 0) {
@@ -118,7 +118,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		
 		// 取出该塘口时间段内运行数据
 		Example example = new Example(SensorRecordJson.class);
-		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 24 + " hour");
+		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 24 + " hour").andEqualTo("terminalId", params.getTerminalId());
 		List<SensorRecordJson> list = mapper.selectByExample(example);
 		if (list == null || list.size() == 0) {
 			option.title("暂无数据");

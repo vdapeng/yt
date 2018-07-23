@@ -140,7 +140,35 @@
 					a.id
 			) a  ]]>,
 			(
-				SELECT
+			SELECT DISTINCT
+				b.terminal_id ,
+				b.`code`
+			FROM
+				(
+					SELECT
+						a.id
+					FROM
+						ponds a ,
+						`user` b
+					WHERE
+						a.user_id = b.id
+					<if test="entity.openid != null and entity.openid != ''">
+						AND b.openid = #{entity.openid}
+					</if>
+					UNION ALL
+						SELECT
+							ponds_id id
+						FROM
+							ponds_share_record
+						WHERE
+						<if test="entity.openid != null and entity.openid != ''">
+							openid = #{entity.openid}
+						</if>
+				) a ,
+				sensor b
+			WHERE
+				a.id = b.ponds_id
+<!-- 				SELECT
 					b.terminal_id ,
 					b.`code`
 				FROM
@@ -152,7 +180,7 @@
 				AND a.user_id = c.id
 				<if test="entity.openid != null and entity.openid != ''">
 					AND c.openid = #{entity.openid}
-				</if>
+				</if> -->
 			) b
 		WHERE
 			a.terminalId = b.terminal_id
