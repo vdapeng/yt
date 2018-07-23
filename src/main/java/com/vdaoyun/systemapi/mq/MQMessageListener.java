@@ -54,7 +54,6 @@ public class MQMessageListener implements MessageListener {
 
 	@Override
 	public Action consume(Message message, ConsumeContext context) {
-		deviceNotiRecordService.sendWxMpTemplateMessage();
 		String secondTopic = message.getUserProperties("mqttSecondTopic");
 		byte[] body = message.getBody();
 		log.debug("\n=====================================\n\t"
@@ -75,6 +74,8 @@ public class MQMessageListener implements MessageListener {
 			MQDeviceWarnModel record = JSONObject.parseObject(body, MQDeviceWarnModel.class, Feature.AllowArbitraryCommas);
 			DeviceWarnRecord entity = new DeviceWarnRecord(record);
 			deviceWarnRecordService.alarm(entity);
+			// 报警发送微信通知
+			deviceNotiRecordService.sendWxMpTemplateMessage();
 			break;
 		case MQConstants.CGQ_TOPIC:
 			MQSensorRecordModel data = JSON.parseObject(body, MQSensorRecordModel.class, Feature.AllowArbitraryCommas);
