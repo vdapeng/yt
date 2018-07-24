@@ -18,6 +18,8 @@ import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 
+import tk.mybatis.mapper.entity.Example;
+
 @Service
 @Transactional
 public class PondsService extends BaseService<Ponds> {
@@ -119,6 +121,13 @@ public class PondsService extends BaseService<Ponds> {
 			((HashMap<String, Object>) sensorJsonData).put("data_json", JSON.parse(((HashMap<String, Object>) sensorJsonData).get("data_json").toString()));
 		}
 		return hashMap;
+	}
+	
+	public List<Ponds> search(String search) {
+		Example example = new Example(Ponds.class);
+		example.createCriteria().andLike("name", search + "%");
+		example.or().andLike("address", "%" + search + "%");
+		return mapper.selectByExample(example);
 	}
 	
 }

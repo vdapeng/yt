@@ -110,11 +110,11 @@
     	<result column="address" jdbcType="VARCHAR" property="address" />
     	<result column="latitude" jdbcType="VARCHAR" property="latitude" />
     	<result column="longitude" jdbcType="VARCHAR" property="longitude" />
-    	<result column="user_id" jdbcType="INTEGER" property="userId" />
-    	<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    	<result column="userId" jdbcType="INTEGER" property="userId" />
+    	<result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
     	<result column="activated" jdbcType="VARCHAR" property="activated" />
     	<result column="enabled" jdbcType="VARCHAR" property="enabled" />
-    	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
+    	<result column="terminalId" jdbcType="VARCHAR" property="terminalId" />
 		<association property="sensorJsonData" select="com.vdaoyun.systemapi.web.mapper.sensor.SensorRecordJsonMapper.selectNewByTerminalId" column="terminalId" javaType="java.util.Map"></association>
 		<collection property="sensorList" select="com.vdaoyun.systemapi.web.mapper.sensor.SensorMapper.selectListJsonByPondsId" column="id"></collection>
 	</resultMap>

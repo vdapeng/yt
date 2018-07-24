@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vdaoyun.common.bean.AjaxJson;
+import com.vdaoyun.systemapi.common.utils.AjaxJsonUtils;
 import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 import com.vdaoyun.systemapi.web.service.ponds.PondsService;
@@ -49,6 +51,12 @@ public class PondsController {
 		AjaxJson ajaxJson = new AjaxJson();
 		ajaxJson.setData(service.selectPageInfo(entity, pageNum, pageSize, order, sort));
 		return ajaxJson;
+	}
+	
+	@GetMapping("search")
+	@ApiOperation(value = "", hidden = true, tags = {"B管理后台____首页_搜索"})
+	public AjaxJson search(@RequestParam(value = "search", required = false) @ApiParam("搜索") String search) throws Exception {
+		return AjaxJsonUtils.ajaxJson(service.search(search));
 	}
 	
 	@ApiOperation(tags = {"A小程序_____首页_列表查询"}, value = "")

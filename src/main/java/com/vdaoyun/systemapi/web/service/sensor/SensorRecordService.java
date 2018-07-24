@@ -61,7 +61,7 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 		
 		Option option = new Option();
 		option.yAxis(new ValueAxis());
-		option.title("运行记录");
+//		option.title("运行记录");
 		option.tooltip(Trigger.axis);
 		List<HashMap<String, Object>> result = rootMapper.selectEchartData(params);
 		
