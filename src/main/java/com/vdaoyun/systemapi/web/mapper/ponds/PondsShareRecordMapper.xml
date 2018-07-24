@@ -75,6 +75,7 @@
 			a.nickname ,
 			a.true_name trueName,
 			a.avatar_url avatarUrl,
+			a.terminalId,
 			b.nickname shareNickName ,
 			b.true_name shareTrueName ,
 			b.avatar_url shareAvatarUrl
@@ -87,6 +88,7 @@
 					b.id pondsId ,
 					b. NAME ,
 					b.address ,
+					b.terminal_id terminalId,
 					c.avatar_url ,
 					c.true_name ,
 					c.nickname
