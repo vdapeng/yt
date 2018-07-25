@@ -19,10 +19,10 @@
 				AND id = #{entity.id}
 			</if>
 			<if test="entity.name != '' and entity.name != null">
-				AND name = #{entity.name}
+				AND name like CONCAT('%', #{entity.name}, '%')
 			</if>
 			<if test="entity.address != '' and entity.address != null">
-				AND address = #{entity.address}
+				AND address like CONCAT('%', #{entity.address}, '%')
 			</if>
 			<if test="entity.latitude != '' and entity.latitude != null">
 				AND latitude = #{entity.latitude}

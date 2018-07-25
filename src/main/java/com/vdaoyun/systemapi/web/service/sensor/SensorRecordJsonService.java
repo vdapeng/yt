@@ -45,6 +45,12 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 	
 	@SuppressWarnings("unchecked")
 	public Option selectEchartData(SensorEchartParams params) {
+		
+		String formart = "HH:mm";
+		if (params.getExpr() != 1) {
+			formart = "MM月dd日/HH:mm";
+		}
+		
 		Option option = new Option();
 		option.yAxis(new ValueAxis());
 //		option.title("运行记录");
@@ -75,7 +81,6 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			return option;
 		}
 		
-		
 		HashMap<String, Line> aHashMap = new HashMap<>();
 		
 		for (Sensor sensor : sensors) {
@@ -92,7 +97,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			for (Sensor sensor : sensors) {
 				aHashMap.get(sensor.getCode()).data().add(df.format( data.getDoubleValue(sensor.getCode())));
 			}
-			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), "HH:mm"));
+			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), formart));
 		}
 		for (Sensor sensor : sensors) {
 			option.series().add(aHashMap.get(sensor.getCode()));
@@ -104,6 +109,12 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 	
 	@SuppressWarnings("unchecked")
 	public Option selectDeviceEchartData(SensorEchartParams params) {
+		
+		String formart = "HH:mm";
+		if (params.getExpr() != 1) {
+			formart = "MM月dd日/HH:mm";
+		}
+		
 		Option option = new Option();
 		option.yAxis(new ValueAxis());
 //		option.title("运行记录");
@@ -143,7 +154,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			for (Sensor sensor : sensors) {
 				aHashMap.get(sensor.getCode()).data().add(df.format(data.getDoubleValue(sensor.getCode())));
 			}
-			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), "HH:mm"));
+			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), formart));
 		}
 		for (Sensor sensor : sensors) {
 			option.series().add(aHashMap.get(sensor.getCode()));

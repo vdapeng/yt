@@ -126,4 +126,9 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 		return new PageInfo<>(rootMapper.alarmList(param));
 	}
 	
+	public int count() {
+		DeviceWarnRecord record = new DeviceWarnRecord();
+		return mapper.selectCount(record);
+	}
+	
 }

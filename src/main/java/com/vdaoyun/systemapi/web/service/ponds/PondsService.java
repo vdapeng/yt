@@ -130,4 +130,9 @@ public class PondsService extends BaseService<Ponds> {
 		return mapper.selectByExample(example);
 	}
 	
+	public int count() {
+		Ponds ponds = new Ponds();
+		ponds.setIsDel(YesOrNo.NO.toString());
+		return mapper.selectCount(ponds);
+	}
 }

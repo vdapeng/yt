@@ -105,6 +105,9 @@
 				<if test="entity.shareOpenid != '' and entity.shareOpenid != null">
 					AND a.share_openid = #{entity.shareOpenid}
 				</if>
+				<if test="entity.pondsName != '' and entity.pondsName != null">
+					AND b.name like  CONCAT('%', #{entity.pondsName}, '%')
+				</if>
 			) a ,
 			`user` b
 		WHERE

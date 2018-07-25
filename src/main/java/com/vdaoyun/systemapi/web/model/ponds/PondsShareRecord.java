@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -141,5 +142,15 @@ public class PondsShareRecord implements Serializable {
         this.createDate = createDate;
     }
     
-    
+    @Transient
+    @ApiModelProperty(value = "塘口名称")
+    private String pondsName;
+
+	public String getPondsName() {
+		return pondsName;
+	}
+
+	public void setPondsName(String pondsName) {
+		this.pondsName = pondsName;
+	}
 }

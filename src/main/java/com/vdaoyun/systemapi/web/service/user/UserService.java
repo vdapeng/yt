@@ -162,4 +162,8 @@ public class UserService extends BaseService<User> {
 				
 	}
 	
+	public int count() {
+		User record = new User();
+		return mapper.selectCount(record);
+	}
 }
