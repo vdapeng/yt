@@ -2,8 +2,8 @@ package com.vdaoyun.systemapi.web.controller.warn;
 
 import javax.validation.Valid;
 
-import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vdaoyun.common.bean.AjaxJson;
+import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.warn.DeviceNotiRecord;
 import com.vdaoyun.systemapi.web.service.warn.DeviceNotiRecordService;
-
-import com.vdaoyun.common.bean.AjaxJson;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -102,9 +102,14 @@ public class DeviceNotiRecordController {
 		return ajaxJson;
 	}
 	
-	@GetMapping("noti")
-	public void noti() {
-		service.sendWxMpTemplateMessage();
+	@GetMapping("read")
+	@ApiOperation(value = "报警已读", tags = {"将报警通知设置为已读状态"})
+	public AjaxJson read(@RequestParam("deviceWarnRecordId") Long deviceWarnRecordId) throws Exception {
+		if (service.count(deviceWarnRecordId) < 1) {
+			throw new ParamException("未找到相关记录");
+		}
+		service.read(deviceWarnRecordId);
+		return new AjaxJson();
 	}
-
+	
 }

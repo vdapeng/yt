@@ -72,7 +72,7 @@ public class MQMessageListener implements MessageListener {
 			DeviceWarnRecord entity = new DeviceWarnRecord(record);
 			deviceWarnRecordService.alarm(entity);
 			// 报警发送微信通知
-			deviceNotiRecordService.sendWxMpTemplateMessage();
+			deviceNotiRecordService.sendWxMpTemplateMessage(entity);
 		} else if (secondTopic.contains("EquipmentData")) {
 			MQDeviceRecordModel record = JSON.parseObject(bodyJson, MQDeviceRecordModel.class);
 			DeviceRecord entity = new DeviceRecord(record);

@@ -80,7 +80,7 @@ public class DeviceWarnRecordController {
 		@PathVariable(value = "id") Long id
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
-		ajaxJson.setData(service.selectByPrimaryKey(id));
+		ajaxJson.setData(service.selectInfoByKey(id));
 		return ajaxJson;
 	}
 	

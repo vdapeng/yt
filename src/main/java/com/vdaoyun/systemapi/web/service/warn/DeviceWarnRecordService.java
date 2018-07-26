@@ -36,6 +36,10 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 		return super.insert(entity);
 	}
 	
+	public HashMap<String, Object> selectInfoByKey(Long id) {
+		return rootMapper.selectInfoByKey(id);
+	}
+	
 	@Autowired
 	private SensorService sensorService;
 	
@@ -123,7 +127,10 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
 		param.put("entity", entity);
 		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
-		return new PageInfo<>(rootMapper.alarmList(param));
+		if (entity.containsKey("openid")) {
+			return new PageInfo<>(rootMapper.alarmList(param));
+		}
+		return new PageInfo<>(rootMapper.alarmAllList(param));
 	}
 	
 	public int count() {

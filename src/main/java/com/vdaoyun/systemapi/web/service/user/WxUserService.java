@@ -1,5 +1,7 @@
 package com.vdaoyun.systemapi.web.service.user;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,13 @@ public class WxUserService extends BaseService<WxUser> {
 		Example example = new Example(WxUser.class);
 		example.createCriteria().andEqualTo("openid", openid);
 		mapper.updateByExampleSelective(user, example);
+	}
+	
+	public WxUser selectByUserId(Long userId) {
+		Example example = new Example(WxUser.class);
+		example.createCriteria().andCondition("unionid = (SELECT unionid FROM user Where id =" + userId + " )");
+		List<WxUser> wxUsers = mapper.selectByExample(example);
+		return wxUsers.isEmpty() ? null : wxUsers.get(0);
 	}
 
 }

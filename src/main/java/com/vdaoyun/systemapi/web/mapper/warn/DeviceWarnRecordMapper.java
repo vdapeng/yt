@@ -9,14 +9,17 @@ import com.vdaoyun.systemapi.web.model.warn.DeviceWarnRecord;
 
 public interface DeviceWarnRecordMapper extends BaseMapper<DeviceWarnRecord> {
 
-	public List<DeviceWarnRecord> selectPageInfo(Map<String, Object> param);
+	List<DeviceWarnRecord> selectPageInfo(Map<String, Object> param);
 	
 	List<HashMap<String, Object>> selectPageInfoEx(Map<String, Object> param);
 	
 	Long countPageInfoEx(Map<String, Object> param);
 	
-	public DeviceWarnRecord selectInfoByKey(Integer id);
+	HashMap<String, Object> selectInfoByKey(Long id);
 	
 	// 报警列表
 	List<HashMap<String, Object>> alarmList(HashMap<String, Object> param);
+	
+	List<HashMap<String, Object>> alarmAllList(HashMap<String, Object> param);
+	
 }
