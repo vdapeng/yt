@@ -26,6 +26,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.systemapi.mq.model.MQSensorRecordModel;
+import com.vdaoyun.systemapi.web.model.echart.WLegend;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
 import com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecordJson;
@@ -87,6 +88,9 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			return option;
 		}
 		
+		WLegend wLegend = new WLegend();
+		
+		
 		HashMap<String, Line> aHashMap = new HashMap<>();
 		Boolean isFirst = true;
 		for (Sensor sensor : sensors) {
@@ -95,22 +99,36 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			line.stack(sensor.getCode());
 			line.smooth(true);
 			aHashMap.put(sensor.getCode(), line);
-			option.legend().data().add(sensor.getName());
-			option.legend().selected(sensor.getName(), isFirst);
-			isFirst = false;
 			
+			wLegend.data().add(sensor.getName());
+			wLegend.selected(sensor.getName(), isFirst);
+			
+//			option.legend().data().add(sensor.getName());
+//			option.legend().selected(sensor.getName(), isFirst);
+			isFirst = false;
 			
 			Line tLine = new Line();
 			tLine.name(sensor.getName() + "温度");
 			tLine.stack(sensor.getCode() + "_T");
 			tLine.smooth(true);
 			aHashMap.put(sensor.getCode() + "_T", tLine);
-			option.legend().data().add(sensor.getName() + "温度");
-			option.legend().selected(sensor.getName() + "温度", isFirst);
+//			option.legend().data().add(sensor.getName() + "温度");
+//			option.legend().selected(sensor.getName() + "温度", isFirst);
+			
+			wLegend.data().add(sensor.getName() + "温度");
+			wLegend.selected(sensor.getName() + "温度", isFirst);
 		}
-		option.legend().padding(5, 15, 0, 15);
-		option.legend().x(X.left);
-		option.legend().y(Y.bottom);
+		
+		wLegend.padding(5, 15, 10, 15);
+		wLegend.x(X.left);
+		wLegend.y(Y.bottom);
+		wLegend.setType("scroll");
+		wLegend.setPageIconSize(20);
+		option.setLegend(wLegend);
+//		option.legend().padding(5, 15, 10, 15);
+//		option.legend().x(X.left);
+//		option.legend().y(Y.bottom);
+		
 		CategoryAxis xAxis = new CategoryAxis();
 		xAxis.setBoundaryGap(false);
 		for (SensorRecordJson json : list) {
@@ -131,7 +149,8 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			option.series().add(aHashMap.get(sensor.getCode() + "_T"));
 		}
 		option.xAxis().add(xAxis);
-		option.grid().bottom(80);
+		option.grid().bottom(70);
+		option.grid().top(30);
 		return option;
 	}
 	
@@ -166,6 +185,8 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			option.title().top(Y.center);
 			return option;
 		}
+		
+		WLegend wLegend = new WLegend();
 		HashMap<String, Line> aHashMap = new HashMap<>();
 		Boolean isFirst = true;
 		for (Sensor sensor : sensors) {
@@ -173,8 +194,12 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			line.name(sensor.getName());
 			line.smooth(true);
 			aHashMap.put(sensor.getCode(), line);
-			option.legend().data().add(sensor.getName());
-			option.legend().selected(sensor.getName(), isFirst);
+//			option.legend().data().add(sensor.getName());
+//			option.legend().selected(sensor.getName(), isFirst);
+			
+			wLegend.data().add(sensor.getName());
+			wLegend.selected(sensor.getName(), isFirst);
+			
 			isFirst = false;
 			
 			Line tLine = new Line();
@@ -182,13 +207,24 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			tLine.stack(sensor.getCode() + "_T");
 			tLine.smooth(true);
 			aHashMap.put(sensor.getCode() + "_T", tLine);
-			option.legend().data().add(sensor.getName() + "温度");
-			option.legend().selected(sensor.getName() + "温度", isFirst);
+//			option.legend().data().add(sensor.getName() + "温度");
+//			option.legend().selected(sensor.getName() + "温度", isFirst);
+			
+			wLegend.data().add(sensor.getName() + "温度");
+			wLegend.selected(sensor.getName() + "温度", isFirst);
 			
 		}
-		option.legend().padding(5, 15, 0, 15);
-		option.legend().x(X.left);
-		option.legend().y(Y.bottom);
+//		option.legend().padding(5, 15, 0, 15);
+//		option.legend().x(X.left);
+//		option.legend().y(Y.bottom);
+		wLegend.padding(5, 15, 10, 15);
+		wLegend.x(X.left);
+		wLegend.y(Y.bottom);
+		wLegend.setType("scroll");
+		wLegend.setPageIconSize(20);
+		option.setLegend(wLegend);
+		
+		
 		CategoryAxis xAxis = new CategoryAxis();
 		xAxis.setBoundaryGap(false);
 		for (SensorRecordJson json : list) {
