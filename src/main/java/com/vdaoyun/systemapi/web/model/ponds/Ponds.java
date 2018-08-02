@@ -73,6 +73,16 @@ public class Ponds implements Serializable {
     @ApiModelProperty(name = "is_del", value = "是否删除" )
     private String isDel;
     
+    public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	private Long version;
+    
     public String getIsDel() {
 		return isDel;
 	}

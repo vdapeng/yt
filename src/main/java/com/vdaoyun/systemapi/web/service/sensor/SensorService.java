@@ -19,6 +19,7 @@ import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.sensor.SensorMapper;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
 import com.vdaoyun.systemapi.web.model.sensor.SensorConfig;
+import com.vdaoyun.systemapi.web.service.ponds.PondsExService;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
@@ -169,6 +170,9 @@ public class SensorService extends BaseService<Sensor> {
 		return rootMapper.selectByTerminalId(param);
 	}
 	
+	@Autowired
+	private PondsExService pondsExService;
+	
 	// 批量给塘口配置探测器
 	public void batchConfig(String terminalId, Long pondsId, List<SensorConfig> sensorConfigs) {
 		if (sensorConfigs.size() < 1) {
@@ -209,6 +213,7 @@ public class SensorService extends BaseService<Sensor> {
 //			}
 //		}
 		mapper.insertList(sensors);
+		pondsExService.version(pondsId);
 	}
 	
 	// 判断塘口是否绑定探测器
@@ -239,6 +244,7 @@ public class SensorService extends BaseService<Sensor> {
 			example.createCriteria().andIn("id", noAlarmSensorIds);
 			mapper.updateByExampleSelective(new Sensor(YesOrNo.NO.toString()), example);
 		}
+		pondsExService.version(null);
 	}
 	
 	public void batchConfigNoti(List<Sensor> sensorList) {
