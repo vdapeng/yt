@@ -11,7 +11,7 @@ public interface PondsMapper extends BaseMapper<Ponds> {
 
 	public List<HashMap<String, Object>> selectPageInfo(Map<String, Object> param);
 	
-	public Ponds selectInfoByKey(Integer id);
+	public HashMap<String, Object> selectInfoByKey(Long id);
 	
 	List<HashMap<String, Object>> selectPageInfoEx(HashMap<String, Object> param);
 	

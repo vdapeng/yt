@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +17,52 @@ import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.device.DeviceMapper;
 import com.vdaoyun.systemapi.web.model.device.Device;
+import com.vdaoyun.systemapi.web.service.ponds.PondsService;
+import com.vdaoyun.systemapi.web.service.sensor.SensorRecordJsonService;
+import com.vdaoyun.systemapi.web.service.sensor.SensorRecordService;
+import com.vdaoyun.systemapi.web.service.sensor.SensorService;
+import com.vdaoyun.systemapi.web.service.warn.DeviceNotiRecordExService;
+import com.vdaoyun.systemapi.web.service.warn.DeviceWarnRecordService;
 
 @Transactional
 @Service
 public class DeviceService extends BaseService<Device> {
+	
+	@Autowired
+	private SensorRecordService sensorRecordService;
+	@Autowired
+	private SensorRecordJsonService sensorRecordJsonService;
+	@Autowired
+	private DeviceRecordService deviceRecordService;
+	@Autowired
+	private SensorService sensorService;
+	@Autowired
+	private PondsService pondsService;
+	@Autowired
+	private DeviceNotiRecordExService deviceNotiRecordService;
+	@Autowired
+	private DeviceWarnRecordService deviceWarnRecordService;
 
+	@Value("${data.device.remove}")
+	private Boolean ISDELDATA = false;
+	
 	@Override
 	public int delete(Object key) {
+		if (ISDELDATA) {
+			Device device = mapper.selectByPrimaryKey(key);
+			if (device == null) {
+				return 0;
+			}
+			String terminalId = device.getTerminalId();
+			sensorRecordService.removeByTer(terminalId);
+			sensorRecordJsonService.removeByTer(terminalId);
+			deviceRecordService.removeByTer(terminalId);
+			sensorService.removeByTer(terminalId);
+			deviceNotiRecordService.removeByTer(terminalId);
+			deviceWarnRecordService.removeByTer(terminalId);
+			pondsService.setNullByTer(terminalId);
+			return mapper.deleteByPrimaryKey(key);
+		}
 		Device entity = new Device();
 		entity.setTerminalId((String) key);
 		entity.setIsDel(YesOrNo.YES.toString());

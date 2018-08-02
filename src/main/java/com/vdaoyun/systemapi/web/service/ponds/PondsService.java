@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,9 @@ import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
+import com.vdaoyun.systemapi.web.model.sensor.Sensor;
+import com.vdaoyun.systemapi.web.service.sensor.SensorService;
+import com.vdaoyun.systemapi.web.service.warn.DeviceNotiRecordExService;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -24,13 +28,44 @@ import tk.mybatis.mapper.entity.Example;
 @Transactional
 public class PondsService extends BaseService<Ponds> {
 	
+	/**
+	 * 
+	 * @Title: setNullByTer
+	 *  
+	 * @Description: 当设备删除时，将绑定了该设备的塘口，设备编号设置为空
+	 *  
+	 * @param terminalId void
+	 */
+	public void setNullByTer(String terminalId) {
+		Ponds record = new Ponds();
+		record.setTerminalId(null);
+		Example example = new Example(Ponds.class);
+		example.createCriteria().andEqualTo("terminalId", terminalId);
+		mapper.updateByExampleSelective(record, example);
+	}
+	
+	@Value("${data.ponds.remove}")
+	private Boolean ISDELDATA = false;
+	
+	@Autowired
+	private PondsShareRecordService pondsShareRecordService;
+	@Autowired
+	private DeviceNotiRecordExService deviceNotiRecordService;
+	
 	@Override
 	public int delete(Object key) {
+		if (ISDELDATA) {
+			sensorService.removeByPondsId((Long)key);
+			pondsShareRecordService.removeByPondsId((Long)key);
+			deviceNotiRecordService.removeByPondsId((Long)key);
+			return mapper.deleteByPrimaryKey(key);
+		}
 		Ponds entity = new Ponds();
 		entity.setIsDel(YesOrNo.YES.toString());
 		entity.setId((Long)key);
 		return super.update(entity);
 	} 
+	
 	
 	@Override
 	public int insert(Ponds entity) {
@@ -39,6 +74,7 @@ public class PondsService extends BaseService<Ponds> {
 	}
 	
 	public List<Ponds> selectAll() {
+		PageHelper.startPage(1, 10);
 		return mapper.selectAll();
 	}
 	
@@ -63,6 +99,10 @@ public class PondsService extends BaseService<Ponds> {
 		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
 		List<HashMap<String, Object>> list = rootMapper.selectPageInfo(param);
 		return new PageInfo<>(list);
+	}
+	
+	public HashMap<String, Object> selectInfoByKey(Long key) {
+		return rootMapper.selectInfoByKey(key);
 	}
 	
 	
@@ -125,8 +165,8 @@ public class PondsService extends BaseService<Ponds> {
 	
 	public List<Ponds> search(String search) {
 		Example example = new Example(Ponds.class);
-		example.createCriteria().andLike("name", search + "%");
-		example.or().andLike("address", "%" + search + "%");
+		example.createCriteria().andLike("name", search + "%").andEqualTo("isDel", "n");
+		example.or().andLike("address", "%" + search + "%").andEqualTo("isDel", "n");
 		return mapper.selectByExample(example);
 	}
 	
@@ -134,5 +174,23 @@ public class PondsService extends BaseService<Ponds> {
 		Ponds ponds = new Ponds();
 		ponds.setIsDel(YesOrNo.NO.toString());
 		return mapper.selectCount(ponds);
+	}
+	
+	public List<Ponds> selectListByTerminalId(String terminalId) {
+		Ponds ponds = new Ponds();
+		ponds.setTerminalId(terminalId);
+		return mapper.select(ponds);
+	}
+	
+	
+	@Autowired
+	private SensorService sensorService;
+	
+	public Ponds selectInfoByCodeAndTerminalId(String terminalId, String code) {
+		Sensor sensor = sensorService.selectInfoByCodeAndTerminalId(terminalId, code);
+		if (sensor == null) {
+			return null;
+		}
+		return mapper.selectByPrimaryKey(sensor.getPondsId());
 	}
 }

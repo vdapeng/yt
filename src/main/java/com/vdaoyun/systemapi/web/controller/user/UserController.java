@@ -152,17 +152,17 @@ public class UserController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "通过主键删除", hidden = true)
-	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public AjaxJson delete(
-		@PathVariable(value = "id") Integer id
-	) throws Exception {
-		AjaxJson ajaxJson = new AjaxJson();
-		Boolean result = service.delete(id) > 0;
-		ajaxJson.setMsg(result ? "删除成功" : "删除失败");
-		ajaxJson.setSuccess(result);
-		return ajaxJson;
-	}
+//	@ApiOperation(value = "通过主键删除", hidden = true)
+//	@ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "Integer", paramType = "path")
+//	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+//	public AjaxJson delete(
+//		@PathVariable(value = "id") Integer id
+//	) throws Exception {
+//		AjaxJson ajaxJson = new AjaxJson();
+//		Boolean result = service.delete(id) > 0;
+//		ajaxJson.setMsg(result ? "删除成功" : "删除失败");
+//		ajaxJson.setSuccess(result);
+//		return ajaxJson;
+//	}
 
 }

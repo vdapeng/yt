@@ -41,6 +41,12 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 //		return super.update(entity);
 //	} 
 	
+	public void removeByTer(String terminalId) {
+		SensorRecord record = new SensorRecord();
+		record.setTerminalId(terminalId);
+		mapper.delete(record);
+	}
+	
 	@Override
 	public int insert(SensorRecord entity) {
 //		entity.setCreateDate(new Date());

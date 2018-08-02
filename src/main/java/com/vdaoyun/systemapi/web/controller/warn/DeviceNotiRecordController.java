@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vdaoyun.common.bean.AjaxJson;
-import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.warn.DeviceNotiRecord;
 import com.vdaoyun.systemapi.web.service.warn.DeviceNotiRecordService;
 
@@ -103,12 +102,16 @@ public class DeviceNotiRecordController {
 	}
 	
 	@GetMapping("read")
-	@ApiOperation(value = "报警已读", tags = {"将报警通知设置为已读状态"})
-	public AjaxJson read(@RequestParam("deviceWarnRecordId") Long deviceWarnRecordId) throws Exception {
-		if (service.count(deviceWarnRecordId) < 1) {
-			throw new ParamException("未找到相关记录");
-		}
-		service.read(deviceWarnRecordId);
+	@ApiOperation(value = "报警已读", tags = {"A小程序_____首页_塘口详情_将报警通知设置为已读状态"})
+	public AjaxJson read(@RequestParam("pondsId") @ApiParam("塘口编号") Long pondsId) throws Exception {
+		service.read(pondsId);
+		return new AjaxJson();
+	}
+	
+	@GetMapping("wx/noti")
+	@ApiOperation(value = "微信通知用户", hidden = true)
+	public AjaxJson wxNoti(@RequestParam("id") Long id) throws Exception {
+		service.wxNoti(id);
 		return new AjaxJson();
 	}
 	

@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.systemapi.web.mapper.ponds.PondsShareRecordMapper;
 import com.vdaoyun.systemapi.web.model.ponds.PondsShareRecord;
@@ -28,6 +27,20 @@ public class PondsShareRecordService extends BaseService<PondsShareRecord> {
 //		entity.setId((Integer)key);
 //		return super.update(entity);
 //	} 
+	
+	/**
+	 * 
+	 * @Title: removeByPondsId
+	 *  
+	 * @Description: 通过塘口编号删除
+	 *  
+	 * @param ponsId void
+	 */
+	public void removeByPondsId(Long ponsId) {
+		PondsShareRecord record = new PondsShareRecord();
+		record.setPondsId(ponsId);
+		mapper.delete(record);
+	}
 	
 	@Override
 	public int insert(PondsShareRecord entity) {

@@ -26,13 +26,14 @@ public class Device implements Serializable {
      * 设备编号
      */
 	@Id
-    @NotNull(message = "设备编号 is required")
+    @NotNull(message = "请输入终端编号")
     @Column(name = "terminal_id")
     @ApiModelProperty(name = "terminalId", value = "设备编号", required = true )
     private String terminalId;
 	/**
      * 名称
      */
+	 @NotNull(message = "请输入终端名称")
     @Column(name = "name")
     @ApiModelProperty(name = "name", value = "名称" )
     private String name;

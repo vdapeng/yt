@@ -22,4 +22,19 @@ public interface DeviceWarnRecordMapper extends BaseMapper<DeviceWarnRecord> {
 	
 	List<HashMap<String, Object>> alarmAllList(HashMap<String, Object> param);
 	
+	
+	// 用于微信报警查询分页
+	List<HashMap<String, Object>> pageInfoAlarmListForWx(HashMap<String, Object> param);
+	
+	// 微信报警查询
+	List<HashMap<String, Object>> selectAlarmListForWx(HashMap<String, Object> param);
+	
+	// 管理后台报警查询
+	List<HashMap<String, Object>> selectAlarmListForAdmin(HashMap<String, Object> param);
+	
+	//	用于管理后台报警查询分页
+	List<HashMap<String, Object>> pageInfoAlarmListForAdmin(HashMap<String, Object> param);
+	
+	
+	
 }

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper">
+
+
+	<cache type="com.vdaoyun.systemapi.configuration.MybatisRedisCache">
+        <property name="eviction" value="FIFO" />
+        <property name="flushInterval" value="6000000" />
+        <property name="size" value="1024" />
+        <property name="readOnly" value="false" />
+    </cache>
+
   <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.ponds.Ponds">
     <id column="id" jdbcType="INTEGER" property="id" />
     	<result column="name" jdbcType="VARCHAR" property="name" />
@@ -89,19 +98,25 @@
 		</if>
 	</select>
 	
-	<select id="selectInfoByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-		SELECT 
-		id AS id
-		,name AS name
-		,address AS address
-		,latitude AS latitude
-		,longitude AS longitude
-		,user_id AS userId
-		,create_date AS createDate
-		,activated AS activated
-		,enabled AS enabled
-		FROM ponds
-		 WHERE id = #{id}
+	<select id="selectInfoByKey" parameterType="java.lang.Long" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			a.address,
+			a.latitude ,
+			a.longitude,
+			a.user_id AS userId ,
+			a.create_date AS createDate ,
+			a.activated ,
+			a.terminal_id terminalId,
+			a.enabled,
+			b.nickname,
+			b.true_name trueName,
+			b.avatar_url avatarUrl,
+			b.mobile
+		FROM
+			ponds a LEFT JOIN `user` b ON a.user_id = b.id
+		WHERE a.id = #{id}
 	</select>
 	
 	<resultMap type="java.util.Map" id="JsonResultMap">

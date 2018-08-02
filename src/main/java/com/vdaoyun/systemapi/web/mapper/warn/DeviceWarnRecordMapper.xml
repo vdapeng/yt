@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vdaoyun.systemapi.web.mapper.warn.DeviceWarnRecordMapper">
+
+	<cache type="com.vdaoyun.systemapi.configuration.MybatisRedisCache">
+        <property name="eviction" value="FIFO" />
+        <property name="flushInterval" value="6000000" />
+        <property name="size" value="1024" />
+        <property name="readOnly" value="false" />
+    </cache>
+
   <resultMap id="BaseResultMap" type="com.vdaoyun.systemapi.web.model.warn.DeviceWarnRecord">
     <id column="id" jdbcType="INTEGER" property="id" />
     	<result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
@@ -135,6 +143,9 @@
 		<if test="entity.terminalId != null and entity.terminalId != ''">
 			AND terminalId = #{entity.terminalId}
 		</if>
+		<if test="entity.pondsId != null and entity.pondsId != ''">
+			AND terminalId = (SELECT IFNULL(terminal_id,'0') terminalId  FROM ponds WHERE id = #{entity.pondsId} )
+		</if>
 		<if test="entity.beginDate != null and entity.beginDate != ''">
 			AND postTime &gt; #{entity.beginDate}
 		</if>
@@ -259,32 +270,204 @@
 		GROUP BY id) a
 	</select>
 	
-	<select id="selectInfoByKey" parameterType="java.lang.Long" resultType="java.util.Map">
-<!-- 		SELECT 
-		id AS id
-		,terminal_id AS terminalId
-		,post_time AS postTime
-		,alaram_business AS alaramBusiness
-		,alaram_equipment AS alaramEquipment
-		FROM device_warn_record
-	 WHERE id = #{id} -->	
+	
+	<resultMap type="java.util.Map" id="ResultForInfo">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="terminalId" jdbcType="VARCHAR" property="terminalId" />
+		<result column="postTime" jdbcType="TIMESTAMP" property="postTime" />
+		<result column="alaramBusiness" jdbcType="VARCHAR" property="alaramBusiness" />
+		<result column="alaramEquipment" jdbcType="VARCHAR" property="alaramEquipment" />
+		<collection property="notiList" javaType="java.util.List" ofType="java.util.Map">
+			<id column="deviceNotiRecordId" jdbcType="INTEGER" property="deviceNotiRecordId" />
+			<result column="isRead" jdbcType="VARCHAR" property="isRead" />
+			<result column="content" jdbcType="VARCHAR" property="content" />
+			<result column="wxNotiDate" jdbcType="TIMESTAMP" property="wxNotiDate" />
+			<result column="smsNotiDate" jdbcType="TIMESTAMP" property="smsNotiDate" />
+			<result column="readDate" jdbcType="TIMESTAMP" property="readDate" />
+			<result column="isWxNoti" jdbcType="VARCHAR" property="isWxNoti" />
+			<result column="isSmsNoti" jdbcType="VARCHAR" property="isSmsNoti" />
+			<result column="bizId" jdbcType="VARCHAR" property="bizId" />
+			<result column="pondsName" jdbcType="VARCHAR" property="pondsName" />
+			<result column="code" jdbcType="VARCHAR" property="code" />
+			<result column="pondsId" jdbcType="INTEGER" property="pondsId" />
+		</collection>
+	</resultMap>
+	<select id="selectInfoByKey" parameterType="java.lang.Long" resultMap="ResultForInfo">
 		 SELECT
-			b.*, a.terminal_id terminalId ,
+			a.terminal_id terminalId ,
 			a.post_time postTime ,
-			a.alaram_business
+			a.alaram_business alaramBusiness ,
+			a.alaram_equipment alaramEquipment,
+			a.id ,
+			b.id deviceNotiRecordId ,
+			b.content ,
+			b.is_read isRead ,
+			b.wx_noti_date wxNotiDate ,
+			b.sms_noti_date smsNotiDate ,
+			b.read_date readDate ,
+			b.is_wx_noti isWxNoti ,
+			b.is_sms_noti isSmsNoti ,
+			b.biz_id bizId ,
+			b.ponds_id pondsId ,
+			b.`code` ,
+			c.`name` pondsName
 		FROM
 			device_warn_record a
 		LEFT JOIN device_noti_record b ON a.id = b.device_warn_record_id
-		WHERE
-			a.id = #{id}
+		LEFT JOIN ponds c ON b.ponds_id = c.id 
+		WHERE a.id = #{id}
 	</select>
 
 	<!-- 
 	将报警中的编码换成中文显示
 	SELECT a.*, GROUP_CONCAT(c.name separator '&') alaram_business_name 
-		FROM( SELECT a.*, GROUP_CONCAT(b.name separator '&') alaram_equipment_name 
-		FROM device_warn_record a LEFT JOIN device_warn_type b ON INSTR(a.alaram_equipment, 
-		b.`code`) > 0 GROUP BY a.id) a LEFT JOIN device_warn_type c ON INSTR(a.alaram_business, 
-		c.`code`) > 0 GROUP BY a.id -->
+	FROM( SELECT a.*, GROUP_CONCAT(b.name separator '&') alaram_equipment_name 
+	FROM device_warn_record a LEFT JOIN device_warn_type b ON INSTR(a.alaram_equipment, 
+	b.`code`) > 0 GROUP BY a.id) a LEFT JOIN device_warn_type c ON INSTR(a.alaram_business, 
+	c.`code`) > 0 GROUP BY a.id 
+	-->
+	
+	<!-- 
+	SELECT *, GROUP_CONCAT(b.sensorName separator '&') FROM device_warn_record a ,
+	(SELECT a.*, b.`code`, b.`name` sensorName FROM (
+	SELECT * FROM ponds WHERE user_id = 6
+	UNION ALL
+	(SELECT a.* FROM ponds a, ponds_share_record b WHERE a.id = b.ponds_id AND b.openid  = (select openid FROM `user` WHERE id = 6))) a,
+	sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0 GROUP BY a.id
+	 -->
+	
+	<resultMap type="java.util.Map" id="WxAlarmResult">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="terminalId" property="terminalId" jdbcType="VARCHAR" />
+		<result column="postTime" jdbcType="TIMESTAMP" property="postTime" />
+		<result column="alarmBusiness" property="alarmBusiness" jdbcType="VARCHAR"  />
+		<result column="alaramEquipment" property="alaramEquipment" jdbcType="VARCHAR"  />
+		<collection property="pondsList" ofType="java.util.Map" javaType="java.util.List">
+			<id column="pondsId" property="pondsId" jdbcType="INTEGER" />
+			<result column="pondsName" property="pondsName" jdbcType="VARCHAR" />
+			<result column="address" property="address" jdbcType="VARCHAR" />
+			<result column="userId" property="userId" jdbcType="INTEGER" />
+			<collection property="sensorList" ofType="java.util.Map" javaType="java.util.List">
+				<id column="sensorCode" property="sensorCode" jdbcType="VARCHAR" />
+				<result column="sensorName" property="sensorName" jdbcType="VARCHAR" />
+			</collection>
+		</collection>
+	</resultMap>
+	<!-- 用于微信报警查询分页 -->
+	<select id="pageInfoAlarmListForWx" parameterType="java.util.Map" resultType="java.util.Map" >
+		SELECT a.id, a.terminal_id terminalId, a.postTime, a.alaram_business alarmBusiness, a.alaram_equipment alaramEquipment,
+		b.id pondsId, b.`name` pondsName, b.address, b.user_id userId, b.`code` sensorCode, b.sensorName
+		 FROM (SELECT DISTINCT id, terminal_id, post_time postTime, alaram_business, alaram_equipment FROM device_warn_record WHERE terminal_id IN 
+		 ( SELECT terminal_id FROM device a, `user` b WHERE a.user_id = b.id AND b.openid = #{entity.openid}
+		   UNION ALL
+		   (SELECT terminal_id FROM ponds_share_record a, ponds b WHERE a.ponds_id = b.id AND a.openid = #{entity.openid})
+		  )
+		 <if test="orderByClause != null and orderByClause != ''">
+			ORDER BY ${orderByClause}
+		</if> )a  ,
+		(SELECT DISTINCT a.id, a.`name`, a.address, a.user_id, a.terminal_id, b.`code`, b.`name` sensorName FROM (
+		SELECT id, terminal_id, `name`, address, user_id FROM ponds WHERE user_id IN (SELECT id FROM `user` WHERE openid = #{entity.openid})
+		UNION ALL
+		(SELECT a.id, a.terminal_id, a.`name`, a.address, a.user_id FROM ponds a, ponds_share_record b WHERE a.id = b.ponds_id AND b.openid  = #{entity.openid})) a,
+		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0
+		GROUP BY a.id 
+		<if test="orderByClause != null and orderByClause != ''">
+			ORDER BY ${orderByClause}
+		</if> 
+	</select>
+	<!-- 微信报警查询 -->
+	<select id="selectAlarmListForWx" parameterType="java.util.Map" resultMap="WxAlarmResult">
+		SELECT a.id, a.terminal_id terminalId, a.postTime, a.alaram_business alarmBusiness, a.alaram_equipment alaramEquipment,
+		b.id pondsId, b.`name` pondsName, b.address, b.user_id userId, b.`code` sensorCode, b.sensorName
+		 FROM (SELECT DISTINCT id, terminal_id, post_time postTime, alaram_business, alaram_equipment FROM device_warn_record WHERE terminal_id IN 
+		 ( SELECT terminal_id FROM device a, `user` b WHERE a.user_id = b.id AND b.openid = #{entity.openid}
+		   UNION ALL
+		   (SELECT terminal_id FROM ponds_share_record a, ponds b WHERE a.ponds_id = b.id AND a.openid = #{entity.openid})
+		  )
+		 <if test="orderByClause != null and orderByClause != ''">
+			ORDER BY ${orderByClause}
+		</if>
+		 LIMIT #{begin}, #{end})a  ,
+		(SELECT a.id, a.`name`, a.address, a.user_id, a.terminal_id, b.`code`, b.`name` sensorName FROM (
+		SELECT id, terminal_id, `name`, address, user_id FROM ponds WHERE user_id IN (SELECT id FROM `user` WHERE openid = #{entity.openid})
+		UNION ALL
+		(SELECT a.id, a.terminal_id, a.`name`, a.address, a.user_id FROM ponds a, ponds_share_record b WHERE a.id = b.ponds_id AND b.openid  = #{entity.openid})) a,
+		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0 
+		<if test="orderByClause != null and orderByClause != ''">
+			ORDER BY ${orderByClause}
+		</if>
+<!-- 		SELECT a.id, a.terminal_id terminalId, a.post_time postTime, a.alaram_business alarmBusiness, a.alaram_equipment alaramEquipment,
+		b.id pondsId, b.`name` pondsName, b.address, b.user_id userId, b.`code` sensorCode, b.sensorName
+		 FROM device_warn_record a ,
+		(SELECT a.id, a.`name`, a.address, a.user_id, a.terminal_id, b.`code`, b.`name` sensorName FROM (
+		SELECT id, terminal_id, `name`, address, user_id FROM ponds WHERE (SELECT id FROM `user` WHERE openid = #{entity.openid})
+		UNION ALL
+		(SELECT a.id, a.terminal_id, a.`name`, a.address, a.user_id FROM ponds a, ponds_share_record b WHERE a.id = b.ponds_id AND b.openid  = #{entity.openid})) a,
+		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0 
+		<if test="orderByClause != null and orderByClause != ''">
+			ORDER BY ${orderByClause}
+		</if> -->
+	</select>
+	
+	<!-- 管理后台报警查询 -->
+	<select id="selectAlarmListForAdmin" parameterType="java.util.Map" resultMap="WxAlarmResult">
+		SELECT a.id, a.terminal_id terminalId, a.postTime, a.alaram_business alarmBusiness, a.alaram_equipment alaramEquipment,
+		b.id pondsId, b.`name` pondsName, b.address, b.user_id userId, b.`code` sensorCode, b.sensorName
+		 FROM (SELECT DISTINCT a.id, a.terminal_id, a.post_time postTime, a.alaram_business, a.alaram_equipment FROM device_warn_record a, ponds b 
+		 WHERE a.terminal_id = b.terminal_id 
+		<if test="entity.pondsId != null and entity.pondsId != ''">
+			AND b.id = #{entity.pondsId}
+		</if> 
+		<if test="entity.terminalId != null and entity.terminalId != ''">
+			AND b.terminal_id = #{entity.terminalId}
+		</if> 
+		<if test="entity.beginDate != null and entity.beginDate != ''">
+			AND a.post_time &gt; #{entity.beginDate}
+		</if>
+		<if test="entity.finishDate != null and entity.finishDate != ''">
+			AND a.post_time &lt; #{entity.finishDate}
+		</if> 
+		<if test="orderByClause != null and orderByClause != ''">
+			ORDER BY ${orderByClause}
+		</if>
+		 LIMIT #{begin}, #{end}) a ,
+		(SELECT a.id, a.`name`, a.address, a.user_id, a.terminal_id, b.`code`, b.`name` sensorName FROM (
+		SELECT id, terminal_id, `name`, address, user_id FROM ponds 
+		<if test="entity.pondsId != null and entity.pondsId != ''">
+			WHERE id = #{entity.pondsId}
+		</if>
+		) a,
+		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0
+	</select>
+	<!-- 用于管理后台报警查询分页 -->
+	<select id="pageInfoAlarmListForAdmin" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT a.id, a.terminal_id terminalId, a.postTime, a.alaram_business alarmBusiness, a.alaram_equipment alaramEquipment,
+		b.id pondsId, b.`name` pondsName, b.address, b.user_id userId, b.`code` sensorCode, b.sensorName
+		 FROM (SELECT DISTINCT a.id, a.terminal_id, a.post_time postTime, a.alaram_business, a.alaram_equipment FROM device_warn_record a, ponds b
+		  WHERE a.terminal_id = b.terminal_id 
+		 <if test="entity.pondsId != null and entity.pondsId != ''">
+			AND b.id = #{entity.pondsId}
+		</if> 
+		<if test="entity.terminalId != null and entity.terminalId != ''">
+			AND b.terminal_id = #{entity.terminalId}
+		</if> 
+		<if test="entity.beginDate != null and entity.beginDate != ''">
+			AND a.post_time &gt; #{entity.beginDate}
+		</if>
+		<if test="entity.finishDate != null and entity.finishDate != ''">
+			AND a.post_time &lt; #{entity.finishDate}
+		</if> 
+		<if test="orderByClause != null and orderByClause != ''">
+			ORDER BY ${orderByClause}
+		</if>) a ,
+		(SELECT a.id, a.`name`, a.address, a.user_id, a.terminal_id, b.`code`, b.`name` sensorName FROM (
+		SELECT id, terminal_id, `name`, address, user_id FROM ponds 
+		<if test="entity.pondsId != null and entity.pondsId != ''">
+			WHERE id = #{entity.pondsId}
+		</if>
+		) a,
+		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0  
+		GROUP BY a.id
+	</select>
 	
 </mapper>

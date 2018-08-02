@@ -162,8 +162,11 @@ public class UserService extends BaseService<User> {
 				
 	}
 	
-	public int count() {
+	public int count(String isEnable) {
 		User record = new User();
+		if (StringUtils.isNotEmpty(isEnable)) {
+			record.setIsEnable(isEnable);
+		}
 		return mapper.selectCount(record);
 	}
 }

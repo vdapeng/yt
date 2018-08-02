@@ -36,7 +36,7 @@ public class MQTest {
 	 * @Description: 模拟设备运行数据， 每15分钟推送一次
 	 *   void
 	 */
-	@Scheduled(cron = "0 0/15 * * * ? ")
+//	@Scheduled(cron = "0 0/15 * * * ? ")
 	public void sendDeviceRecordData() {
 		// 模拟业务数据
 		MQDeviceRecordData item = new MQDeviceRecordData();
@@ -79,7 +79,7 @@ public class MQTest {
 	 * @Description: 模拟设备报警，每三十分钟一次
 	 *   void
 	 */
-	@Scheduled(cron = "0 0/30 * * * ? ")
+	@Scheduled(cron = "0 0/3 * * * ? ")
 	public void sendDeviceWarnData() {
 		MQDeviceWarnModel record = new MQDeviceWarnModel();
 		record.setTerminalID(Arrays.asList(new String[] {"TK232", "TK233"}).get(RandomUtils.nextInt(0, 1)));
@@ -111,7 +111,7 @@ public class MQTest {
 	 * @Description: 模拟传感器运行数据，每十五分钟一次
 	 *   void
 	 */
-	@Scheduled(cron = "0 0/15 * * * ? ")
+//	@Scheduled(cron = "0 0/15 * * * ? ")
 	public void sendCGQRecordData() {
 		// 模拟业务数据
 		HashMap<String, Object> item = new HashMap<>();

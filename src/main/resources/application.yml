@@ -15,4 +15,10 @@ wechat:
     token: hjkjiot
     aesKey: RsmFdzocFXEfgzPb7oCkGnIrqGTPdkkYxnnj85hiWgb
     msgDataFormat: JSON
+    
+data:
+  ponds:
+    remove: true # 当塘口删除时，是否物理删除相关数据
+  device: 
+    remove: false # 当设备删除时，是否物理删除相关数据
 

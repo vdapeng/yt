@@ -1,5 +1,7 @@
 package com.vdaoyun.systemapi.web.controller.device;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.common.utils.AjaxJsonUtils;
+import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.device.Device;
+import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 import com.vdaoyun.systemapi.web.service.device.DeviceService;
+import com.vdaoyun.systemapi.web.service.ponds.PondsService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -79,12 +85,25 @@ public class DeviceController {
 			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
 			return ajaxJson;
 		}
+		Device device = service.selectByPrimaryKey(entity.getTerminalId());
+		if (device != null) { // 当设备编号存在时
+			if (device.getIsDel().equalsIgnoreCase(YesOrNo.YES.toString())) {
+				device.setIsDel(YesOrNo.NO.toString());
+				device.setName(entity.getName());
+				Boolean result = service.update(device) > 0;
+				ajaxJson.setData(entity);
+				ajaxJson.setSuccess(result);
+				ajaxJson.setMsg(result ? "新增成功" : "新增失败");
+				return ajaxJson;
+			} else {
+				throw new ParamException("该设备已存在");
+			}
+		}
 		Boolean result = service.insertInfo(entity) > 0;
 		ajaxJson.setData(entity);
 		ajaxJson.setSuccess(result);
 		ajaxJson.setMsg(result ? "新增成功" : "新增失败");
 		return ajaxJson;
-
 	}
 	
 	@ApiOperation(tags = {"A小程序_____我的_终端管理_终端信息编辑"}, value = "编辑")
@@ -102,11 +121,25 @@ public class DeviceController {
 		return ajaxJson;
 	}
 	
+	@Autowired
+	private PondsService pondsService;
+	
 	@ApiOperation(tags = {"A小程序_____我的_终端管理_终端删除"}, value = "")
 	@RequestMapping(value = "/{terminalId}", method = RequestMethod.DELETE)
 	public AjaxJson delete(
 		@PathVariable(value = "terminalId") @ApiParam(value = "设备编号") String terminalId
 	) throws Exception {
+		
+		List<Ponds> pondsList = pondsService.selectListByTerminalId(terminalId);
+		if (!pondsList.isEmpty()) {
+			String pondsNames = "";
+			for (Ponds ponds : pondsList) {
+				pondsNames += ponds.getName() + " ";
+			}
+			pondsNames = pondsNames.substring(0, pondsNames.length() - 1);
+			throw new ParamException("该终端已绑定如下塘口：" + pondsNames + "。请先解除绑定后删除。");
+		}
+		
 		AjaxJson ajaxJson = new AjaxJson();
 		Boolean result = service.delete(terminalId) > 0;
 		ajaxJson.setMsg(result ? "删除成功" : "删除失败");

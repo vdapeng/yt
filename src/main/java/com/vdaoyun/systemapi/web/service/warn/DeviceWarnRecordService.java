@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
@@ -29,6 +30,12 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 //		entity.setId((Integer)key);
 //		return super.update(entity);
 //	} 
+	
+	public void removeByTer(String terminalId) {
+		DeviceWarnRecord record = new DeviceWarnRecord();
+		record.setTerminalId(terminalId);
+		mapper.delete(record);
+	}
 	
 	@Override
 	public int insert(DeviceWarnRecord entity) {
@@ -124,18 +131,36 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 			String wdy_pageOrder, 
 			String wdy_pageSort) {
 		HashMap<String, Object> param = new HashMap<>();
-		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
+		param.put("begin", (wdy_pageNum - 1) * wdy_pageSize);
+		param.put("end", wdy_pageSize);
 		param.put("entity", entity);
 		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
 		if (entity.containsKey("openid")) {
-			return new PageInfo<>(rootMapper.alarmList(param));
+			Page<HashMap<String, Object>> page = PageHelper.startPage(wdy_pageNum, wdy_pageSize);
+			rootMapper.pageInfoAlarmListForWx(param);
+			PageInfo<HashMap<String, Object>> pageInfo = new PageInfo<>(page, 0);
+			pageInfo.setList(rootMapper.selectAlarmListForWx(param));
+			return pageInfo;
+//			return new PageInfo<>(rootMapper.alarmList(param));
 		}
-		return new PageInfo<>(rootMapper.alarmAllList(param));
+		Page<HashMap<String, Object>> page = PageHelper.startPage(wdy_pageNum, wdy_pageSize);
+		rootMapper.pageInfoAlarmListForAdmin(param);
+		PageInfo<HashMap<String, Object>> pageInfo = new PageInfo<>(page, 0);
+		pageInfo.setList(rootMapper.selectAlarmListForAdmin(param));
+		return pageInfo;
+//		return new PageInfo<>(rootMapper.alarmAllList(param));
 	}
 	
 	public int count() {
 		DeviceWarnRecord record = new DeviceWarnRecord();
 		return mapper.selectCount(record);
+	}
+	
+	public void version(Long id, Long version) {
+		DeviceWarnRecord record = new DeviceWarnRecord();
+		record.setId(id);
+		record.setVersion(++version);
+		mapper.updateByPrimaryKeySelective(record);
 	}
 	
 }

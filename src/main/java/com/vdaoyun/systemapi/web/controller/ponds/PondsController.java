@@ -104,6 +104,12 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
+	@GetMapping("info")
+	@ApiOperation(value = "通过主键查询详情", hidden = true)
+	public AjaxJson info(@RequestParam(value = "id") Long id) throws Exception {
+		return AjaxJsonUtils.ajaxJson(service.selectInfoByKey(id));
+	}
+	
 	@ApiOperation(tags = {"A小程序_____我的_塘口管理_新增"}, value = "新增")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public AjaxJson insert(

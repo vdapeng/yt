@@ -38,6 +38,12 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 @Transactional
 public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 	
+	public void removeByTer(String terminalId) {
+		SensorRecordJson record = new SensorRecordJson();
+		record.setTerminalId(terminalId);
+		mapper.delete(record);
+	}
+	
 	private static final DecimalFormat df = new DecimalFormat("#.00");
 	
 	@Autowired
@@ -82,28 +88,50 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		}
 		
 		HashMap<String, Line> aHashMap = new HashMap<>();
-		
+		Boolean isFirst = true;
 		for (Sensor sensor : sensors) {
 			Line line = new Line();
 			line.name(sensor.getName());
 			line.stack(sensor.getCode());
+			line.smooth(true);
 			aHashMap.put(sensor.getCode(), line);
 			option.legend().data().add(sensor.getName());
+			option.legend().selected(sensor.getName(), isFirst);
+			isFirst = false;
+			
+			
+			Line tLine = new Line();
+			tLine.name(sensor.getName() + "温度");
+			tLine.stack(sensor.getCode() + "_T");
+			tLine.smooth(true);
+			aHashMap.put(sensor.getCode() + "_T", tLine);
+			option.legend().data().add(sensor.getName() + "温度");
+			option.legend().selected(sensor.getName() + "温度", isFirst);
 		}
+		option.legend().padding(5, 15, 0, 15);
+		option.legend().x(X.left);
+		option.legend().y(Y.bottom);
 		CategoryAxis xAxis = new CategoryAxis();
 		xAxis.setBoundaryGap(false);
 		for (SensorRecordJson json : list) {
 			JSONObject data = JSONObject.parseObject(json.getDataJson(), JSONObject.class, Feature.AllowArbitraryCommas);
 			for (Sensor sensor : sensors) {
 				aHashMap.get(sensor.getCode()).data().add(df.format( data.getDoubleValue(sensor.getCode())));
+				if (data.containsKey(sensor.getCode() + "_Temperature")) {
+					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_Temperature")));
+				} else if (data.containsKey(sensor.getCode() + "_T")) {
+					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_T")));
+				}
+				
 			}
 			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), formart));
 		}
 		for (Sensor sensor : sensors) {
 			option.series().add(aHashMap.get(sensor.getCode()));
+			option.series().add(aHashMap.get(sensor.getCode() + "_T"));
 		}
 		option.xAxis().add(xAxis);
-		option.legend().top(15);
+		option.grid().bottom(80);
 		return option;
 	}
 	
@@ -138,29 +166,49 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			option.title().top(Y.center);
 			return option;
 		}
-		
 		HashMap<String, Line> aHashMap = new HashMap<>();
+		Boolean isFirst = true;
 		for (Sensor sensor : sensors) {
 			Line line = new Line();
 			line.name(sensor.getName());
-			line.stack(sensor.getCode());
+			line.smooth(true);
 			aHashMap.put(sensor.getCode(), line);
 			option.legend().data().add(sensor.getName());
+			option.legend().selected(sensor.getName(), isFirst);
+			isFirst = false;
+			
+			Line tLine = new Line();
+			tLine.name(sensor.getName() + "温度");
+			tLine.stack(sensor.getCode() + "_T");
+			tLine.smooth(true);
+			aHashMap.put(sensor.getCode() + "_T", tLine);
+			option.legend().data().add(sensor.getName() + "温度");
+			option.legend().selected(sensor.getName() + "温度", isFirst);
+			
 		}
+		option.legend().padding(5, 15, 0, 15);
+		option.legend().x(X.left);
+		option.legend().y(Y.bottom);
 		CategoryAxis xAxis = new CategoryAxis();
 		xAxis.setBoundaryGap(false);
 		for (SensorRecordJson json : list) {
 			JSONObject data = JSONObject.parseObject(json.getDataJson(), JSONObject.class, Feature.AllowArbitraryCommas);
 			for (Sensor sensor : sensors) {
 				aHashMap.get(sensor.getCode()).data().add(df.format(data.getDoubleValue(sensor.getCode())));
+				if (data.containsKey(sensor.getCode() + "_Temperature")) {
+					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_Temperature")));
+				} else if (data.containsKey(sensor.getCode() + "_T")) {
+					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_T")));
+				}
 			}
 			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), formart));
 		}
 		for (Sensor sensor : sensors) {
 			option.series().add(aHashMap.get(sensor.getCode()));
+			option.series().add(aHashMap.get(sensor.getCode() + "_T"));
 		}
 		option.xAxis().add(xAxis);
-		option.legend().top(15);
+		option.grid().bottom(80);
 		return option;
 	}
 	

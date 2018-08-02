@@ -27,6 +27,34 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 @Transactional
 public class SensorService extends BaseService<Sensor> {
 	
+	/**
+	 * 
+	 * @Title: removeByTer
+	 *  
+	 * @Description: 通过设备编号删除
+	 *  
+	 * @param terminalId void
+	 */
+	public void removeByTer(String terminalId) {
+		Sensor record = new Sensor();
+		record.setTerminalId(terminalId);
+		mapper.delete(record);
+	}
+	
+	/**
+	 * 
+	 * @Title: removeByPondsId
+	 *  
+	 * @Description: 通过塘口编号删除
+	 *  
+	 * @param ponsId void
+	 */
+	public void removeByPondsId(Long ponsId) {
+		Sensor record = new Sensor();
+		record.setPondsId(ponsId);
+		mapper.delete(record);
+	}
+	
 	public List<Sensor> select(Sensor sensor) {
 		return mapper.select(sensor);
 	}
@@ -236,5 +264,12 @@ public class SensorService extends BaseService<Sensor> {
 			sensor.setIsNoti(YesOrNo.NO.toString());
 			mapper.updateByExampleSelective(sensor, example);
 		}
+	}
+	
+	public Sensor selectInfoByCodeAndTerminalId(String terminalId, String code) {
+		Sensor sensor = new Sensor();
+		sensor.setTerminalId(terminalId);
+		sensor.setCode(code);
+		return mapper.selectOne(sensor);
 	}
 }

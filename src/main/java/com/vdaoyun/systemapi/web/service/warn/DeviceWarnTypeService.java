@@ -16,6 +16,7 @@ import com.vdaoyun.systemapi.web.mapper.warn.DeviceWarnTypeMapper;
 import com.vdaoyun.systemapi.web.model.warn.DeviceWarnType;
 
 @Service
+@Transactional
 public class DeviceWarnTypeService extends BaseService<DeviceWarnType> {
 	
 //	@Override

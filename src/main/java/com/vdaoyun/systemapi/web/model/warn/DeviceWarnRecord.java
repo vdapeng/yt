@@ -60,6 +60,8 @@ public class DeviceWarnRecord implements Serializable {
     @ApiModelProperty(name = "alaramEquipment", value = "设备报警" )
     private String alaramEquipment;
     
+    private Long version;
+    
   	/**
      * 获取
      *
@@ -178,6 +180,14 @@ public class DeviceWarnRecord implements Serializable {
 
 	public void setAlaramEquipmentName(String alaramEquipmentName) {
 		this.alaramEquipmentName = alaramEquipmentName;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
     
 }

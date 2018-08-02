@@ -94,7 +94,67 @@ public class DeviceNotiRecord implements Serializable {
     @ApiModelProperty(name = "readDate", value = "查看时间" )
     private Date readDate;
     
-  	/**
+    @Column(name = "biz_id")
+    @ApiModelProperty(name = "bizId", value = "发送回执ID,可根据该ID查询具体的发送状态" )
+    private String bizId;
+    
+    @Column(name = "ponds_id")
+    @ApiModelProperty(name = "pondsId", value = "塘口编号" )
+    private Long pondsId;
+    
+    @Column(name = "code")
+    @ApiModelProperty(name = "code", value = "探测器编码" )
+    private String code;
+    
+    @Column(name = "terminal_id")
+    @ApiModelProperty(name = "terminalId", value = "终端编号" )
+    private String terminalId;
+    
+    @Column(name = "msg_Id")
+    @ApiModelProperty(name = "msgId", value = "微信消息编号" )
+    private String msgId;
+    
+  	public String getMsgId() {
+		return msgId;
+	}
+
+	public void setMsgId(String msgId) {
+		this.msgId = msgId;
+	}
+
+	public Long getPondsId() {
+		return pondsId;
+	}
+
+	public void setPondsId(Long pondsId) {
+		this.pondsId = pondsId;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getTerminalId() {
+		return terminalId;
+	}
+
+	public void setTerminalId(String terminalId) {
+		this.terminalId = terminalId;
+	}
+
+	public String getBizId() {
+		return bizId;
+	}
+
+	public void setBizId(String bizId) {
+		this.bizId = bizId;
+	}
+
+	/**
      * 获取
      *
      * @return remark - 

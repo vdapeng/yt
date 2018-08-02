@@ -5,9 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.vdaoyun.systemapi.wx.mp.builder.TextBuilder;
-import com.vdaoyun.systemapi.wx.mp.utils.JsonUtils;
-
 import me.chanjar.weixin.common.api.WxConsts.XmlMsgType;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
@@ -44,9 +41,10 @@ public class MsgHandler extends AbstractHandler {
     }
 
     //TODO 组装回复消息
-    String content = "收到信息内容：" + JsonUtils.toJson(wxMessage);
+//    String content = "收到信息内容：" + JsonUtils.toJson(wxMessage);
 
-    return new TextBuilder().build(content, wxMessage, weixinService);
+//    return new TextBuilder().build(content, wxMessage, weixinService);
+    return null;
 
   }
 

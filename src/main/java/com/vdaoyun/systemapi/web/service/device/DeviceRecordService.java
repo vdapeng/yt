@@ -27,6 +27,12 @@ import com.vdaoyun.systemapi.web.model.device.DeviceRecord;
 @Service
 public class DeviceRecordService extends BaseService<DeviceRecord> {
 	
+	public void removeByTer(String terminalId) {
+		DeviceRecord record = new DeviceRecord();
+		record.setTerminalId(terminalId);
+		mapper.delete(record);
+	}
+	
 //	@Override
 //	public int delete(Object key) {
 //		DeviceRecord entity = new DeviceRecord();
