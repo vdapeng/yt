@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +74,7 @@ public class MybatisRedisCache implements Cache {
 
 		try {
 			Set<String> keys = redisTemplate.keys("*:" + this.id + "*");
-			if (!CollectionUtils.isEmpty(keys)) {
+			if (!keys.isEmpty()) {
 				redisTemplate.delete(keys);
 			}
 		} catch (Exception e) {
