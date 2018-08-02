@@ -13,8 +13,6 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.vdaoyun.systemapi.common.utils.SpringContextHolder;
-
 public class MybatisRedisCache implements Cache {
 
 	private static final Logger log = LoggerFactory.getLogger(MybatisRedisCache.class);

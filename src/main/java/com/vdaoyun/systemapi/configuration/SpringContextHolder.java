@@ -1,10 +1,11 @@
-package com.vdaoyun.systemapi.common.utils;
+package com.vdaoyun.systemapi.configuration;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("unchecked")
 @Component
 public class SpringContextHolder implements ApplicationContextAware {
 
@@ -14,14 +15,12 @@ public class SpringContextHolder implements ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		SpringContextHolder.applicationContext = applicationContext;
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	public static <T> T getBean(String name) {
 		checkApplicationContext();
 		return (T) applicationContext.getBean(name);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T getBean(Class<T> clazz) {
 		checkApplicationContext();
 		return (T) applicationContext.getBeansOfType(clazz);

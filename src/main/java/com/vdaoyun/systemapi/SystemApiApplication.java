@@ -16,7 +16,7 @@ import com.vdaoyun.systemapi.common.utils.EnvironmentUtil;
 
 @EnableAsync
 @SpringBootApplication
-@ServletComponentScan(basePackages = {"com.vdaoyun.systemapi"})
+@ServletComponentScan
 @EnableTransactionManagement
 public class SystemApiApplication {
 	
