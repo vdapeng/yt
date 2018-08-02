@@ -32,7 +32,6 @@ public class PondsExService extends BaseService<Ponds> {
 			ponds.setVersion(++version);
 			mapper.updateByPrimaryKeySelective(ponds);
 		}
-		
 	}
 
 }
