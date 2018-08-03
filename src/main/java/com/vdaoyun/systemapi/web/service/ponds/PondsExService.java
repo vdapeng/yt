@@ -12,6 +12,14 @@ import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 @Service
 public class PondsExService extends BaseService<Ponds> {
 	
+	/**
+	 * 
+	 * @Title: version
+	 *  
+	 * @Description: 更新version字段，更新二级缓存用
+	 *  
+	 * @param id void
+	 */
 	public void version(Long id) {
 		Ponds record;
 		if (id == null) {

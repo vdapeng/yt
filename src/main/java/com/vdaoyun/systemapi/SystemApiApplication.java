@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.vdaoyun.systemapi.common.utils.EnvironmentUtil;
+import com.vdaoyun.systemapi.configuration.EnvironmentHolder;
 
 @EnableAsync
 @SpringBootApplication
@@ -41,6 +42,9 @@ public class SystemApiApplication {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"),
             env.getActiveProfiles());
+        
+        String string = EnvironmentHolder.getProperty("spring.application.name", String.class);
+        System.out.println(string);
 	}
 	
 //	@Bean

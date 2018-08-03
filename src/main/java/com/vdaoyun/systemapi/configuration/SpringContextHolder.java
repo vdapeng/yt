@@ -3,10 +3,23 @@ package com.vdaoyun.systemapi.configuration;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
+/**
+ * 
+ * @Package com.vdaoyun.systemapi.configuration
+ *  
+ * @ClassName: SpringContextHolder
+ *  
+ * @Description: 全局ApplicationContext，用于获取Bean
+ *  
+ * @author DaPeng (fengzq@vdaoyun.com)
+ *  
+ * @date 2018年8月3日 下午3:34:46
+ *
+ */
 @SuppressWarnings("unchecked")
-@Component
+@Configuration
 public class SpringContextHolder implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;

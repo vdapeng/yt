@@ -1,4 +1,8 @@
 logging:
+#  config: classpath:logback-boot.xml
+#  pattern:
+#    file: "%d{yyyy/MM/dd-HH:mm} [%thread] %-5level %logger- %msg%n"
+#  path: log
   level:
     org.springframework.web: DEBUG
     com.github.binarywang.demo.wx.mp: DEBUG
@@ -18,7 +22,7 @@ wechat:
     
 data:
   ponds:
-    remove: true # 当塘口删除时，是否物理删除相关数据
+    remove: true  # 当塘口删除时，是否物理删除相关数据
   device: 
     remove: false # 当设备删除时，是否物理删除相关数据
 

@@ -29,7 +29,7 @@
 				AND code = #{entity.code}
 			</if>
 			<if test="entity.name != '' and entity.name != null">
-				AND name = #{entity.name}
+				AND name like CONCAT('%', #{entity.name}, '%')
 			</if>
 			<if test="entity.orderby != '' and entity.orderby != null">
 				AND orderby = #{entity.orderby}

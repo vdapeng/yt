@@ -116,6 +116,9 @@
 				<if test="entity.pondsName != '' and entity.pondsName != null">
 					AND b.name like  CONCAT('%', #{entity.pondsName}, '%')
 				</if>
+				<if test="entity.pondsId != '' and entity.pondsId != null">
+					AND a.ponds_id = #{entity.pondsId}
+				</if>
 			) a ,
 			`user` b
 		WHERE

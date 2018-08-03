@@ -1,9 +1,12 @@
 package com.vdaoyun.systemapi.common.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -12,16 +15,36 @@ import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.vdaoyun.systemapi.configuration.SpringContextHolder;
 
+import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.WxMpMassOpenIdsMessage;
+
+/**
+ * 
+ * @Package com.vdaoyun.systemapi.common.utils
+ *  
+ * @ClassName: SmsUtils
+ *  
+ * @Description: 阿里云短信通知工具类
+ *  
+ * @author DaPeng (fengzq@vdaoyun.com)
+ *  
+ * @date 2018年8月3日 下午2:37:03
+ *
+ */
 public class SmsUtils {
 	
 	private static final String defaultConnectTimeout = "10000";
 	private static final String defaultReadTimeout = "10000";
 	
-	private static final String accessKeyId = "";
-	private static final String accessKeySecret = "";
+	private static final String accessKeyId = "LTAID7tAbKcq6f2t";
+	private static final String accessKeySecret = "l2WYEcxdr7owSAdA4JeMGbVBddzrky";
 	
 	private static final String product = "Dysmsapi";
 	private static final String domain = "dysmsapi.aliyuncs.com";
@@ -29,8 +52,21 @@ public class SmsUtils {
 	private static final String signName = "";
 	private static final String templateCode = "";
 	
-	public static SendSmsResponse sendAlarmNoti(String phoneNumber, String templateParam) throws ClientException {
-		if (StringUtils.isEmpty(phoneNumber)) {
+	// 短信发送成功CODE编码
+	private static final String send_success_code = "OK";
+	// 短信发送异常 微信推送给管理员
+	private static final String[] toUsers = new String[] {"oDJHb0Ws7H4hN7NRhIz13DQCg3IM"};
+	
+	private static final Logger log = LoggerFactory.getLogger(SmsUtils.class);
+	
+	public static SendSmsResponse sendAlarmNoti(String phoneNumber, String templateParam) {
+		if (StringUtils.isEmpty(phoneNumber) || !ValidationUtils.isMobile(phoneNumber)) {
+			log.debug("\n=============================\n\t"
+					+ "TITLE: \t{}\n\t"
+					+ "MESSAGE: \t{}\n\t"
+					+ "PHONE: \t{}\n"
+					+ "=============================", "短信发送失败", "手机号码无效", phoneNumber);
+			
 			return null;
 		}
 		return SmsUtils.sendSms(phoneNumber, templateParam, signName, templateCode);
@@ -48,7 +84,7 @@ public class SmsUtils {
 	* @return SendSmsResponse    返回类型 
 	* @throws
 	 */
-	private static SendSmsResponse sendSms(String phoneNumber, String templateParam, String signName, String templateCode) throws ClientException {
+	private static SendSmsResponse sendSms(String phoneNumber, String templateParam, String signName, String templateCode) {
 		if (StringUtils.isEmpty(signName)) {
 			signName = SmsUtils.signName;
 		}
@@ -61,7 +97,11 @@ public class SmsUtils {
 
         //初始化acsClient,暂不支持region化
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
-        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+        try {
+			DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+		} catch (ClientException e1) {
+			e1.printStackTrace();
+		}
         IAcsClient acsClient = new DefaultAcsClient(profile);
 
         //组装请求对象-具体描述见控制台-文档部分内容
@@ -79,10 +119,36 @@ public class SmsUtils {
         //request.setSmsUpExtendCode("90997");
 
         //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
-        request.setOutId("yourOutId");
+//        request.setOutId("yourOutId");
 
         //hint 此处可能会抛出异常，注意catch
-        SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
+        SendSmsResponse sendSmsResponse = null;
+		try {
+			sendSmsResponse = acsClient.getAcsResponse(request);
+		} catch (ServerException e1) {
+			e1.printStackTrace();
+		} catch (ClientException e1) {
+			e1.printStackTrace();
+		}
+		
+		// 短信发送失败
+        if (sendSmsResponse == null || sendSmsResponse.getCode() == null || !sendSmsResponse.getCode().equalsIgnoreCase(send_success_code)) {
+        	
+        	WxMpService wxMpService = SpringContextHolder.getBean("wxMpService");
+        	WxMpMassOpenIdsMessage message = new WxMpMassOpenIdsMessage();
+        	message.setToUsers(Arrays.asList(toUsers));
+        	message.setMsgType(WxConsts.MassMsgType.TEXT);
+        	message.setContent("阿里云短信服务异常：" + sendSmsResponse.getMessage());
+        	try {
+				wxMpService.getMassMessageService().massOpenIdsMessageSend(message);
+			} catch (WxErrorException e) {
+				log.error("\n================================\n\t"
+						+ "TITLE: \t{}\n\t"
+						+ "TOUSER: \t{}\n\t"
+						+ "MESSAGE: \t{}\n\t"
+						+ "================================", "短信发送失败", phoneNumber , e.getMessage());
+			}
+		}
         return sendSmsResponse;
 	}
 	
