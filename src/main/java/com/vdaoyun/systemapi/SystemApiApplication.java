@@ -12,9 +12,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.vdaoyun.systemapi.common.utils.EnvironmentUtil;
-import com.vdaoyun.systemapi.configuration.EnvironmentHolder;
-
 @EnableAsync
 @SpringBootApplication
 @ServletComponentScan
@@ -25,7 +22,6 @@ public class SystemApiApplication {
 
 	public static void main(String[] args) throws UnknownHostException {
 		Environment env = SpringApplication.run(SystemApiApplication.class, args).getEnvironment();
-		EnvironmentUtil.addEnvironment(env);
 		String protocol = "http";
         if (env.getProperty("server.ssl.key-store") != null) {
             protocol = "https";
@@ -42,9 +38,6 @@ public class SystemApiApplication {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"),
             env.getActiveProfiles());
-        
-        String string = EnvironmentHolder.getProperty("spring.application.name", String.class);
-        System.out.println(string);
 	}
 	
 //	@Bean

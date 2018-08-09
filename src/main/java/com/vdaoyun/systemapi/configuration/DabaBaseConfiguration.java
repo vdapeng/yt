@@ -34,8 +34,8 @@ public class DabaBaseConfiguration implements EnvironmentAware {
         datasource.setDriverClassName("com.mysql.jdbc.Driver");
         datasource.setUsername(propertyResolver.getProperty("username"));
         datasource.setPassword(propertyResolver.getProperty("password"));
-        datasource.setMaxPoolPreparedStatementPerConnectionSize(10);
-        datasource.setMaxActive(10);
+//        datasource.setMaxPoolPreparedStatementPerConnectionSize(10);
+        datasource.setMaxActive(20);
 //        datasource.setInitialSize(Integer.valueOf(propertyResolver.getProperty("initialSize")));
 //        datasource.setMinIdle(Integer.valueOf(propertyResolver.getProperty("minIdle")));
 //        datasource.setMaxWait(Long.valueOf(propertyResolver.getProperty("maxWait")));

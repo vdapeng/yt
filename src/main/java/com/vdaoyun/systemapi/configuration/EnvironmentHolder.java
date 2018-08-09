@@ -21,7 +21,7 @@ import org.springframework.core.env.Environment;
 public class EnvironmentHolder implements EnvironmentAware {
 	
 	private static Environment environment;
-	
+		
 	// 默认值
 	private static final String defaultValue = "";
 

@@ -437,7 +437,10 @@
 			WHERE id = #{entity.pondsId}
 		</if>
 		) a,
-		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0
+		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0 
+		<if test="orderByClause != null and orderByClause != ''">
+			ORDER BY ${orderByClause}
+		</if>
 	</select>
 	<!-- 用于管理后台报警查询分页 -->
 	<select id="pageInfoAlarmListForAdmin" parameterType="java.util.Map" resultType="java.util.Map">

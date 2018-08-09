@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.common.base.Predicate;
-import com.vdaoyun.systemapi.common.utils.EnvironmentUtil;
 
 import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -44,9 +43,15 @@ public class SwaggerConfiguration {
                 .build();
     }
     
+    private static final String DEV = "dev";
+    
     private Predicate<RequestHandler> basePackage(String str) {
+    	// 	扫描所有有注解的api
+    	//  RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class);
+    	
     	Predicate<RequestHandler> basePackage = RequestHandlerSelectors.none();
-    	if (profile.equalsIgnoreCase(EnvironmentUtil.DEV)) {
+    	// 当前为开发模式时，生成swagger接口测试页面
+    	if (profile.equalsIgnoreCase(DEV)) {
     		basePackage = RequestHandlerSelectors.basePackage(str);
 		}
     	return basePackage;

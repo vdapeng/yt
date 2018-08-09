@@ -21,7 +21,7 @@ public class CountController {
 	private CountService countService;
 
 	@GetMapping("")
-	@ApiOperation(hidden = true, value = "")
+	@ApiOperation(hidden = true, value = "B_管理后台_首页_____统计")
 	public AjaxJson countNum() throws Exception {
 		return AjaxJsonUtils.ajaxJson(countService.count());
 	}

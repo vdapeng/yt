@@ -13,7 +13,7 @@ import com.aliyun.openservices.ons.api.SendResult;
  *  
  * @ClassName: MQSendCallback
  *  
- * @Description: 发送回调
+ * @Description: MQ发送回调
  *  
  * @author DaPeng (fengzq@vdaoyun.com)
  *  

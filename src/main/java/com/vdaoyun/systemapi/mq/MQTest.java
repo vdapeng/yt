@@ -20,6 +20,19 @@ import com.vdaoyun.systemapi.mq.model.MQDeviceRecordModel;
 import com.vdaoyun.systemapi.mq.model.MQDeviceWarnModel;
 import com.vdaoyun.systemapi.mq.model.MQSensorRecordModel;
 
+/**
+ * 
+ * @Package com.vdaoyun.systemapi.mq
+ *  
+ * @ClassName: MQTest
+ *  
+ * @Description: MQ测试类，通过定时器，定时发送MQ消息
+ *  
+ * @author DaPeng (fengzq@vdaoyun.com)
+ *  
+ * @date 2018年8月3日 下午4:33:43
+ *
+ */
 @Service
 public class MQTest {
 

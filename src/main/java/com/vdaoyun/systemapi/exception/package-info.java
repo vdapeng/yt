@@ -8,7 +8,7 @@
 */
 /** 
 * @ClassName: package-info 
-* @Description: TODO(这里用一句话描述这个类的作用) 
+* @Description: 自定义异常定义以及处理
 * @author DaPeng (fengzq@vdaoyun.com) 
 * @date 2018年7月6日 下午3:46:59 
 *  

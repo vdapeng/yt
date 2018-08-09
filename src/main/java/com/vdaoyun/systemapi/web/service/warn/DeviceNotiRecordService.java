@@ -134,26 +134,29 @@ public class DeviceNotiRecordService extends BaseService<DeviceNotiRecord> {
 		templateMessage.addData(new WxMpTemplateData("keyword2", DateFormatUtils.format(deviceWarnRecord.getPostTime(), "yyyy-MM-dd HH:mm:ss"), ""));
 		templateMessage.addData(new WxMpTemplateData("keyword3", sensor.getName(), ""));
 		templateMessage.addData(new WxMpTemplateData("remark", "请及时处理！", ""));
+		String msgid = "";
 		try {
-			String msgid = wxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
+			msgid = wxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
 			
 			log.info( "\n=============SUCCESS===============\n\t"
 					+ "msgId: {}\n"
 					+ "===============END=================", msgid);
-			DeviceNotiRecord record2 = new DeviceNotiRecord();
-			record2.setId(id);
-			record2.setIsWxNoti(YesOrNo.YES.toString());
-			record2.setMsgId(msgid);
-			mapper.updateByPrimaryKeySelective(record2);
-			
-			deviceWarnRecordService.version(record.getDeviceWarnRecordId(), deviceWarnRecord.getVersion());
 			
 		} catch (WxErrorException e) {
 			log.error( "\n=============ERROR===============\n\t"
 					+ "msg: {}\n"
 					+ "==============END================", e.getMessage());
-			throw new ParamException("微信消息发送失败，错误消息：" + e.getMessage());
+//			throw new ParamException("微信消息发送失败，错误消息：" + e.getMessage());
 		}
+		if (StringUtils.isNotEmpty(msgid)) {
+			DeviceNotiRecord record2 = new DeviceNotiRecord();
+			record2.setId(id);
+			record2.setIsWxNoti(YesOrNo.YES.toString());
+			record2.setMsgId(msgid);
+			mapper.updateByPrimaryKeySelective(record2);
+			deviceWarnRecordService.version(record.getDeviceWarnRecordId(), deviceWarnRecord.getVersion());
+		}
+		
 	}
 
 	@Autowired
@@ -232,7 +235,7 @@ public class DeviceNotiRecordService extends BaseService<DeviceNotiRecord> {
 			mapper.insertSelective(record); // 新增报警通知记录
 			
 			MiniProgram miniProgram = new MiniProgram();
-			miniProgram.setPagePath("pages/monitor/detail/detail?pondsId=" + ponds.getId() + "&pondsName=" + ponds.getName() + "&terminalId=" + terminalId);
+			miniProgram.setPagePath("pages/monitor/templateMsgDetail/templateMsgDetail?pondsId=" + ponds.getId() + "&pondsName=" + ponds.getName() + "&terminalId=" + terminalId);
 			miniProgram.setAppid(wxMaService.getWxMaConfig().getAppid());
 			WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder()
 					.toUser(wxUser.getOpenid())
@@ -245,23 +248,25 @@ public class DeviceNotiRecordService extends BaseService<DeviceNotiRecord> {
 			templateMessage.addData(new WxMpTemplateData("keyword2", DateFormatUtils.format(now, "yyyy-MM-dd HH:mm:ss"), ""));
 			templateMessage.addData(new WxMpTemplateData("keyword3", sensor.getName(), ""));
 			templateMessage.addData(new WxMpTemplateData("remark", "请及时处理！", ""));
+			String msgid = "";
 			try {
-				String msgid = wxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
+				msgid = wxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
 				log.info( "\n=============SUCCESS===============\n\t"
 						+ "msgId: {}\n"
 						+ "===============END=================", msgid);
-				DeviceNotiRecord record2 = new DeviceNotiRecord();
-				record2.setId(record.getId());
-				record2.setIsWxNoti(YesOrNo.YES.toString());
-				record2.setMsgId(msgid);
-				mapper.updateByPrimaryKeySelective(record2);
 			} catch (WxErrorException e) {
 				log.error( "\n=============ERROR===============\n\t"
 						+ "msg: {}\n"
 						+ "==============END================", e.getMessage());
 			}
+			if (StringUtils.isNotEmpty(msgid)) {
+				DeviceNotiRecord record2 = new DeviceNotiRecord();
+				record2.setId(record.getId());
+				record2.setIsWxNoti(YesOrNo.YES.toString());
+				record2.setMsgId(msgid);
+				mapper.updateByPrimaryKeySelective(record2);
+			}
 		}
-		
 		// 通过websocket给管理后台发送消息
 		wsHandler.sendAll("有新报警:" + device.getName() + "__" + entity.getAlaramBusiness());
 		
