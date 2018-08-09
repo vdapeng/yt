@@ -29,7 +29,6 @@ import com.vdaoyun.util.StringTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -43,8 +42,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * 
  * @date 2017-7-17 10:34:23
  */
-@ApiIgnore
-@Api(tags = { "参数信息相关接口" }, hidden = true)
+@Api(tags = { "参数信息相关接口" })
 @RestController
 @RequestMapping(value = "/sys/param")
 public class ParamController {
@@ -54,7 +52,7 @@ public class ParamController {
 	@Autowired
 	protected ParamService paramService;
 
-	@ApiOperation("查询列表")
+	@ApiOperation(value = "查询列表", hidden = true)
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public AjaxJson select(
 			@RequestParam(defaultValue = "1") @ApiParam(value = "页码", required = true, defaultValue = "1") Integer pageNum,
@@ -71,7 +69,7 @@ public class ParamController {
 		return j;
 	}
 
-	@ApiOperation("新增")
+	@ApiOperation(value = "新增", hidden = true)
 	@RequestMapping(method = RequestMethod.POST)
 	public AjaxJson insert(@RequestBody @ApiParam(value = "参数信息", required = true) @Valid Param param, Errors errors)
 			throws Exception {
@@ -92,7 +90,7 @@ public class ParamController {
 		return j;
 	}
 
-	@ApiOperation("更新")
+	@ApiOperation(value = "更新", hidden = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(@PathVariable @ApiParam(value = "参数编号", required = true) Integer id,
 			@RequestBody @ApiParam(value = "参数信息", required = true) @Valid Param param, Errors errors)
@@ -109,7 +107,7 @@ public class ParamController {
 		return j;
 	}
 
-	@ApiOperation("删除")
+	@ApiOperation(value = "删除", hidden = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public AjaxJson delete(@PathVariable @ApiParam(value = "参数编号", required = true) Integer id) throws Exception {
 		AjaxJson j = new AjaxJson();
@@ -127,17 +125,18 @@ public class ParamController {
 		return j;
 	}
 
-	@ApiOperation("验证唯一性")
+	@ApiOperation(value = "验证唯一性", hidden = true)
 	@RequestMapping(value = "/verifyOnly", method = RequestMethod.GET)
 	public boolean verifyOnly(@RequestParam @ApiParam(value = "参数值", required = true) String value,
 			@RequestParam(required = false) @ApiParam(value = "参数编号", required = false) Integer id) throws Exception {
 		return paramService.selectByName(value, id) != null;
 	}
 
-	@ApiOperation("根据参数名称查询")
+	@ApiOperation(value = "通过参数名称，获取参数值", tags = {"A小程序_____全局_系统参数_通过参数名称，获取参数值"})
 	@RequestMapping(value = "/name", method = RequestMethod.GET)
-	public AjaxJson selectByName(@RequestParam @ApiParam(value = "参数名称", required = true) String name)
-			throws Exception {
+	public AjaxJson selectByName(
+			@RequestParam(defaultValue = "小程序首页数据间隔", value = "name", required = false) @ApiParam(value = "参数名称", required = false, defaultValue = "小程序首页数据间隔") String name
+	) throws Exception {
 		AjaxJson j = new AjaxJson();
 		j.setData(paramService.selectByName(name, null));
 		return j;

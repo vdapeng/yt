@@ -78,6 +78,27 @@ public class SwaggerConfiguration {
                 .build();
     }
     
+    @Bean
+    public Docket sysApi() {
+    	return new Docket(DocumentationType.SWAGGER_2)
+    			.groupName("sysApi")
+                .apiInfo(sysApiInfo())
+                .select()
+                .apis(basePackage("com.vdaoyun.systemapi.web.base.param.controller"))
+                .paths(PathSelectors.any())
+                .build();
+    }
+    
+    private ApiInfo sysApiInfo() {
+    	return new ApiInfoBuilder()
+                .title("微道云RESTful APIs测试")
+                .description("在这里可以欢快的测试你写的优秀(lese)代码了")
+                .termsOfServiceUrl("")
+                .contact("大鹏")
+                .version("1.0")
+                .build();
+    }
+    
 
 
 }

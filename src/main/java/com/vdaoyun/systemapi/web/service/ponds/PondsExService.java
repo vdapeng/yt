@@ -36,7 +36,7 @@ public class PondsExService extends BaseService<Ponds> {
 		if (record != null) {
 			Long version = record.getVersion();
 			Ponds ponds = new Ponds();
-			ponds.setId(id);
+			ponds.setId(record.getId());
 			ponds.setVersion(++version);
 			mapper.updateByPrimaryKeySelective(ponds);
 		}
