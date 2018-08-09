@@ -30,6 +30,7 @@ import com.vdaoyun.systemapi.web.model.echart.WLegend;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
 import com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecordJson;
+import com.vdaoyun.systemapi.web.service.ponds.PondsExService;
 import com.vdaoyun.util.DateUtil;
 
 import tk.mybatis.mapper.entity.Example;
@@ -248,6 +249,10 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		return option;
 	}
 	
+	
+	@Autowired
+	private PondsExService pondsExService;
+	
 	@Async
 	public void insertRecord(MQSensorRecordModel data) {
 		String terminalId = data.getTerminalID();				// 设备编号
@@ -266,6 +271,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			sensorRecordJsons.add(sensorRecordJson);
 		}
 		batchInsert(sensorRecordJsons);
+		pondsExService.version(null);
 	}
 	
 	public PageInfo<SensorRecordJson> selectPageInfo(

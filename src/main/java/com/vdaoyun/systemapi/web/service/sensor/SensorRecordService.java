@@ -145,7 +145,7 @@ public class SensorRecordService extends BaseService<SensorRecord> {
 	@Async
 	public void insertRecord(MQSensorRecordModel data) {
 		String terminalId = data.getTerminalID();				// 设备编号
-		Date postTime = new Date();		 				// 上传时间
+		Date postTime = new Date();		 						// 上传时间
 		Integer SampeFrequency = data.getSampeFrequency();		// 数据采集频率
 		Set<String> keys = data.getData().get(0).keySet();		// 数据所有key
 		List<HashMap<String, Object>> list = data.getData();	// 采集到的数据列表
