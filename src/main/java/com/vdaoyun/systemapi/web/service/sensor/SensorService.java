@@ -66,10 +66,11 @@ public class SensorService extends BaseService<Sensor> {
 		criteria.andEqualTo("terminalId", terminalId);
 		// 将该设备下所有探测器状态设置为非报警状态
 		mapper.updateByExampleSelective(new Sensor(YesOrNo.NO.toString()), example);
-		criteria.andIn("code", Arrays.asList(codes));
-		// 将该设备下报警的探测器状态设置为报警状态
-		mapper.updateByExampleSelective(new Sensor(YesOrNo.YES.toString()), example);
-		
+		if (codes == null || codes.length < 1) {
+			criteria.andIn("code", Arrays.asList(codes));
+			// 将该设备下报警的探测器状态设置为报警状态
+			mapper.updateByExampleSelective(new Sensor(YesOrNo.YES.toString()), example);
+		}
 	}
 	
 //	@Override
@@ -202,6 +203,7 @@ public class SensorService extends BaseService<Sensor> {
 			criteria.andIn("code", delSensorCodes);
 			mapper.deleteByExample(example);
 		}
+		pondsExService.version(pondsId);
 //		mapper.delete(new Sensor(terminalId, pondsId));
 		if (sensors.size() < 1) {
 			return;
@@ -213,7 +215,6 @@ public class SensorService extends BaseService<Sensor> {
 //			}
 //		}
 		mapper.insertList(sensors);
-		pondsExService.version(pondsId);
 	}
 	
 	// 判断塘口是否绑定探测器

@@ -135,7 +135,7 @@
 		WHERE a.ponds_id = #{pondsId}
 	</select>
 	
-	<select id="selectListByPondsIdForJson" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="selectListByPondsIdForJson" parameterType="java.util.Map" resultType="java.util.Map" >
 		SELECT DISTINCT
 			a.*, IF(b.ponds_id > 0,'y', 'n') isEnable
 		FROM

@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,7 +86,7 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(value = "搜索所有鱼塘列表", hidden = true)
+	@ApiOperation(value = "搜索所有鱼塘列表", tags = {"B_管理后台_____塘口列表默认查询"}, hidden = true)
 	@RequestMapping(value = "all", method = RequestMethod.GET)
 	public AjaxJson selectAll() throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -155,6 +156,10 @@ public class PondsController {
 	public AjaxJson delete(
 		@PathVariable(value = "id") Long id
 	) throws Exception {
+		Ponds ponds = service.selectByPrimaryKey(id);
+		if (ponds == null) {
+			throw new ParamException("未找到相关塘口");
+		}
 		if (sensorService.isBindSensor(id)) {
 			throw new ParamException("该塘口已绑定探测器，请先解绑该塘口所有探测器");
 		}
@@ -166,6 +171,16 @@ public class PondsController {
 		ajaxJson.setMsg(result ? "删除成功" : "删除失败");
 		ajaxJson.setSuccess(result);
 		return ajaxJson;
+	}
+	
+	@ApiOperation(value = "", hidden = true, tags = {"B_后台管理_____首页_塘口是否首页显示"})
+	@PutMapping("/{id}/home")
+	public AjaxJson isHome(@PathVariable(value = "id") Long id) throws Exception {
+		Ponds ponds = service.selectByPrimaryKey(id);
+		if (ponds == null) {
+			throw new ParamException("未找到相关塘口");
+		}
+		return AjaxJsonUtils.ajaxJson(null);
 	}
 
 }

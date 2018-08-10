@@ -10,6 +10,19 @@ import com.vdaoyun.systemapi.web.service.ponds.PondsService;
 import com.vdaoyun.systemapi.web.service.user.UserService;
 import com.vdaoyun.systemapi.web.service.warn.DeviceWarnRecordService;
 
+/**
+ * 
+ * @Package com.vdaoyun.systemapi.web.service.count
+ *  
+ * @ClassName: CountService
+ *  
+ * @Description: 数据相关统计
+ *  
+ * @author DaPeng (fengzq@vdaoyun.com)
+ *  
+ * @date 2018年8月10日 下午2:42:20
+ *
+ */
 @Service
 public class CountService {
 	
@@ -20,6 +33,14 @@ public class CountService {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * 
+	 * @Title: 数量统计
+	 *  
+	 * @Description: 统计平台下，用户数量，塘口数量，报警条数和未审核用户数量
+	 *  
+	 * @return HashMap<String,Object>	统计集合
+	 */
 	public HashMap<String, Object> count() {
 		HashMap<String, Object> result = new HashMap<>();
 		result.put("userNum", userService.count(null));

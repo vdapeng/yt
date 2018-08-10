@@ -38,7 +38,7 @@ public class PondsService extends BaseService<Ponds> {
 	 */
 	public void setNullByTer(String terminalId) {
 		Ponds record = new Ponds();
-		record.setTerminalId(null);
+		record.setTerminalId("000000");
 		Example example = new Example(Ponds.class);
 		example.createCriteria().andEqualTo("terminalId", terminalId);
 		mapper.updateByExampleSelective(record, example);
@@ -74,8 +74,10 @@ public class PondsService extends BaseService<Ponds> {
 	}
 	
 	public List<Ponds> selectAll() {
+		Ponds ponds = new Ponds();
+		ponds.setIsDel(YesOrNo.NO.toString());
 		PageHelper.startPage(1, 10);
-		return mapper.selectAll();
+		return mapper.select(ponds);
 	}
 	
 	@Autowired
@@ -134,7 +136,6 @@ public class PondsService extends BaseService<Ponds> {
 		return rootMapper.selectInfoEx(id);
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	public PageInfo<HashMap<String, Object>> selectListJsonData(Ponds entity, Integer wdy_pageNum, Integer wdy_pageSize,
 			String wdy_pageOrder, String wdy_pageSort) {
@@ -153,6 +154,15 @@ public class PondsService extends BaseService<Ponds> {
 		return new PageInfo<>(list);
 	}
 	
+	/**
+	 * 
+	 * @Title: 查询塘口信息
+	 *  
+	 * @Description: 查询塘口信息并查询出塘口下所有传感器最新一条运行数据
+	 *  
+	 * @param id	塘口编号
+	 * @return HashMap<String,Object>
+	 */
 	@SuppressWarnings("unchecked")
 	public HashMap<String, Object> selectInfoJsonData(Long id) {
 		HashMap<String, Object> hashMap = rootMapper.selectInfoJsonData(id);
@@ -163,6 +173,15 @@ public class PondsService extends BaseService<Ponds> {
 		return hashMap;
 	}
 	
+	/**
+	 * 
+	 * @Title: 搜索塘口
+	 *  
+	 * @Description: 通过关键字搜索塘口信息
+	 *  
+	 * @param search		搜索关键字，可匹配名称和地址
+	 * @return List<Ponds>	塘口列表信息
+	 */
 	public List<Ponds> search(String search) {
 		Example example = new Example(Ponds.class);
 		example.createCriteria().andLike("name", search + "%").andEqualTo("isDel", "n");
@@ -170,12 +189,29 @@ public class PondsService extends BaseService<Ponds> {
 		return mapper.selectByExample(example);
 	}
 	
+	/**
+	 * 
+	 * @Title: 统计未删除的塘口数量
+	 *  
+	 * @Description: 统计未删除的塘口数量
+	 *  
+	 * @return 塘口数量
+	 */
 	public int count() {
 		Ponds ponds = new Ponds();
 		ponds.setIsDel(YesOrNo.NO.toString());
 		return mapper.selectCount(ponds);
 	}
 	
+	/**
+	 * 
+	 * @Title: 查询指定设备所绑定的塘口列表
+	 *  
+	 * @Description: 通过设备编号查询塘口列表
+	 *  
+	 * @param terminalId	设备编号
+	 * @return List<Ponds>	塘口列表
+	 */
 	public List<Ponds> selectListByTerminalId(String terminalId) {
 		Ponds ponds = new Ponds();
 		ponds.setTerminalId(terminalId);
@@ -186,6 +222,16 @@ public class PondsService extends BaseService<Ponds> {
 	@Autowired
 	private SensorService sensorService;
 	
+	/**
+	 * 
+	 * @Title: 查询塘口信息
+	 *  
+	 * @Description: 通过设备编号和传感器编号查询塘口信息
+	 *  
+	 * @param terminalId		设备编号
+	 * @param code				传感器编号
+	 * @return Ponds			塘口信息
+	 */
 	public Ponds selectInfoByCodeAndTerminalId(String terminalId, String code) {
 		Sensor sensor = sensorService.selectInfoByCodeAndTerminalId(terminalId, code);
 		if (sensor == null) {
@@ -193,4 +239,21 @@ public class PondsService extends BaseService<Ponds> {
 		}
 		return mapper.selectByPrimaryKey(sensor.getPondsId());
 	}
+	
+	/**
+	 * 
+	 * @Title: 是否首页显示
+	 *  
+	 * @Description: 通过塘口编号更新塘口是否首页显示状态
+	 *  
+	 * @param id			塘口编号
+	 * @param isHome 		当前状态；为y时，更改为n，非y时，更改为y
+	 */
+	public void isHome(Long id, String isHome) {
+		Ponds ponds = new Ponds();
+		ponds.setId(id);
+		ponds.setIsHome(isHome.equalsIgnoreCase(YesOrNo.YES.toString()) ? YesOrNo.NO.toString() : YesOrNo.YES.toString());
+		mapper.updateByPrimaryKey(ponds);
+	}
+	
 }

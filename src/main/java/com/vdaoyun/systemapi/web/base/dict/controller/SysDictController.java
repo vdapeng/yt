@@ -20,6 +20,7 @@ import com.vdaoyun.common.api.enums.IConstant;
 import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.base.dict.model.SysDict;
 import com.vdaoyun.systemapi.web.base.dict.service.SysDictService;
+import com.vdaoyun.systemapi.web.service.sensor.SensorExService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,6 +50,9 @@ public class SysDictController {
 	@Autowired
 	protected SysDictService sysDictService;
 
+	@Autowired
+	private SensorExService sensorExService;
+	
 	@ApiOperation("查询列表")
 	@RequestMapping(method = RequestMethod.GET)
 	public AjaxJson select(@RequestParam @ApiParam(value = "所属分组编号", required = true) Integer groupId)
@@ -97,6 +101,7 @@ public class SysDictController {
 		} else {
 			j.setMsg("新增失败");
 		}
+		sensorExService.version(null);
 		return j;
 	}
 
@@ -115,6 +120,7 @@ public class SysDictController {
 		sysDictService.update(sysDict);
 		j.setMsg("更新成功");
 		log.info("sys_dict表更新数据，dictId：" + id);
+		sensorExService.version(null);
 		return j;
 	}
 
@@ -130,6 +136,7 @@ public class SysDictController {
 			j.setMsg("删除成功");
 			log.info("sys_dict表删除数据，dictId：" + id);
 		}
+		sensorExService.version(null);
 		return j;
 	}
 
@@ -145,6 +152,7 @@ public class SysDictController {
 		sysDictService.changeDict(id);
 		j.setMsg("切换成功");
 		log.info("sys_dict表更新数据，dictId：" + id);
+		sensorExService.version(null);
 		return j;
 	}
 

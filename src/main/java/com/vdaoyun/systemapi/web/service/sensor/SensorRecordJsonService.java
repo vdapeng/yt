@@ -152,6 +152,15 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		option.xAxis().add(xAxis);
 		option.grid().bottom(70);
 		option.grid().top(30);
+		
+//		WBackgroundColor backgroundColor = new WBackgroundColor();
+//		
+//		backgroundColor.getColorStops().add(new ColorStop(0.0, "red"));
+//		backgroundColor.getColorStops().add(new ColorStop(1.0, "blud"));
+//		HashMap<String, Object> cHashMap = new HashMap<>();
+//		backgroundColor.setGlobalCoord(true);
+//		cHashMap.put("color", backgroundColor);
+//		option.backgroundColor(cHashMap);
 		return option;
 	}
 	
@@ -246,6 +255,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		}
 		option.xAxis().add(xAxis);
 		option.grid().bottom(80);
+//		option.backgroundColor("rgb(128, 128, 128)");
 		return option;
 	}
 	
@@ -264,7 +274,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		for (int i = 0; i < list.size(); i++) {
 			item = list.get(i);
 			SensorRecordJson sensorRecordJson = new SensorRecordJson();
-			sensorRecordJson.setDataTime(DateUtil.subtractDate(postTime, SampeFrequency/60 * (list.size() - 1 - i)));	// 计算数据生产时间
+			sensorRecordJson.setDataTime(DateUtil.subtractDate(postTime, SampeFrequency / 60 * (list.size() - 1 - i)));	// 计算数据生产时间
 			sensorRecordJson.setPostTime(postTime);
 			sensorRecordJson.setTerminalId(terminalId);
 			sensorRecordJson.setDataJson(JSON.toJSONString(item));

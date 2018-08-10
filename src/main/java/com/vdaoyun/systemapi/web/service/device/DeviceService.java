@@ -43,25 +43,26 @@ public class DeviceService extends BaseService<Device> {
 	@Autowired
 	private DeviceWarnRecordService deviceWarnRecordService;
 
+	// 是否物理删除设备数据，默认false
 	@Value("${data.device.remove}")
 	private Boolean ISDELDATA = false;
 	
 	@Override
 	public int delete(Object key) {
-		if (ISDELDATA) {
+		if (ISDELDATA) {// 物理删除
 			Device device = mapper.selectByPrimaryKey(key);
 			if (device == null) {
 				return 0;
 			}
 			String terminalId = device.getTerminalId();
-			sensorRecordService.removeByTer(terminalId);
-			sensorRecordJsonService.removeByTer(terminalId);
-			deviceRecordService.removeByTer(terminalId);
-			sensorService.removeByTer(terminalId);
-			deviceNotiRecordService.removeByTer(terminalId);
-			deviceWarnRecordService.removeByTer(terminalId);
-			pondsService.setNullByTer(terminalId);
-			return mapper.deleteByPrimaryKey(key);
+			sensorRecordService.removeByTer(terminalId);			// 删除设备传感器运行数据
+			sensorRecordJsonService.removeByTer(terminalId);		// 删除设备运行数据
+			deviceRecordService.removeByTer(terminalId);			// 删除设备运行数据
+			sensorService.removeByTer(terminalId);					// 删除设备所有传感器
+			deviceNotiRecordService.removeByTer(terminalId);		// 删除设备所有报警通知记录
+			deviceWarnRecordService.removeByTer(terminalId);		// 删除设备所有报警记录
+			pondsService.setNullByTer(terminalId);					// 将绑定该设备的所有塘口设备编号置000000
+			return mapper.deleteByPrimaryKey(key);					// 删除设备
 		}
 		Device entity = new Device();
 		entity.setTerminalId((String) key);

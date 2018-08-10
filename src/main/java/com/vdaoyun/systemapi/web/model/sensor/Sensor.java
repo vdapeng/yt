@@ -41,6 +41,16 @@ public class Sensor implements Serializable {
 		this.terminalId = terminalId;
 		this.pondsId = pondsId;
 	}
+	
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	private Long version;
 
 	/**
 	 * 

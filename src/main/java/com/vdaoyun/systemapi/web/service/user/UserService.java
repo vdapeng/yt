@@ -20,6 +20,19 @@ import com.vdaoyun.systemapi.web.model.user.User;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import tk.mybatis.mapper.entity.Example;
 
+/**
+ * 
+ * @Package com.vdaoyun.systemapi.web.service.user
+ *  
+ * @ClassName: UserService
+ *  
+ * @Description: 小程序用户相关业务层
+ *  
+ * @author DaPeng (fengzq@vdaoyun.com)
+ *  
+ * @date 2018年8月10日 下午2:53:31
+ *
+ */
 @Service
 @Transactional
 public class UserService extends BaseService<User> {
@@ -40,7 +53,7 @@ public class UserService extends BaseService<User> {
 		return mapper.updateByPrimaryKeySelective(entity) > 0;
 	}
 
-	
+	// 禁用
 	public boolean disEnable(Long id) {
 		User entity = new User();
 		entity.setId(id);
@@ -54,6 +67,15 @@ public class UserService extends BaseService<User> {
 		return super.insert(entity);
 	}
 	
+	/**
+	 * 
+	 * @Title: selectInfoByOpenid
+	 *  
+	 * @Description: 通过openid查询用户信息
+	 *  
+	 * @param openid
+	 * @return User
+	 */
 	public User selectInfoByOpenid(String openid) {
 		User record = new User();
 		record.setOpenid(openid);

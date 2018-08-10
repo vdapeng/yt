@@ -2,6 +2,7 @@ package com.vdaoyun.systemapi.mq;
 
 import java.time.LocalDateTime;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.vdaoyun.systemapi.web.model.warn.DeviceWarnRecord;
 import com.vdaoyun.systemapi.web.service.device.DeviceRecordService;
 import com.vdaoyun.systemapi.web.service.sensor.SensorRecordJsonService;
 import com.vdaoyun.systemapi.web.service.sensor.SensorRecordService;
+import com.vdaoyun.systemapi.web.service.sensor.SensorService;
 import com.vdaoyun.systemapi.web.service.warn.DeviceNotiRecordService;
 import com.vdaoyun.systemapi.web.service.warn.DeviceWarnRecordService;
 
@@ -51,11 +53,13 @@ public class MQMessageListener implements MessageListener {
 	private SensorRecordJsonService sensorRecordJsonService;
 	@Autowired
 	private DeviceNotiRecordService deviceNotiRecordService;
+	@Autowired
+	private SensorService sensorService;
 
 	@Override
 	public Action consume(Message message, ConsumeContext context) {
 		String secondTopic = message.getUserProperties("mqttSecondTopic");
-		byte[] body = message.getBody();
+		byte[] body = message.getBody(); // 获取mq数据
 		String bodyJson = JSON.toJSONString(JSONObject.parse(body, Feature.AllowArbitraryCommas));
 		log.debug("\n=====================================\n\t"
 				+ "SECONDTOPIC: \t{}\n\t"
@@ -63,20 +67,30 @@ public class MQMessageListener implements MessageListener {
 				+ "DATETIME:\t{}\n"
 				+ "=====================================", 
 				secondTopic, bodyJson, LocalDateTime.now());
-		if (secondTopic.contains("BusinessData")) {
+		if (secondTopic.contains("BusinessData")) { 																// 接收到业务数据
 			MQSensorRecordModel data = JSON.parseObject(bodyJson, MQSensorRecordModel.class);
 			sensorRecordService.insertRecord(data);
 			sensorRecordJsonService.insertRecord(data);
-		} else if (secondTopic.contains("Alarm")) {
+			
+			String alarmBusiness = data.getAlaram_Business() == null ? "" : data.getAlaram_Business();
+			sensorService.alarm(alarmBusiness.trim().split(MQConstants.WARN_SEPARATOR), data.getTerminalID());		// 更新传感器报警状态
+			
+			if (StringUtils.isNotEmpty(alarmBusiness)) {					// 如果存在报警信息
+				DeviceWarnRecord entity = new DeviceWarnRecord(data);
+				deviceWarnRecordService.insert(entity);						// 1. 新增报警记录
+				deviceNotiRecordService.sendWxMpTemplateMessage(entity);	// 2. 发送微信通知
+			}
+			
+		} else if (secondTopic.contains("Alarm")) { 											// 接收到报警数据
 			MQDeviceWarnModel record = JSON.parseObject(bodyJson, MQDeviceWarnModel.class);
 			DeviceWarnRecord entity = new DeviceWarnRecord(record);
-			deviceWarnRecordService.alarm(entity);
-			// 报警发送微信通知
-			deviceNotiRecordService.sendWxMpTemplateMessage(entity);
-		} else if (secondTopic.contains("EquipmentData")) {
+			deviceWarnRecordService.alarm(entity);												// 1. 修改传感器报警状态，并添加报警记录
+			deviceNotiRecordService.sendWxMpTemplateMessage(entity);							// 2. 报警发送微信通知
+			
+		} else if (secondTopic.contains("EquipmentData")) {										// 接收到设备数据
 			MQDeviceRecordModel record = JSON.parseObject(bodyJson, MQDeviceRecordModel.class);
-			DeviceRecord entity = new DeviceRecord(record);
-			deviceRecordService.insert(entity);
+			DeviceRecord entity = new DeviceRecord(record);			
+			deviceRecordService.insert(entity);													// 1. 添加设备运行记录
 		}
 //		switch (secondTopic) {
 //		case MQConstants.DEVICE_TOPIC:

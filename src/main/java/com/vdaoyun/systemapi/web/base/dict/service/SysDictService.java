@@ -33,7 +33,7 @@ public class SysDictService extends BaseService<SysDict> {
 
 	@Autowired
 	private SysDictMapper sysDictMapper;
-
+	
 	/**
 	 * 
 	 * @Title: selectDictListByGroupId

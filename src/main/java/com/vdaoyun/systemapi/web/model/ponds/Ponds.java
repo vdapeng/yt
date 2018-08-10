@@ -288,4 +288,17 @@ public class Ponds implements Serializable {
     }
     
     
+    // 2018-08-10 新增字段
+    @Column(name = "is_home")
+    @ApiModelProperty(value = "是否首页显示")
+    private String isHome;
+
+	public String getIsHome() {
+		return isHome;
+	}
+
+	public void setIsHome(String isHome) {
+		this.isHome = isHome;
+	}
+    
 }

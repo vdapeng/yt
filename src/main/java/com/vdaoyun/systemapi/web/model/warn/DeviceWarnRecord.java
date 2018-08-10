@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import com.vdaoyun.systemapi.mq.model.MQDeviceWarnModel;
+import com.vdaoyun.systemapi.mq.model.MQSensorRecordModel;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -157,6 +158,12 @@ public class DeviceWarnRecord implements Serializable {
     	this.alaramBusiness = model.getAlaram_Business();
     	this.alaramEquipment = model.getAlaram_Equipment();
 	}
+    
+    public DeviceWarnRecord(MQSensorRecordModel model){
+    	this.terminalId = model.getTerminalID();
+    	this.postTime = new Date();
+    	this.alaramBusiness = model.getAlaram_Business();
+    }
     
     @ApiModelProperty(value = "业务报警文字说明")
     @Transient
