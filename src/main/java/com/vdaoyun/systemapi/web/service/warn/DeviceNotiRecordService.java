@@ -19,6 +19,7 @@ import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.exception.ParamException;
+import com.vdaoyun.systemapi.mq.MQConstants;
 import com.vdaoyun.systemapi.web.mapper.warn.DeviceNotiRecordMapper;
 import com.vdaoyun.systemapi.web.model.device.Device;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
@@ -204,7 +205,7 @@ public class DeviceNotiRecordService extends BaseService<DeviceNotiRecord> {
 			return;
 		}
 		
-		String[] alarams = alaramBusiness.split("&");
+		String[] alarams = alaramBusiness.trim().split(MQConstants.WARN_SEPARATOR);
 		for (String alarm : alarams) { // 拆分探测器，分别发送
 			
 			Sensor sensor = sensorService.selectInfoByCodeAndTerminalId(terminalId, alarm);

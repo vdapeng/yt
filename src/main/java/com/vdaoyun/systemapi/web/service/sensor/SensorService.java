@@ -66,7 +66,7 @@ public class SensorService extends BaseService<Sensor> {
 		criteria.andEqualTo("terminalId", terminalId);
 		// 将该设备下所有探测器状态设置为非报警状态
 		mapper.updateByExampleSelective(new Sensor(YesOrNo.NO.toString()), example);
-		if (codes == null || codes.length < 1) {
+		if (codes != null && codes.length > 0) {
 			criteria.andIn("code", Arrays.asList(codes));
 			// 将该设备下报警的探测器状态设置为报警状态
 			mapper.updateByExampleSelective(new Sensor(YesOrNo.YES.toString()), example);

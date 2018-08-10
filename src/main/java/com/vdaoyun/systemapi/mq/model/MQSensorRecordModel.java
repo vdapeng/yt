@@ -30,7 +30,7 @@ public class MQSensorRecordModel extends MQAbstractModel {
 	
 	/**
 	 * 报警信息
-	 */
+	 */				
 	private String Alaram_Business;
 	
 	/**
