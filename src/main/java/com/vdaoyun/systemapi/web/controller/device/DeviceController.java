@@ -90,6 +90,7 @@ public class DeviceController {
 			if (device.getIsDel().equalsIgnoreCase(YesOrNo.YES.toString())) {
 				device.setIsDel(YesOrNo.NO.toString());
 				device.setName(entity.getName());
+//				device.setUserId(entity.getUserId());
 				Boolean result = service.update(device) > 0;
 				ajaxJson.setData(entity);
 				ajaxJson.setSuccess(result);
@@ -123,6 +124,8 @@ public class DeviceController {
 	
 	@Autowired
 	private PondsService pondsService;
+//	@Autowired
+//	private SensorService sensorService;
 	
 	@ApiOperation(tags = {"A小程序_____我的_终端管理_终端删除"}, value = "")
 	@RequestMapping(value = "/{terminalId}", method = RequestMethod.DELETE)
@@ -134,11 +137,21 @@ public class DeviceController {
 		if (!pondsList.isEmpty()) {
 			String pondsNames = "";
 			for (Ponds ponds : pondsList) {
-				pondsNames += ponds.getName() + " ";
+				pondsNames += ponds.getName() + " | ";
 			}
-			pondsNames = pondsNames.substring(0, pondsNames.length() - 1);
+			pondsNames = pondsNames.substring(0, pondsNames.length() - 2);
 			throw new ParamException("该终端已绑定如下塘口：" + pondsNames + "。请先解除绑定后删除。");
 		}
+		
+//		List<Sensor> sensors = sensorService.selectByPondsIdAndTerminalId(null, terminalId);
+//		if (!sensors.isEmpty()) {
+//			String sensorNames = "";
+//			for (Sensor sensor : sensors) {
+//				sensorNames += sensor.getName() + " | ";
+//			}
+//			sensorNames = sensorNames.substring(0, sensorNames.length() - 1);
+//			throw new ParamException("该终端如下探测器：" + sensorNames + "已被绑定。请先解除绑定后删除。");
+//		}
 		
 		AjaxJson ajaxJson = new AjaxJson();
 		Boolean result = service.delete(terminalId) > 0;
@@ -152,6 +165,5 @@ public class DeviceController {
 	public AjaxJson selectInfoByPondsId(String terminalId, Long pondsId) throws Exception {
 		return AjaxJsonUtils.ajaxJson(service.selectInfoByPondsId(terminalId, pondsId));
 	}
-	
 	
 }

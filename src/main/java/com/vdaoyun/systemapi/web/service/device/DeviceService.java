@@ -67,7 +67,9 @@ public class DeviceService extends BaseService<Device> {
 		Device entity = new Device();
 		entity.setTerminalId((String) key);
 		entity.setIsDel(YesOrNo.YES.toString());
-		return mapper.updateByPrimaryKeySelective(entity);
+		int result = mapper.updateByPrimaryKeySelective(entity);
+//		sensorService.removeByTer((String) key);
+		return result;
 	}
 
 	/**

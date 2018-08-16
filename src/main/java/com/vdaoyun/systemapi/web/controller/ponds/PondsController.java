@@ -1,7 +1,10 @@
 package com.vdaoyun.systemapi.web.controller.ponds;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,7 @@ import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.common.utils.AjaxJsonUtils;
 import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
+import com.vdaoyun.systemapi.web.model.sensor.Sensor;
 import com.vdaoyun.systemapi.web.service.ponds.PondsService;
 import com.vdaoyun.systemapi.web.service.ponds.PondsShareRecordService;
 import com.vdaoyun.systemapi.web.service.sensor.SensorService;
@@ -39,6 +43,8 @@ public class PondsController {
 	private SensorService sensorService;
 	@Autowired
 	private PondsShareRecordService pondsShareRecordService;
+//	@Autowired
+//	private DeviceService deviceService;
 	
 	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表"}, value = "列表查询")
 	@PostMapping("list")
@@ -141,6 +147,24 @@ public class PondsController {
 		@RequestBody Ponds entity, 
 		@PathVariable(value = "id") Long id
 	) throws Exception {
+		
+		Ponds ponds = service.selectByPrimaryKey(id);
+		if (ponds == null) {
+			throw new ParamException("塘口不存在");
+		}
+		String terminalId = ponds.getTerminalId();
+		// 限制，只有将探测器解除绑定之后才能进行终端更改
+		if (StringUtils.isNotEmpty(terminalId) && !terminalId.equalsIgnoreCase(entity.getTerminalId())) {
+			List<Sensor> sensors = sensorService.selectByPondsIdAndTerminalId(ponds.getId(), terminalId);
+			if (!sensors.isEmpty()) {
+				String sensorNames = "";
+				for (Sensor sensor : sensors) {
+					sensorNames += sensor.getName() + " | ";
+				}
+				sensorNames = sensorNames.substring(0, sensorNames.length() - 2);
+				throw new ParamException("该终端如下探测器：" + sensorNames + "已绑定在该塘口。请先解除绑定后修改。");
+			}
+		}
 		AjaxJson ajaxJson = new AjaxJson();
 		entity.setId(id);
 		Boolean result = service.update(entity) > 0;
@@ -183,4 +207,11 @@ public class PondsController {
 		return AjaxJsonUtils.ajaxJson(null);
 	}
 
+//	public static void main(String[] args) {
+//		System.out.println(Math.max(5, 5));
+//		System.out.println(Math.min(0, 0));
+//		System.out.println(Math.max(3, 5));
+//		System.out.println(Math.min(-19.2, 3.21));
+//	}
+	
 }

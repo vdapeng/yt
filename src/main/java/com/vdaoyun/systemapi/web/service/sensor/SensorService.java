@@ -133,6 +133,15 @@ public class SensorService extends BaseService<Sensor> {
 		return mapper.selectByExample(example);
 	}
 	
+	public List<Sensor> selectByPondsIdAndTerminalId(Long pondsId, String terminalId) {
+		Example example = new Example(Sensor.class);
+		example.setDistinct(true);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("terminalId", terminalId);
+		criteria.andEqualTo("pondsId", pondsId);
+		return mapper.selectByExample(example);
+	}
+	
 	public List<Sensor> selectSensorsByTerminalId(String terminalId, String code) {
 		Example example = new Example(Sensor.class);
 		example.setDistinct(true);

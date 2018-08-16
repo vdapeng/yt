@@ -20,6 +20,8 @@ public class WsHandler extends TextWebSocketHandler {
 	private static Integer onLineCount = 0;
 	
 	private static CopyOnWriteArraySet<WebSocketSession> webSocketSet = new CopyOnWriteArraySet<WebSocketSession>();  
+	
+//	private static HashMap<String, WebSocketSession> webSocketHash = new HashMap<>();
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
@@ -27,6 +29,10 @@ public class WsHandler extends TextWebSocketHandler {
 		webSocketSet.remove(session);
 		--onLineCount;
 		log.info("会话丢失，当前在线人数" + onLineCount);
+//		if (webSocketHash.values().contains(session)) {
+//			webSocketHash.values().remove(session);
+//		}
+//		webSocketHash.put(session.getId(), session);
 	}
 	
 	@Override
@@ -34,6 +40,7 @@ public class WsHandler extends TextWebSocketHandler {
 		super.afterConnectionEstablished(session);
 		webSocketSet.add(session);
 		++onLineCount;
+//		webSocketHash.values().add(session);
 		log.info("建立新的会话，当前在线人数" + onLineCount);
 	}
 	

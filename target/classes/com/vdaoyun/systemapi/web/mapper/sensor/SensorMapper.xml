@@ -178,7 +178,7 @@
 							AND a.ponds_id != #{pondsId}
 					)
 			) a
-		LEFT JOIN(SELECT `code`, ponds_id FROM sensor WHERE ponds_id =  #{pondsId}) b ON a. CODE = b. CODE;
+		LEFT JOIN(SELECT `code`, ponds_id FROM sensor WHERE ponds_id =  #{pondsId} AND terminal_id = #{terminalId}) b ON a. CODE = b. CODE;
 	</select>
 	
 	

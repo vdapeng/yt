@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.vdaoyun.systemapi.mq.model.MQDeviceRecordData;
 import com.vdaoyun.systemapi.mq.model.MQDeviceRecordModel;
 
@@ -314,15 +316,32 @@ public class DeviceRecord implements Serializable {
     	this.terminalId = model.getTerminalID();
     	this.postTime = new Date();
     	MQDeviceRecordData data = model.getData().get(0);
-		this.batteryLevel = data.getBatteryLevel();
-		this.solarVoltage = data.getSolarVoltage();
-		this.batteryVoltage = data.getBatteryVoltage();
-		this.systemTemperature = data.getSystemTemperature();
-		this.batteryTemperature = data.getBatteryTemperature();
-		this.shellTemperature = data.getShellTemperature();
+		this.batteryLevel = Math.max(data.getBatteryLevel(), data.getBL()) ;
+		this.solarVoltage = Math.max(data.getSolarVoltage(), data.getSV());
+		this.batteryVoltage = Math.max(data.getBatteryVoltage(), data.getBV());
+		
+		if (Math.min(data.getSystemTemperature(), data.getSystemT()) < 0) {
+			this.systemTemperature = Math.min(data.getSystemTemperature(), data.getSystemT());
+		} else {
+			this.systemTemperature = Math.max(data.getSystemTemperature(), data.getSystemT()) ;
+		}
+		if (Math.min(data.getBatteryTemperature(), data.getBT()) < 0) {
+			this.batteryTemperature = Math.min(data.getBatteryTemperature(), data.getBT());
+		} else {
+			this.batteryTemperature = Math.max(data.getBatteryTemperature(), data.getBT());
+		}
+		if (Math.min(data.getShellTemperature(), data.getShellT()) < 0) {
+			this.shellTemperature = Math.min(data.getShellTemperature(), data.getShellT());
+		} else {
+			this.shellTemperature = Math.max(data.getShellTemperature(), data.getShellT());
+		}
+		
 		this.gps = data.getGPS();
 		this.powerKey = data.getPowerKey();
-		this.chargerStatus = data.getChargerStatus();
+		if (StringUtils.isEmpty(data.getPowerKey())) {
+			this.powerKey = data.getPK();
+		}
+		this.chargerStatus = Math.max(data.getChargerStatus(), data.getCS());
 	}
     
     

@@ -1,7 +1,7 @@
 FROM ibmjava:jre
 ADD ./target /app/target
 WORKDIR /app/target
-RUN cp system-api-1.0.0.jar app.jar
+RUN cp system-api-0.0.2-A.jar app.jar
 ENV LANG C.UTF-8
 ENV TZ=Asia/Shanghai
 ENV CONFIG_PROFILE=prod

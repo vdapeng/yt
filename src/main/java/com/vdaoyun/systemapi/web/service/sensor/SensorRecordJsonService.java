@@ -27,6 +27,7 @@ import com.github.pagehelper.PageInfo;
 import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.systemapi.mq.model.MQSensorRecordModel;
 import com.vdaoyun.systemapi.web.model.echart.WLegend;
+import com.vdaoyun.systemapi.web.model.echart.WLine;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
 import com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecordJson;
@@ -95,10 +96,11 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		HashMap<String, Line> aHashMap = new HashMap<>();
 		Boolean isFirst = true;
 		for (Sensor sensor : sensors) {
-			Line line = new Line();
+			WLine line = new WLine();
 			line.name(sensor.getName());
 			line.stack(sensor.getCode());
 			line.smooth(true);
+			line.setConnectNulls(true);
 			aHashMap.put(sensor.getCode(), line);
 			
 			wLegend.data().add(sensor.getName());
@@ -108,10 +110,11 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 //			option.legend().selected(sensor.getName(), isFirst);
 			isFirst = false;
 			
-			Line tLine = new Line();
+			WLine tLine = new WLine();
 			tLine.name(sensor.getName() + "温度");
 			tLine.stack(sensor.getCode() + "_T");
 			tLine.smooth(true);
+			tLine.setConnectNulls(true);
 			aHashMap.put(sensor.getCode() + "_T", tLine);
 //			option.legend().data().add(sensor.getName() + "温度");
 //			option.legend().selected(sensor.getName() + "温度", isFirst);
@@ -135,13 +138,18 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		for (SensorRecordJson json : list) {
 			JSONObject data = JSONObject.parseObject(json.getDataJson(), JSONObject.class, Feature.AllowArbitraryCommas);
 			for (Sensor sensor : sensors) {
-				aHashMap.get(sensor.getCode()).data().add(df.format( data.getDoubleValue(sensor.getCode())));
+				if (data.containsKey(sensor.getCode())) {
+					aHashMap.get(sensor.getCode()).data().add(df.format(data.getDoubleValue(sensor.getCode())));
+				} else {
+					aHashMap.get(sensor.getCode()).data().add("");
+				}
 				if (data.containsKey(sensor.getCode() + "_Temperature")) {
 					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_Temperature")));
 				} else if (data.containsKey(sensor.getCode() + "_T")) {
 					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_T")));
+				} else {
+					aHashMap.get(sensor.getCode() + "_T").data().add("");
 				}
-				
 			}
 			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), formart));
 		}
@@ -200,9 +208,10 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		HashMap<String, Line> aHashMap = new HashMap<>();
 		Boolean isFirst = true;
 		for (Sensor sensor : sensors) {
-			Line line = new Line();
+			WLine line = new WLine();
 			line.name(sensor.getName());
 			line.smooth(true);
+			line.setConnectNulls(true);
 			aHashMap.put(sensor.getCode(), line);
 //			option.legend().data().add(sensor.getName());
 //			option.legend().selected(sensor.getName(), isFirst);
@@ -212,10 +221,11 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			
 			isFirst = false;
 			
-			Line tLine = new Line();
+			WLine tLine = new WLine();
 			tLine.name(sensor.getName() + "温度");
 			tLine.stack(sensor.getCode() + "_T");
 			tLine.smooth(true);
+			tLine.setConnectNulls(true);
 			aHashMap.put(sensor.getCode() + "_T", tLine);
 //			option.legend().data().add(sensor.getName() + "温度");
 //			option.legend().selected(sensor.getName() + "温度", isFirst);
@@ -234,17 +244,22 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		wLegend.setPageIconSize(20);
 		option.setLegend(wLegend);
 		
-		
 		CategoryAxis xAxis = new CategoryAxis();
 		xAxis.setBoundaryGap(false);
 		for (SensorRecordJson json : list) {
 			JSONObject data = JSONObject.parseObject(json.getDataJson(), JSONObject.class, Feature.AllowArbitraryCommas);
 			for (Sensor sensor : sensors) {
-				aHashMap.get(sensor.getCode()).data().add(df.format(data.getDoubleValue(sensor.getCode())));
+				if (data.containsKey(sensor.getCode())) {
+					aHashMap.get(sensor.getCode()).data().add(df.format(data.getDoubleValue(sensor.getCode())));
+				} else {
+					aHashMap.get(sensor.getCode()).data().add("");
+				}
 				if (data.containsKey(sensor.getCode() + "_Temperature")) {
 					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_Temperature")));
 				} else if (data.containsKey(sensor.getCode() + "_T")) {
 					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_T")));
+				} else {
+					aHashMap.get(sensor.getCode() + "_T").data().add("");
 				}
 			}
 			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), formart));
