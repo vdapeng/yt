@@ -413,8 +413,8 @@
 	<select id="selectAlarmListForAdmin" parameterType="java.util.Map" resultMap="WxAlarmResult">
 		SELECT a.id, a.terminal_id terminalId, a.postTime, a.alaram_business alarmBusiness, a.alaram_equipment alaramEquipment,
 		b.id pondsId, b.`name` pondsName, b.address, b.user_id userId, b.`code` sensorCode, b.sensorName
-		 FROM (SELECT DISTINCT a.id, a.terminal_id, a.post_time postTime, a.alaram_business, a.alaram_equipment FROM device_warn_record a, ponds b 
-		 WHERE a.terminal_id = b.terminal_id 
+		 FROM (SELECT DISTINCT a.id, a.terminal_id, a.post_time postTime, a.alaram_business, a.alaram_equipment FROM device_warn_record a LEFT JOIN ponds b 
+		 ON a.terminal_id = b.terminal_id WHERE 1=1 
 		<if test="entity.pondsId != null and entity.pondsId != ''">
 			AND b.id = #{entity.pondsId}
 		</if> 
@@ -430,14 +430,14 @@
 		<if test="orderByClause != null and orderByClause != ''">
 			ORDER BY ${orderByClause}
 		</if>
-		 LIMIT #{begin}, #{end}) a ,
+		 LIMIT #{begin}, #{end}) a LEFT JOIN
 		(SELECT a.id, a.`name`, a.address, a.user_id, a.terminal_id, b.`code`, b.`name` sensorName FROM (
 		SELECT id, terminal_id, `name`, address, user_id FROM ponds 
 		<if test="entity.pondsId != null and entity.pondsId != ''">
 			WHERE id = #{entity.pondsId}
 		</if>
 		) a,
-		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0 
+		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b ON a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0 
 		<if test="orderByClause != null and orderByClause != ''">
 			ORDER BY ${orderByClause}
 		</if>
@@ -446,8 +446,8 @@
 	<select id="pageInfoAlarmListForAdmin" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT a.id, a.terminal_id terminalId, a.postTime, a.alaram_business alarmBusiness, a.alaram_equipment alaramEquipment,
 		b.id pondsId, b.`name` pondsName, b.address, b.user_id userId, b.`code` sensorCode, b.sensorName
-		 FROM (SELECT DISTINCT a.id, a.terminal_id, a.post_time postTime, a.alaram_business, a.alaram_equipment FROM device_warn_record a, ponds b
-		  WHERE a.terminal_id = b.terminal_id 
+		 FROM (SELECT DISTINCT a.id, a.terminal_id, a.post_time postTime, a.alaram_business, a.alaram_equipment FROM device_warn_record a LEFT JOIN ponds b
+		  ON a.terminal_id = b.terminal_id WHERE 1=1
 		 <if test="entity.pondsId != null and entity.pondsId != ''">
 			AND b.id = #{entity.pondsId}
 		</if> 
@@ -462,14 +462,14 @@
 		</if> 
 		<if test="orderByClause != null and orderByClause != ''">
 			ORDER BY ${orderByClause}
-		</if>) a ,
+		</if>) a LEFT JOIN
 		(SELECT a.id, a.`name`, a.address, a.user_id, a.terminal_id, b.`code`, b.`name` sensorName FROM (
 		SELECT id, terminal_id, `name`, address, user_id FROM ponds 
 		<if test="entity.pondsId != null and entity.pondsId != ''">
 			WHERE id = #{entity.pondsId}
 		</if>
 		) a,
-		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b WHERE a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0  
+		sensor b WHERE a.id = b.ponds_id AND b.terminal_id = a.terminal_id) b ON a.terminal_id = b.terminal_id AND INSTR(a.alaram_business,b.`code`) > 0  
 		GROUP BY a.id
 	</select>
 	
