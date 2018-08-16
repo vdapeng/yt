@@ -341,7 +341,11 @@ public class DeviceRecord implements Serializable {
 		if (StringUtils.isEmpty(data.getPowerKey())) {
 			this.powerKey = data.getPK();
 		}
-		this.chargerStatus = Math.max(data.getChargerStatus(), data.getCS());
+		if (data.getCS() != null) {
+			this.chargerStatus = data.getCS();
+		} else {
+			this.chargerStatus = data.getChargerStatus();
+		}
 	}
     
     

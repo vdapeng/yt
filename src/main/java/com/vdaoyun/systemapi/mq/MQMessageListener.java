@@ -73,9 +73,8 @@ public class MQMessageListener implements MessageListener {
 			sensorRecordJsonService.insertRecord(data);
 			
 			String alarmBusiness = data.getAlaram_Business() == null ? "" : data.getAlaram_Business();
-			sensorService.alarm(alarmBusiness.trim().split(MQConstants.WARN_SEPARATOR), data.getTerminalID());		// 更新传感器报警状态
-			
 			if (StringUtils.isNotEmpty(alarmBusiness)) {					// 如果存在报警信息
+				sensorService.alarm(alarmBusiness.trim().split(MQConstants.WARN_SEPARATOR), data.getTerminalID());		// 更新传感器报警状态
 				DeviceWarnRecord entity = new DeviceWarnRecord(data);
 				deviceWarnRecordService.insert(entity);						// 1. 新增报警记录
 				deviceNotiRecordService.sendWxMpTemplateMessage(entity);	// 2. 发送微信通知
