@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.vdaoyun.common.api.base.service.BaseService;
+import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
+
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 
 @Service
@@ -42,4 +46,13 @@ public class PondsExService extends BaseService<Ponds> {
 		}
 	}
 
+	public void alarm(String[] codes, String terminalId) {
+		Example example = new Example(Ponds.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("terminalId", terminalId);
+		Ponds record = new Ponds();
+		record.setIsAlarm(YesOrNo.NO.toString());
+		mapper.updateByExampleSelective(record, example);
+	}
+	
 }

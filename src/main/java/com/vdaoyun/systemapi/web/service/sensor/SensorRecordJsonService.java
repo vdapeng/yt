@@ -309,6 +309,12 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 			Example example = new Example(SensorRecordJson.class);
 		 	Criteria criteria = example.createCriteria();
 		 	criteria.andEqualTo(entity);
+		 	if (entity.getBeginDate() != null) {
+				criteria.andGreaterThanOrEqualTo("postTime", entity.getBeginDate());
+			}
+		 	if (entity.getFinishDate() != null) {
+		 		criteria.andLessThanOrEqualTo("postTime", entity.getFinishDate());
+			}
 		 	example.setOrderByClause(wdy_pageOrder + " " + wdy_pageSort);
 		 	PageHelper.startPage(wdy_pageNum, wdy_pageSize);
 		 	List<SensorRecordJson> list = mapper.selectByExample(example);

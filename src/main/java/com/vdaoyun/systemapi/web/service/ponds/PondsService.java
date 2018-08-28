@@ -18,7 +18,9 @@ import com.vdaoyun.common.api.base.service.BaseService;
 import com.vdaoyun.common.api.enums.IConstant.YesOrNo;
 import com.vdaoyun.systemapi.web.mapper.ponds.PondsMapper;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
+import com.vdaoyun.systemapi.web.model.ponds.TransferParam;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
+import com.vdaoyun.systemapi.web.service.device.DeviceExService;
 import com.vdaoyun.systemapi.web.service.sensor.SensorService;
 import com.vdaoyun.systemapi.web.service.warn.DeviceNotiRecordExService;
 
@@ -254,6 +256,61 @@ public class PondsService extends BaseService<Ponds> {
 		ponds.setId(id);
 		ponds.setIsHome(isHome.equalsIgnoreCase(YesOrNo.YES.toString()) ? YesOrNo.NO.toString() : YesOrNo.YES.toString());
 		mapper.updateByPrimaryKey(ponds);
+	}
+	
+	
+	@Autowired
+	private DeviceExService deviceService;
+	
+	/**
+	 * 
+	 * @Title: 塘口转让
+	 *  
+	 * @Description: 塘口转让操作逻辑如下:
+	 *  
+	 *  1. 更换该塘口终端所有人
+	 *  2. 更换该塘口所有报警通知记录接收人
+	 *  3. 删除该塘口所有共享信息
+	 *  4. 更换塘口所有人
+	 *  
+	 * @param param
+	 * @param terminalId 终端编号
+	 */
+	public void transfer(TransferParam param, String terminalId) {
+		// 1. 更换该塘口终端所有人
+		deviceService.transfer(terminalId, param.getToUserId());  
+		// 2. 更换该塘口所有报警通知记录接收人
+		deviceNotiRecordService.transfer(param);
+		// 3. 删除该塘口所有共享信息
+		pondsShareRecordService.removeByPondsId(param.getPondsId());
+		// 4. 更换塘口所有人
+		Ponds record = new Ponds();
+		record.setId(param.getPondsId());
+		record.setUserId(param.getToUserId());
+		mapper.updateByPrimaryKeySelective(record);
+	}
+	
+	/**
+	 * 
+	 * @Title: 小程序首页接口
+	 *  
+	 * @Description: 查询指定用户的塘口列表以及分享给我的塘口列表
+	 *  	
+	 * @param openid		用户openid
+	 * @param wdy_pageNum	页码
+	 * @param wdy_pageSize	每页条数
+	 * @param wdy_pageOrder 排序字段
+	 * @param wdy_pageSort	排序方式
+	 * @return PageInfo<HashMap<String,Object>>
+	 */
+	public PageInfo<HashMap<String, Object>> selectMiniList(
+			String openid, Integer wdy_pageNum, Integer wdy_pageSize,
+			String wdy_pageOrder, String wdy_pageSort) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
+		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
+		List<HashMap<String, Object>> list = rootMapper.selectMiniList(openid);
+		return new PageInfo<>(list);
 	}
 	
 }

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
@@ -348,5 +349,28 @@ public class DeviceRecord implements Serializable {
 		}
 	}
     
+    @Transient
+    @ApiModelProperty(value = "开始时间")
+    private Date beginDate;
+    
+    @Transient
+    @ApiModelProperty(value = "结束时间")
+    private Date finishDate;
+
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public Date getFinishDate() {
+		return finishDate;
+	}
+
+	public void setFinishDate(Date finishDate) {
+		this.finishDate = finishDate;
+	}
     
 }

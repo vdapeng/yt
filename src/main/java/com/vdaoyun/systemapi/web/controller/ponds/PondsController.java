@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.common.utils.AjaxJsonUtils;
 import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
+import com.vdaoyun.systemapi.web.model.ponds.TransferParam;
 import com.vdaoyun.systemapi.web.model.sensor.Sensor;
 import com.vdaoyun.systemapi.web.service.ponds.PondsService;
 import com.vdaoyun.systemapi.web.service.ponds.PondsShareRecordService;
@@ -45,6 +47,20 @@ public class PondsController {
 	private PondsShareRecordService pondsShareRecordService;
 //	@Autowired
 //	private DeviceService deviceService;
+	
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表"}, value = "列表查询")
+	@GetMapping("list")
+	public AjaxJson select(
+			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam("页码") Integer pageNum,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) @ApiParam("每页条数") Integer pageSize,
+			@RequestParam(value = "order", defaultValue = "createDate", required = false) @ApiParam("排序字段") String order,
+			@RequestParam(value = "sort", defaultValue = "DESC", required = false) @ApiParam("排序方式") String sort,
+			@RequestParam(value = "openid") @ApiParam("微信openid") String openid
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setData(service.selectMiniList(openid, pageNum, pageSize, order, sort));
+		return ajaxJson;
+	}
 	
 	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表"}, value = "列表查询")
 	@PostMapping("list")
@@ -153,8 +169,10 @@ public class PondsController {
 			throw new ParamException("塘口不存在");
 		}
 		String terminalId = ponds.getTerminalId();
+		Boolean isUpdateWarn = false;
 		// 限制，只有将探测器解除绑定之后才能进行终端更改
 		if (StringUtils.isNotEmpty(terminalId) && !terminalId.equalsIgnoreCase(entity.getTerminalId())) {
+			isUpdateWarn = true;
 			List<Sensor> sensors = sensorService.selectByPondsIdAndTerminalId(ponds.getId(), terminalId);
 			if (!sensors.isEmpty()) {
 				String sensorNames = "";
@@ -171,6 +189,9 @@ public class PondsController {
 		ajaxJson.setSuccess(result);
 		ajaxJson.setMsg(result ? "编辑成功" : "编辑失败");
 		ajaxJson.setData(entity);
+		if (result && isUpdateWarn) {
+			//TODO:待清空报警缓存
+		}
 		return ajaxJson;
 	}
 	
@@ -213,5 +234,25 @@ public class PondsController {
 //		System.out.println(Math.max(3, 5));
 //		System.out.println(Math.min(-19.2, 3.21));
 //	}
+	
+	@PostMapping("transfer")
+	public AjaxJson transfer(@RequestBody @Valid TransferParam param, BindingResult result) throws Exception {
+		if (result.hasErrors()) {
+			String errorMessage = "";
+			for (ObjectError error : result.getAllErrors()) {
+				errorMessage += error.getDefaultMessage() + ",";
+			}
+			errorMessage = errorMessage.substring(0, errorMessage.length() - 1);
+			throw new ParamException(errorMessage);
+		}
+		Ponds ponds = service.selectByPrimaryKey(param.getPondsId());
+		if (ponds.getUserId() != param.getFromUserId()) {
+			throw new ParamException("该塘口非你所有，无法转移");
+		}
+		
+		
+		AjaxJson ajaxJson = new AjaxJson();
+		return ajaxJson;
+	}
 	
 }

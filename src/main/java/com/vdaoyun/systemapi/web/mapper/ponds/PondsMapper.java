@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.vdaoyun.common.api.base.mapper.BaseMapper;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
 
+@Mapper
 public interface PondsMapper extends BaseMapper<Ponds> {
 
 	public List<HashMap<String, Object>> selectPageInfo(Map<String, Object> param);
@@ -20,5 +23,8 @@ public interface PondsMapper extends BaseMapper<Ponds> {
 	List<HashMap<String, Object>> selectListJsonData(HashMap<String, Object> param);
 	
 	HashMap<String, Object> selectInfoJsonData(Long id);
+	
+	// 查询塘口信息，包含我拥有的塘口和分享给我的塘口
+	List<HashMap<String, Object>> selectMiniList(String openid);
 	
 }

@@ -121,7 +121,7 @@ public class DeviceNotiRecordService extends BaseService<DeviceNotiRecord> {
 			throw new ParamException("无效通知");
 		}
 		MiniProgram miniProgram = new MiniProgram();
-		miniProgram.setPagePath("pages/monitor/detail/detail?pondsId=" + ponds.getId() + "&pondsName=" + ponds.getName() + "&terminalId=" + device.getTerminalId());
+		miniProgram.setPagePath("pages/monitor/templateMsgDetail/templateMsgDetail?pondsId=" + ponds.getId() + "&pondsName=" + ponds.getName() + "&terminalId=" + device.getTerminalId());
 //		miniProgram.setPagePath("/");
 		miniProgram.setAppid(wxMaService.getWxMaConfig().getAppid());
 		WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder()
@@ -333,4 +333,5 @@ public class DeviceNotiRecordService extends BaseService<DeviceNotiRecord> {
 		record.setBizId(bizId);
 		mapper.updateByPrimaryKeySelective(record);
 	}
+	
 }

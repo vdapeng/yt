@@ -62,6 +62,12 @@
 			<if test="entity.powerKey != '' and entity.powerKey != null">
 				AND power_key = #{entity.powerKey}
 			</if>
+			<if test="entity.beginDate != null">
+				AND post_time &gt;= #{entity.beginDate}
+			</if>
+			<if test="entity.finishDate != null">
+				AND post_time &lt;= #{entity.finishDate}
+			</if>
 		</where>
 	</sql>
 	

@@ -4,7 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vdaoyun.common.api.base.service.BaseService;
+import com.vdaoyun.systemapi.web.model.ponds.TransferParam;
 import com.vdaoyun.systemapi.web.model.warn.DeviceNotiRecord;
+
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 /**
  * 
@@ -49,6 +53,16 @@ public class DeviceNotiRecordExService extends BaseService<DeviceNotiRecord> {
 		DeviceNotiRecord record = new DeviceNotiRecord();
 		record.setPondsId(ponsId);
 		mapper.delete(record);
+	}
+	
+	public void transfer(TransferParam param) {
+		DeviceNotiRecord record = new DeviceNotiRecord();
+		record.setUserId(param.getToUserId());
+		Example example = new Example(DeviceNotiRecord.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("userId", param.getFromUserId());
+		criteria.andEqualTo("pondsId", param.getPondsId());
+		mapper.updateByExampleSelective(record, example);
 	}
 	
 }

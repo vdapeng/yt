@@ -300,5 +300,18 @@ public class Ponds implements Serializable {
 	public void setIsHome(String isHome) {
 		this.isHome = isHome;
 	}
+	
+	@Column(name = "is_alarm")
+    @ApiModelProperty(name = "isAlarm", value = "是否报警，y：报警 n:未报警")
+    private String isAlarm;
+
+	public String getIsAlarm() {
+		return isAlarm;
+	}
+
+	public void setIsAlarm(String isAlarm) {
+		this.isAlarm = isAlarm;
+	}
     
+	
 }

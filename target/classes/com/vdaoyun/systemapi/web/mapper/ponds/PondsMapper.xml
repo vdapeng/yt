@@ -215,4 +215,15 @@
 		FROM ponds WHERE id = #{id}
 	</select>
 	
+	<!-- 小程序首页接口 -->
+	<select id="selectMiniList" parameterType="java.lang.String" resultMap="JsonResultMap">
+		SELECT DISTINCT * FROM (
+		SELECT a.*, 'n' AS is_share FROM ponds a , `user` b WHERE a.user_id = b.id AND b.openid = #{openid}
+		UNION ALL
+		SELECT a.*, 'y' AS is_share  FROM ponds a, ponds_share_record b WHERE a.id = b.ponds_id AND b.openid = #{openid} ) a
+		<if test="orderByClause != null and orderByClause != ''">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
 </mapper>
