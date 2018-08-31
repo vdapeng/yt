@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.vdaoyun</groupId>
 	<artifactId>system-api</artifactId>
-	<version>0.0.2-A</version>
+	<version>0.0.3-A-1</version>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

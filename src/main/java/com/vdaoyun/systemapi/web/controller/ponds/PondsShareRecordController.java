@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.web.model.ponds.PondsShareRecord;
+import com.vdaoyun.systemapi.web.service.ponds.PondsExService;
 import com.vdaoyun.systemapi.web.service.ponds.PondsShareRecordService;
 
 import io.swagger.annotations.Api;
@@ -29,6 +30,8 @@ public class PondsShareRecordController {
 	
 	@Autowired
 	private PondsShareRecordService service;
+	@Autowired
+	private PondsExService pondsExService;
 	
 	@ApiOperation(value = "列表查询", hidden = true)
 	@RequestMapping(value = "list", method = RequestMethod.POST)
@@ -69,7 +72,7 @@ public class PondsShareRecordController {
 		Boolean result = service.insertInfo(entity) > 0;
 		ajaxJson.setData(entity);
 		ajaxJson.setSuccess(result);
-		ajaxJson.setMsg(result ? "新增成功" : "新增失败");
+		ajaxJson.setMsg(result ? "操作成功" : "操作失败");
 		return ajaxJson;
 	}
 	
@@ -85,9 +88,12 @@ public class PondsShareRecordController {
 			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
 		}
 		Boolean result = true;
+		if (result) {
+			pondsExService.version(null);
+		}
 		ajaxJson.setData(entity);
 		ajaxJson.setSuccess(result);
-		ajaxJson.setMsg(result ? "新增成功" : "新增失败");
+		ajaxJson.setMsg(result ? "操作成功" : "操作失败");
 		return ajaxJson;
 	}
 	
@@ -101,7 +107,7 @@ public class PondsShareRecordController {
 		entity.setId(id);
 		Boolean result = service.update(entity) > 0;
 		ajaxJson.setSuccess(result);
-		ajaxJson.setMsg(result ? "编辑成功" : "编辑失败");
+		ajaxJson.setMsg(result ? "操作成功" : "操作失败");
 		ajaxJson.setData(entity);
 		return ajaxJson;
 	}
@@ -114,8 +120,11 @@ public class PondsShareRecordController {
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
 		Boolean result = service.delete(id) > 0;
-		ajaxJson.setMsg(result ? "删除成功" : "删除失败");
+		ajaxJson.setMsg(result ? "操作成功" : "操作失败");
 		ajaxJson.setSuccess(result);
+		if (result) {
+			pondsExService.version(null);
+		}
 		return ajaxJson;
 	}
 	

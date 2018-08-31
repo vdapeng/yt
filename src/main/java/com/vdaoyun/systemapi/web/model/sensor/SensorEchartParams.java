@@ -1,6 +1,9 @@
 package com.vdaoyun.systemapi.web.model.sensor;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Transient;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,7 +22,7 @@ public class SensorEchartParams implements Serializable {
 	@ApiModelProperty(value = "探测器编号，选填")
 	public String sensorCode;
 	
-	@ApiModelProperty(value = "时间段，单位:天，默认：1，即最近1天。建议数值不要过大，数值过大，查询速度慢，响应慢，影响体验感")
+	@ApiModelProperty(value = "时间段，单位:天，默认：1，即最近1天。建议数值不要过大，数值过大，查询速度慢，响应慢，影响体验感。优先级最高")
 	private Integer expr = 1;
 
 	public Long getPondsId() {
@@ -52,6 +55,30 @@ public class SensorEchartParams implements Serializable {
 
 	public void setSensorCode(String sensorCode) {
 		this.sensorCode = sensorCode;
+	}
+	
+	@Transient
+    @ApiModelProperty(value = "开始时间，优先级次于expr")
+    private Date beginDate;
+    
+    @Transient
+    @ApiModelProperty(value = "结束时间，优先级次于expr")
+    private Date finishDate;
+
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public Date getFinishDate() {
+		return finishDate;
+	}
+
+	public void setFinishDate(Date finishDate) {
+		this.finishDate = finishDate;
 	}
 	
 }

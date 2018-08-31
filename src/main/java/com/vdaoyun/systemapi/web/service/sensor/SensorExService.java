@@ -46,5 +46,5 @@ public class SensorExService extends BaseService<Sensor> {
 			mapper.updateByPrimaryKeySelective(sensor);
 		}
 	}
-
+	
 }

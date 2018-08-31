@@ -306,10 +306,8 @@ public class PondsService extends BaseService<Ponds> {
 	public PageInfo<HashMap<String, Object>> selectMiniList(
 			String openid, Integer wdy_pageNum, Integer wdy_pageSize,
 			String wdy_pageOrder, String wdy_pageSort) {
-		Map<String, Object> param = new HashMap<>();
-		param.put("orderByClause", wdy_pageOrder + " " + wdy_pageSort);
 		PageHelper.startPage(wdy_pageNum, wdy_pageSize);
-		List<HashMap<String, Object>> list = rootMapper.selectMiniList(openid);
+		List<HashMap<String, Object>> list = rootMapper.selectMiniList(openid, wdy_pageOrder + " " + wdy_pageSort);
 		return new PageInfo<>(list);
 	}
 	

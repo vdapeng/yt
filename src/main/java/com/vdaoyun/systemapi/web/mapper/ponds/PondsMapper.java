@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.vdaoyun.common.api.base.mapper.BaseMapper;
 import com.vdaoyun.systemapi.web.model.ponds.Ponds;
@@ -25,6 +26,6 @@ public interface PondsMapper extends BaseMapper<Ponds> {
 	HashMap<String, Object> selectInfoJsonData(Long id);
 	
 	// 查询塘口信息，包含我拥有的塘口和分享给我的塘口
-	List<HashMap<String, Object>> selectMiniList(String openid);
+	List<HashMap<String, Object>> selectMiniList(@Param("openid") String openid, @Param("orderByClause") String orderByClause);
 	
 }

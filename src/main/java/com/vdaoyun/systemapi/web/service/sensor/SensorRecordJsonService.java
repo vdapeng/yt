@@ -81,6 +81,23 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		}
 		
 		example.createCriteria().andCondition("data_time >= NOW() - interval " + params.getExpr() * 24 + " hour").andEqualTo("terminalId", params.getTerminalId());
+	
+//		TODO: 按照时间端构建图形
+//		if (false) {
+//			Criteria criteria = example.createCriteria();
+//			criteria.andEqualTo("terminalId", params.getTerminalId());
+//			if (params.getExpr() != null) {
+//				criteria.andCondition("data_time >= NOW() - interval " + params.getExpr() * 24 + " hour");
+//			} else {
+//				if (params.getBeginDate() != null) {
+//					criteria.andGreaterThanOrEqualTo("dataTime", params.getBeginDate());
+//				}
+//				if (params.getFinishDate() != null) {
+//					criteria.andLessThanOrEqualTo("dataTime", params.getFinishDate());
+//				}
+//			}
+//		}
+		
 		List<SensorRecordJson> list = mapper.selectByExample(example);
 		
 		if (list == null || list.size() == 0) {
@@ -127,7 +144,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		wLegend.x(X.left);
 		wLegend.y(Y.bottom);
 		wLegend.setType("scroll");
-		wLegend.setPageIconSize(20);
+		wLegend.setPageIconSize(22);
 		option.setLegend(wLegend);
 //		option.legend().padding(5, 15, 10, 15);
 //		option.legend().x(X.left);
@@ -241,7 +258,7 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		wLegend.x(X.left);
 		wLegend.y(Y.bottom);
 		wLegend.setType("scroll");
-		wLegend.setPageIconSize(20);
+		wLegend.setPageIconSize(22);
 		option.setLegend(wLegend);
 		
 		CategoryAxis xAxis = new CategoryAxis();

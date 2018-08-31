@@ -33,7 +33,7 @@ import com.vdaoyun.systemapi.mq.model.MQSensorRecordModel;
  * @date 2018年8月3日 下午4:33:43
  *
  */
-@Service
+//@Service
 public class MQTest {
 
 	private static final Logger log = LoggerFactory.getLogger(MQTest.class);

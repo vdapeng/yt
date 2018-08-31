@@ -48,7 +48,7 @@ public class PondsController {
 //	@Autowired
 //	private DeviceService deviceService;
 	
-	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表"}, value = "列表查询")
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表——新"}, value = "")
 	@GetMapping("list")
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam("页码") Integer pageNum,
@@ -62,7 +62,7 @@ public class PondsController {
 		return ajaxJson;
 	}
 	
-	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表"}, value = "列表查询")
+	@ApiOperation(tags = {"A小程序_____我的_塘口管理_列表--旧"}, value = "")
 	@PostMapping("list")
 	public AjaxJson select(
 			@RequestParam(value = "pageNum", defaultValue = "1", required = false) @ApiParam("页码") Integer pageNum,

@@ -114,6 +114,7 @@ public class DeviceNotiRecordService extends BaseService<DeviceNotiRecord> {
 		}
 		WxUser wxUser = wxUserService.selectByUserId(ponds.getUserId());
 		if (wxUser == null || wxUser.getIsSubscribe().equalsIgnoreCase(YesOrNo.NO.toString())) {
+			// TODO 改用短信通知
 			throw new ParamException("未关注公众号，无法通知");
 		}
 		DeviceWarnRecord deviceWarnRecord = deviceWarnRecordService.selectByPrimaryKey(record.getDeviceWarnRecordId());
@@ -201,7 +202,7 @@ public class DeviceNotiRecordService extends BaseService<DeviceNotiRecord> {
 		}
 		WxUser wxUser = wxUserService.selectByUserId(device.getUserId()); 
 		if (wxUser == null || StringUtils.isEmpty(wxUser.getOpenid()) || wxUser.getIsEnable().equalsIgnoreCase(YesOrNo.NO.toString()) || wxUser.getIsSubscribe().equalsIgnoreCase(YesOrNo.NO.toString())) {
-			// 用户信息不存在，或者在禁用状态，或者未关注 不发送
+			// 用户信息不存在，或者在禁用状态，或者未关注 不发送 TODO: 改用短信通知
 			return;
 		}
 		

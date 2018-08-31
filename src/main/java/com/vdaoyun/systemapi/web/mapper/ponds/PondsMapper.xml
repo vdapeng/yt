@@ -218,9 +218,9 @@
 	<!-- 小程序首页接口 -->
 	<select id="selectMiniList" parameterType="java.lang.String" resultMap="JsonResultMap">
 		SELECT DISTINCT * FROM (
-		SELECT a.*, 'n' AS is_share FROM ponds a , `user` b WHERE a.user_id = b.id AND b.openid = #{openid}
+		SELECT a.id, a.name, a.address, a.latitude, a.longitude, a.user_id AS userId, a.create_date AS createDate, a.activated, a.enabled, a.terminal_id AS terminalId, 'n' AS isShare, '' AS fromNickName, '' AS fromAvatarUrl, '' AS fromOpenId FROM ponds a , `user` b WHERE a.user_id = b.id AND b.openid = #{openid}
 		UNION ALL
-		SELECT a.*, 'y' AS is_share  FROM ponds a, ponds_share_record b WHERE a.id = b.ponds_id AND b.openid = #{openid} ) a
+		SELECT a.id, a.name, a.address, a.latitude, a.longitude, a.user_id AS userId, a.create_date AS createDate, a.activated, a.enabled, a.terminal_id AS terminalId, 'y' AS isShare, c.nickname AS fromNickName, c.avatar_url fromAvatarUrl, c.openid fromOpenId  FROM ponds a, ponds_share_record b, `user` c WHERE a.id = b.ponds_id AND b.share_openid = c.openid AND b.openid = #{openid} ) a
 		<if test="orderByClause != null and orderByClause != ''">
 			order by ${orderByClause}
 		</if>
