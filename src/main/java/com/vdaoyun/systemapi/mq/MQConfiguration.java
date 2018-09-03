@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 //@EnableScheduling
-@Configuration
+//@Configuration
 public class MQConfiguration {
 	
 	@Autowired

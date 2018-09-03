@@ -185,6 +185,9 @@ public class PondsService extends BaseService<Ponds> {
 	 * @return List<Ponds>	塘口列表信息
 	 */
 	public List<Ponds> search(String search) {
+		if (StringUtils.isEmpty(search)) {
+			PageHelper.startPage(1, 30);
+		}
 		Example example = new Example(Ponds.class);
 		example.createCriteria().andLike("name", search + "%").andEqualTo("isDel", "n");
 		example.or().andLike("address", "%" + search + "%").andEqualTo("isDel", "n");
