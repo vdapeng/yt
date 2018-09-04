@@ -133,4 +133,18 @@ public class DeviceService extends BaseService<Device> {
 		return rootMapper.selectInfoByPondsId(param);
 	}
 	
+	/**
+	 * 
+	 * @Title: 终端解绑
+	 *  
+	 * @Description: 终端解绑
+	 *  
+	 * @param terminalId 终端编号
+	 * 
+	 */
+	public void unbundling(Device record) {
+		record.setUserId(null);
+		mapper.updateByPrimaryKey(record);
+	}
+	
 }

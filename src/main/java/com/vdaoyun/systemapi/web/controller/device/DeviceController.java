@@ -114,6 +114,13 @@ public class DeviceController {
 		@PathVariable(value = "terminalId") @ApiParam(value = "设备编号") String terminalId
 	) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
+		Device device = service.selectByPrimaryKey(terminalId);
+		if (device == null) {
+			throw new ParamException("该终端不存在");
+		}
+		if (device.getUserId() != null && entity.getUserId() != null && device.getUserId() != entity.getUserId()) {
+			throw new ParamException("该先解除该终端绑定关系，再重新绑定新的用户");
+		}
 		entity.setTerminalId(terminalId);
 		Boolean result = service.update(entity) > 0;
 		ajaxJson.setSuccess(result);
@@ -165,5 +172,29 @@ public class DeviceController {
 	public AjaxJson selectInfoByPondsId(String terminalId, Long pondsId) throws Exception {
 		return AjaxJsonUtils.ajaxJson(service.selectInfoByPondsId(terminalId, pondsId));
 	}
+	
+	@ApiOperation(tags = {"B管理后台_____终端管理_终端列表_终端解绑"}, value = "", hidden = true)
+	@GetMapping("{terminalId}/unbundling")
+	public AjaxJson unbundling(
+			@PathVariable("terminalId") @ApiParam(value = "终端编号") String terminalId
+	) throws Exception {
+		AjaxJson ajaxJson = new AjaxJson();
+		Device device = service.selectByPrimaryKey(terminalId);
+		if (device == null) {
+			throw new ParamException("终端不存在");
+		}
+		List<Ponds> pondsList = pondsService.selectListByTerminalId(terminalId);
+		if (!pondsList.isEmpty()) {
+			String pondsNames = "";
+			for (Ponds ponds : pondsList) {
+				pondsNames += ponds.getName() + " | ";
+			}
+			pondsNames = pondsNames.substring(0, pondsNames.length() - 2);
+			throw new ParamException("该终端已绑定如下塘口：" + pondsNames + "。请先解除绑定后解绑。");
+		}
+		service.unbundling(device);
+		return ajaxJson;
+	}
+	
 	
 }

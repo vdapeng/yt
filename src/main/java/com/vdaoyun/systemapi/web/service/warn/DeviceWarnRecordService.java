@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +38,7 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 	
 	@Override
 	public int insert(DeviceWarnRecord entity) {
+		entity.setVersion((long) 0);
 //		entity.setCreateDate(new Date());
 		return super.insert(entity);
 	}
@@ -58,8 +58,9 @@ public class DeviceWarnRecordService extends BaseService<DeviceWarnRecord> {
 	* @return void    返回类型 
 	* @throws
 	 */
-	@Async
+//	@Async
 	public void alarm(DeviceWarnRecord entity) {
+		entity.setVersion((long) 0);
 		mapper.insert(entity);
 		String alaramBusiness = entity.getAlaramBusiness();
 		if (StringUtils.isNotEmpty(alaramBusiness)) {

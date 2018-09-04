@@ -160,10 +160,15 @@ public class PondsController {
 	})
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public AjaxJson update(
-		@RequestBody Ponds entity, 
+		@RequestBody @Valid Ponds entity, BindingResult bindingResult,
 		@PathVariable(value = "id") Long id
 	) throws Exception {
-		
+		AjaxJson ajaxJson = new AjaxJson();
+		if (bindingResult.hasErrors()) {
+			ajaxJson.setSuccess(false);
+			ajaxJson.setMsg(bindingResult.getAllErrors().get(0).getDefaultMessage());
+			return ajaxJson;
+		}
 		Ponds ponds = service.selectByPrimaryKey(id);
 		if (ponds == null) {
 			throw new ParamException("塘口不存在");
@@ -183,8 +188,14 @@ public class PondsController {
 				throw new ParamException("该终端如下探测器：" + sensorNames + "已绑定在该塘口。请先解除绑定后修改。");
 			}
 		}
-		AjaxJson ajaxJson = new AjaxJson();
 		entity.setId(id);
+		entity.setIsAlarm(ponds.getIsAlarm());
+		entity.setIsDel(ponds.getIsDel());
+		entity.setIsHome(ponds.getIsHome());
+		entity.setVersion(ponds.getVersion());
+		if (StringUtils.isEmpty(entity.getTerminalId())) {
+			entity.setTerminalId(null);
+		}
 		Boolean result = service.update(entity) > 0;
 		ajaxJson.setSuccess(result);
 		ajaxJson.setMsg(result ? "编辑成功" : "编辑失败");

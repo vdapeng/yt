@@ -1,6 +1,10 @@
 package com.vdaoyun.systemapi.web.controller.sensor;
 
+import javax.validation.Valid;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.vdaoyun.common.bean.AjaxJson;
 import com.vdaoyun.systemapi.common.utils.AjaxJsonUtils;
+import com.vdaoyun.systemapi.exception.ParamException;
 import com.vdaoyun.systemapi.web.model.sensor.SensorEchartParams;
 import com.vdaoyun.systemapi.web.model.sensor.SensorRecordJson;
 import com.vdaoyun.systemapi.web.service.sensor.SensorRecordJsonService;
@@ -27,8 +32,25 @@ public class SensorRecordJsonController {
 
 	@ApiOperation(tags = {"A小程序_____首页_塘口详情_塘口24小时折线图"}, value = "")
 	@PostMapping("echart")
-	public AjaxJson selectEchartData(@RequestBody SensorEchartParams params) throws Exception {
+	public AjaxJson selectEchartData(@RequestBody SensorEchartParams params) throws ParamException {
+		if (params.getPondsId() == null) {
+			throw new ParamException("塘口编号不可以为空");
+		}
+		if (StringUtils.isEmpty(params.getTerminalId())) {
+			throw new ParamException("设备编号不可以为空");
+		}
 		return AjaxJsonUtils.ajaxJson(JSON.parse(JSON.toJSONString(service.selectEchartData(params))));
+	}
+	
+	@PostMapping("echart/between")
+	public AjaxJson selectEchartDataBetween(@RequestBody @Valid SensorEchartParams params, BindingResult bindingResult) throws ParamException {
+		if (bindingResult.hasErrors()) {
+			throw new ParamException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+		}
+		if (params.getFinishDate().before(params.getBeginDate())) {
+			throw new ParamException("结束时间不能小于开始时间");
+		}
+		return AjaxJsonUtils.ajaxJson(JSON.parse(JSON.toJSONString(service.selectEchartDataBetween(params))));
 	}
 
 	@PostMapping("echart/device")

@@ -337,5 +337,127 @@ public class SensorRecordJsonService extends BaseService<SensorRecordJson> {
 		 	List<SensorRecordJson> list = mapper.selectByExample(example);
 			return new PageInfo<>(list);
 		}
+	
+	@SuppressWarnings("unchecked")
+	public Option selectEchartDataBetween(SensorEchartParams params) {
+		
+		String formart = "HH:mm";
+		if (params.getFinishDate().getTime() - params.getBeginDate().getTime() > 86400000) {
+			formart = "MM月dd日/HH:mm";
+		}
+		
+		Option option = new Option();
+		option.yAxis(new ValueAxis());
+//		option.title("运行记录");
+		option.tooltip(Trigger.axis);
+		// 取出该塘口所有探测器
+		List<Sensor> sensors = sensorService.selectSensorsByPondsId(params.getPondsId());
+		if (sensors == null || sensors.size() == 0) {
+			option.title("暂无数据");
+			option.title().left(X.center);
+			option.title().top(Y.center);
+			return option;
+		}
+		
+		// 取出该塘口时间段内运行数据，默认取出24小时内的数据
+		Example example = new Example(SensorRecordJson.class);
+		
+	
+//		TODO: 按照时间端构建图形
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("terminalId", params.getTerminalId());
+		criteria.andGreaterThanOrEqualTo("dataTime", params.getBeginDate());
+		criteria.andLessThanOrEqualTo("dataTime", params.getFinishDate());
+		
+		List<SensorRecordJson> list = mapper.selectByExample(example);
+		
+		if (list == null || list.size() == 0) {
+			option.title("暂无数据");
+			option.title().left(X.center);
+			option.title().top(Y.center);
+			return option;
+		}
+		
+		WLegend wLegend = new WLegend();
+		
+		
+		HashMap<String, Line> aHashMap = new HashMap<>();
+		Boolean isFirst = true;
+		for (Sensor sensor : sensors) {
+			WLine line = new WLine();
+			line.name(sensor.getName());
+			line.stack(sensor.getCode());
+			line.smooth(true);
+			line.setConnectNulls(true);
+			aHashMap.put(sensor.getCode(), line);
+			
+			wLegend.data().add(sensor.getName());
+			wLegend.selected(sensor.getName(), isFirst);
+			
+//			option.legend().data().add(sensor.getName());
+//			option.legend().selected(sensor.getName(), isFirst);
+			isFirst = false;
+			
+			WLine tLine = new WLine();
+			tLine.name(sensor.getName() + "温度");
+			tLine.stack(sensor.getCode() + "_T");
+			tLine.smooth(true);
+			tLine.setConnectNulls(true);
+			aHashMap.put(sensor.getCode() + "_T", tLine);
+//			option.legend().data().add(sensor.getName() + "温度");
+//			option.legend().selected(sensor.getName() + "温度", isFirst);
+			
+			wLegend.data().add(sensor.getName() + "温度");
+			wLegend.selected(sensor.getName() + "温度", isFirst);
+		}
+		
+		wLegend.padding(5, 15, 10, 15);
+		wLegend.x(X.left);
+		wLegend.y(Y.bottom);
+		wLegend.setType("scroll");
+		wLegend.setPageIconSize(22);
+		option.setLegend(wLegend);
+//		option.legend().padding(5, 15, 10, 15);
+//		option.legend().x(X.left);
+//		option.legend().y(Y.bottom);
+		
+		CategoryAxis xAxis = new CategoryAxis();
+		xAxis.setBoundaryGap(false);
+		for (SensorRecordJson json : list) {
+			JSONObject data = JSONObject.parseObject(json.getDataJson(), JSONObject.class, Feature.AllowArbitraryCommas);
+			for (Sensor sensor : sensors) {
+				if (data.containsKey(sensor.getCode())) {
+					aHashMap.get(sensor.getCode()).data().add(df.format(data.getDoubleValue(sensor.getCode())));
+				} else {
+					aHashMap.get(sensor.getCode()).data().add("");
+				}
+				if (data.containsKey(sensor.getCode() + "_Temperature")) {
+					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_Temperature")));
+				} else if (data.containsKey(sensor.getCode() + "_T")) {
+					aHashMap.get(sensor.getCode() + "_T").data().add(df.format( data.getDoubleValue(sensor.getCode() + "_T")));
+				} else {
+					aHashMap.get(sensor.getCode() + "_T").data().add("");
+				}
+			}
+			xAxis.data().add(DateFormatUtils.format(json.getDataTime(), formart));
+		}
+		for (Sensor sensor : sensors) {
+			option.series().add(aHashMap.get(sensor.getCode()));
+			option.series().add(aHashMap.get(sensor.getCode() + "_T"));
+		}
+		option.xAxis().add(xAxis);
+		option.grid().bottom(70);
+		option.grid().top(30);
+		
+//		WBackgroundColor backgroundColor = new WBackgroundColor();
+//		
+//		backgroundColor.getColorStops().add(new ColorStop(0.0, "red"));
+//		backgroundColor.getColorStops().add(new ColorStop(1.0, "blud"));
+//		HashMap<String, Object> cHashMap = new HashMap<>();
+//		backgroundColor.setGlobalCoord(true);
+//		cHashMap.put("color", backgroundColor);
+//		option.backgroundColor(cHashMap);
+		return option;
+	}
 
 }

@@ -312,6 +312,17 @@ public class Ponds implements Serializable {
 	public void setIsAlarm(String isAlarm) {
 		this.isAlarm = isAlarm;
 	}
-    
+	
+	@Transient
+	@ApiModelProperty(hidden = true, value = "塘口所属用户手机号码")
+	private String mobile;
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 	
 }

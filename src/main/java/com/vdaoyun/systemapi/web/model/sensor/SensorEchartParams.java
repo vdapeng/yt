@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,9 +14,11 @@ public class SensorEchartParams implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	@NotNull(message = "塘口编号不可以为空")
 	@ApiModelProperty(value = "塘口编号，查询塘口下所有探测器运行轨迹图时使用")
 	private Long pondsId;
 	
+	@NotNull(message = "设备编号不可以为空")
 	@ApiModelProperty(value = "设备编号，查询设备下所有探测器运行轨迹图时使用")
 	private String terminalId;
 	
@@ -58,10 +61,12 @@ public class SensorEchartParams implements Serializable {
 	}
 	
 	@Transient
+	@NotNull(message = "开始时间不可以为空")
     @ApiModelProperty(value = "开始时间，优先级次于expr")
     private Date beginDate;
     
     @Transient
+    @NotNull(message = "结束时间不可以为空")
     @ApiModelProperty(value = "结束时间，优先级次于expr")
     private Date finishDate;
 

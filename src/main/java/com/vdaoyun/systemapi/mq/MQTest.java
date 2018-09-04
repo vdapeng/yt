@@ -33,7 +33,7 @@ import com.vdaoyun.systemapi.mq.model.MQSensorRecordModel;
  * @date 2018年8月3日 下午4:33:43
  *
  */
-//@Service
+@Service
 public class MQTest {
 
 	private static final Logger log = LoggerFactory.getLogger(MQTest.class);
@@ -92,10 +92,10 @@ public class MQTest {
 	 * @Description: 模拟设备报警，每三十分钟一次
 	 *   void
 	 */
-	@Scheduled(cron = "0 0/3 * * * ? ")
+//	@Scheduled(cron = "0 0/3 * * * ? ")
 	public void sendDeviceWarnData() {
 		MQDeviceWarnModel record = new MQDeviceWarnModel();
-		record.setTerminalID(Arrays.asList(new String[] {"TK232", "TK233"}).get(RandomUtils.nextInt(0, 1)));
+		record.setTerminalID("ak47");
 //		record.setPostTime(new Date());
 		record.setAlaram_Business("PH_1&DO_1");
 		record.setAlaram_Equipment("BATTERYLOW&TEMPERATUREHIGH");

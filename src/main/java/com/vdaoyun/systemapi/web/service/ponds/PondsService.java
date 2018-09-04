@@ -30,6 +30,11 @@ import tk.mybatis.mapper.entity.Example;
 @Transactional
 public class PondsService extends BaseService<Ponds> {
 	
+	@Override
+	public int update(Ponds entity) {
+		return mapper.updateByPrimaryKey(entity);
+	}
+	
 	/**
 	 * 
 	 * @Title: setNullByTer

@@ -57,6 +57,9 @@
 			<if test="entity.isDel != '' and entity.isDel != null">
 				AND is_del = #{entity.isDel}
 			</if>
+			<if test="entity.mobile != '' and entity.mobile != null">
+				AND mobile like CONCAT('%', #{entity.mobile}, '%')
+			</if>
 		</where>
 	</sql>
 	
